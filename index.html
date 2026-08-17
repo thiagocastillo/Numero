@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El jardín de Número — Etapa 1</title>
+<title>Número, la rana — Juegos del proyecto</title>
 <style>
   :root{
     --tinta:#1B2E3F;
@@ -14,131 +14,82 @@
     --verde-osc:#17612F;
     --verde-claro:#D6F0DC;
     --flor:#FFC93C;
-    --flor-osc:#C68C00;
     --rosa:#E8467C;
     --cielo:#A8DDF0;
     --tierra:#9A6B41;
     --tierra-osc:#5E3D22;
+    --gris:#7B8F9C;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     font-family:Verdana,"DejaVu Sans",Geneva,sans-serif;
-    color:var(--tinta);
-    font-size:16px;
-    line-height:1.5;
-    background:var(--cielo);
-    background-image:
-      radial-gradient(circle at 12% 18%, rgba(255,255,255,.75) 0 26px, transparent 27px),
-      radial-gradient(circle at 16% 16%, rgba(255,255,255,.75) 0 20px, transparent 21px),
-      radial-gradient(circle at 82% 12%, rgba(255,255,255,.6) 0 30px, transparent 31px),
-      radial-gradient(circle at 87% 15%, rgba(255,255,255,.6) 0 22px, transparent 23px);
-    background-repeat:no-repeat;
+    color:var(--tinta);font-size:16px;line-height:1.5;background:var(--cielo);
   }
-  .app{max-width:880px;margin:0 auto;padding:18px 14px 70px;}
+  .app{max-width:900px;margin:0 auto;padding:16px 12px 70px;}
 
   /* ---------- HERO ---------- */
   .hero{
-    background:#fff;
-    border:3px solid var(--tinta);
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 6px 0 var(--tinta);
+    background:#fff;border:3px solid var(--tinta);border-radius:20px;
+    overflow:hidden;box-shadow:0 6px 0 var(--tinta);
   }
   .hero-svg{display:block;width:100%;height:auto;}
   .hero-txt{
-    padding:14px 18px 16px;
-    display:flex;
-    flex-wrap:wrap;
-    align-items:flex-end;
-    justify-content:space-between;
-    gap:12px;
+    padding:12px 18px 14px;display:flex;flex-wrap:wrap;
+    align-items:flex-end;justify-content:space-between;gap:12px;
     border-top:3px solid var(--tinta);
   }
   h1{
     font-family:"Trebuchet MS","DejaVu Sans",sans-serif;
-    font-size:30px;
-    line-height:1.05;
-    margin:0;
-    letter-spacing:-.5px;
+    font-size:28px;line-height:1.05;margin:0;letter-spacing:-.5px;
     text-shadow:2px 2px 0 var(--flor);
   }
   .eyebrow{
-    font-family:"Courier New",monospace;
-    font-size:12px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:var(--verde-osc);
-    margin:0 0 4px;
+    font-family:"Courier New",monospace;font-size:11px;letter-spacing:2px;
+    text-transform:uppercase;color:var(--verde-osc);margin:0 0 4px;
   }
   .marcador{
-    font-family:"Courier New",monospace;
-    background:var(--flor);
-    border:3px solid var(--tinta);
-    border-radius:12px;
-    padding:6px 14px;
-    font-weight:bold;
-    font-size:16px;
-    box-shadow:0 4px 0 var(--tinta);
-    white-space:nowrap;
+    font-family:"Courier New",monospace;background:var(--flor);
+    border:3px solid var(--tinta);border-radius:12px;padding:6px 14px;
+    font-weight:bold;font-size:16px;box-shadow:0 4px 0 var(--tinta);white-space:nowrap;
   }
 
-  /* ---------- HOJA DE CUADERNO ---------- */
+  /* ---------- PESTAÑAS ---------- */
+  .pestanas{display:flex;gap:8px;margin-top:16px;overflow-x:auto;padding:4px 2px 10px;}
+  .pes{
+    flex:none;font-family:"Trebuchet MS",sans-serif;font-weight:bold;font-size:14px;
+    background:#fff;border:3px solid var(--tinta);border-radius:12px;
+    padding:9px 14px;cursor:pointer;box-shadow:0 4px 0 var(--tinta);color:var(--gris);
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  .pes:hover{transform:translateY(2px);box-shadow:0 2px 0 var(--tinta);}
+  .pes.abierta{color:var(--tinta);}
+  .pes.lista{background:var(--verde-claro);color:var(--verde-osc);}
+  .pes.activa{background:var(--verde);color:#fff;}
+
+  /* ---------- HOJA ---------- */
   .hoja{
-    position:relative;
-    background:var(--papel);
-    background-image:repeating-linear-gradient(
-      to bottom, transparent 0 33px, var(--renglon) 33px 34px);
-    border:3px solid var(--tinta);
-    border-radius:18px;
-    padding:22px 20px 22px 46px;
-    margin-top:20px;
-    box-shadow:0 6px 0 var(--tinta);
+    position:relative;background:var(--papel);
+    background-image:repeating-linear-gradient(to bottom, transparent 0 33px, var(--renglon) 33px 34px);
+    border:3px solid var(--tinta);border-radius:18px;
+    padding:22px 20px 22px 46px;box-shadow:0 6px 0 var(--tinta);
   }
-  .hoja::before{
-    content:"";
-    position:absolute;top:0;bottom:0;left:30px;
-    width:2px;background:var(--margen);opacity:.6;
-  }
+  .hoja::before{content:"";position:absolute;top:0;bottom:0;left:30px;width:2px;background:var(--margen);opacity:.6;}
   .hoja::after{
-    content:"";
-    position:absolute;top:14px;bottom:14px;left:10px;
-    width:10px;
+    content:"";position:absolute;top:14px;bottom:14px;left:10px;width:10px;
     background-image:radial-gradient(circle, var(--tinta) 0 3px, transparent 4px);
-    background-size:10px 30px;
-    opacity:.35;
+    background-size:10px 30px;opacity:.35;
   }
-  h2{
-    font-family:"Trebuchet MS","DejaVu Sans",sans-serif;
-    font-size:23px;
-    margin:0 0 2px;
-    color:var(--verde-osc);
-  }
-  .num-paso{
-    font-family:"Courier New",monospace;
-    background:var(--verde);
-    color:#fff;
-    border-radius:50%;
-    width:30px;height:30px;
-    display:inline-flex;align-items:center;justify-content:center;
-    font-weight:bold;font-size:15px;
-    margin-right:8px;
-    vertical-align:middle;
-  }
+  h2{font-family:"Trebuchet MS",sans-serif;font-size:22px;margin:0 0 2px;color:var(--verde-osc);}
+  h3{font-family:"Trebuchet MS",sans-serif;font-size:17px;margin:0 0 6px;}
+  .sub{font-family:"Courier New",monospace;font-size:12px;letter-spacing:1px;color:var(--gris);text-transform:uppercase;margin:0 0 10px;}
   .consigna{margin:8px 0 16px;font-size:14.5px;}
-  .oculto{display:none;}
 
   /* ---------- BOTONES ---------- */
   button{
-    font-family:inherit;
-    font-size:15px;
-    cursor:pointer;
-    border:3px solid var(--tinta);
-    border-radius:12px;
-    padding:12px 18px;
-    background:#fff;
-    color:var(--tinta);
-    box-shadow:0 4px 0 var(--tinta);
+    font-family:inherit;font-size:15px;cursor:pointer;
+    border:3px solid var(--tinta);border-radius:12px;padding:12px 18px;
+    background:#fff;color:var(--tinta);box-shadow:0 4px 0 var(--tinta);
     transition:transform .08s ease, box-shadow .08s ease;
   }
   button:hover:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 var(--tinta);}
@@ -147,144 +98,153 @@
   button:focus-visible{outline:3px solid var(--rosa);outline-offset:3px;}
   .btn-verde{background:var(--verde);color:#fff;font-weight:bold;}
   .btn-flor{background:var(--flor);font-weight:bold;}
-  .fila-botones{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
-  .btn-volver{font-size:13px;padding:9px 14px;box-shadow:0 3px 0 var(--tinta);}
+  .fila{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
 
-  /* ---------- MENÚ ---------- */
-  .menu{display:grid;gap:12px;margin-top:16px;}
-  .menu button{
-    display:flex;align-items:center;gap:14px;text-align:left;
-    background:#fff;padding:14px 16px;
+  /* ---------- CANDADO ---------- */
+  .candado{text-align:center;padding:10px 0;}
+  .candado .icono{font-size:54px;}
+  .candado input{
+    font-family:"Courier New",monospace;font-size:20px;text-align:center;
+    border:3px solid var(--tinta);border-radius:12px;padding:11px 14px;
+    width:220px;max-width:100%;letter-spacing:3px;background:#fff;color:var(--tinta);
   }
-  .menu .icono{
-    font-size:30px;
-    background:var(--verde-claro);
-    border:3px solid var(--tinta);
-    border-radius:12px;
-    width:54px;height:54px;
-    display:flex;align-items:center;justify-content:center;
-    flex:none;
-  }
-  .menu strong{display:block;font-size:16px;font-family:"Trebuchet MS",sans-serif;}
-  .menu span.desc{font-size:13px;color:#4A6070;}
+  .candado input:focus{outline:3px solid var(--rosa);outline-offset:2px;}
 
-  /* ---------- JUEGO 1 ---------- */
-  .vitrina{
-    position:relative;
-    border:3px solid var(--tinta);
-    border-radius:14px;
-    height:160px;
-    overflow:hidden;
-    background:
-      linear-gradient(#BFE9F7 0 58%, var(--verde) 58% 78%, var(--tierra) 78% 100%);
-  }
-  .vitrina .sol{position:absolute;top:12px;right:16px;font-size:26px;}
-  .vitrina .pieza{
-    position:absolute;left:50%;top:50%;
-    transform:translate(-50%,-50%);
-    font-size:62px;
-    filter:drop-shadow(0 4px 0 rgba(0,0,0,.15));
-  }
-  .cinta{
-    position:absolute;top:10px;left:10px;
-    font-family:"Courier New",monospace;
-    font-size:11px;letter-spacing:1px;
-    background:var(--papel);
-    border:2px solid var(--tinta);
-    border-radius:8px;
-    padding:2px 8px;
-  }
-  .item-texto{
-    text-align:center;font-size:17px;font-weight:bold;
-    margin:16px 0 0;color:var(--verde-osc);
-    font-family:"Trebuchet MS",sans-serif;
-  }
-  .par-botones{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
-  .par-botones button{padding:16px 8px;font-size:16px;font-weight:bold;}
-  .b-objeto{background:var(--flor);}
-  .b-fondo{background:var(--cielo);}
-
-  .feedback{
-    margin-top:14px;padding:12px 14px;border-radius:12px;
-    font-size:14px;display:none;border:3px solid var(--tinta);
-  }
+  /* ---------- FEEDBACK ---------- */
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:14px;border:3px solid var(--tinta);display:none;}
   .feedback.ok{display:block;background:var(--verde-claro);}
   .feedback.mal{display:block;background:#FFE1EA;}
   .feedback strong{font-family:"Trebuchet MS",sans-serif;}
 
-  .puntitos{display:flex;gap:6px;margin-top:14px;align-items:center;}
+  .puntitos{display:flex;gap:6px;margin-top:14px;align-items:center;flex-wrap:wrap;}
   .puntito{width:12px;height:12px;border-radius:50%;border:2px solid var(--tinta);background:#fff;}
   .puntito.hecho{background:var(--verde);}
   .puntito.actual{background:var(--flor);}
-  .puntitos span{
-    font-family:"Courier New",monospace;font-size:12px;margin-left:6px;color:#4A6070;
-  }
+  .puntitos .txt{font-family:"Courier New",monospace;font-size:12px;margin-left:6px;color:var(--gris);}
 
-  /* ---------- JUEGO 2 ---------- */
-  .cantero{
-    display:grid;grid-template-columns:repeat(12,1fr);gap:4px;
-    background:var(--tierra);
-    border:3px solid var(--tierra-osc);
-    border-radius:14px 14px 6px 6px;
-    padding:8px;
-    box-shadow:0 5px 0 var(--tierra-osc);
-  }
-  .celda{
-    aspect-ratio:1/1;
-    background:#F0E4CD;
-    border:2px dashed #B99B72;
-    border-radius:8px;
-    box-shadow:none;
-    padding:0;font-size:20px;line-height:1;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .celda:hover:not(:disabled){transform:none;box-shadow:none;background:#FBF2E0;}
-  .celda:active:not(:disabled){transform:scale(.93);box-shadow:none;}
-  .celda.puesta{background:var(--verde-claro);border:2px solid var(--verde-osc);}
-  .regla{
-    display:grid;grid-template-columns:repeat(12,1fr);gap:4px;
-    padding:6px 11px 0;
-    font-family:"Courier New",monospace;font-size:12px;
-    text-align:center;color:#4A6070;
-  }
-  .contador{
-    font-family:"Courier New",monospace;font-size:14px;margin:14px 0 0;
-  }
-
-  /* ---------- JUEGO 3 ---------- */
-  .pregunta{
-    font-family:"Trebuchet MS",sans-serif;
-    font-size:18px;font-weight:bold;color:var(--verde-osc);
-    margin:0 0 14px;
-  }
+  /* ---------- QUIZ ---------- */
+  .pregunta{font-family:"Trebuchet MS",sans-serif;font-size:18px;font-weight:bold;color:var(--verde-osc);margin:0 0 14px;}
   .opciones{display:grid;gap:10px;}
   .opciones button{text-align:left;padding:13px 16px;background:#fff;}
 
-  /* ---------- FINAL ---------- */
-  .final{text-align:center;}
-  .medalla{
-    font-size:60px;
-    display:inline-flex;align-items:center;justify-content:center;
-    width:104px;height:104px;
-    background:var(--flor);
-    border:3px solid var(--tinta);
-    border-radius:50%;
-    box-shadow:0 6px 0 var(--tinta);
+  .vitrina{
+    position:relative;border:3px solid var(--tinta);border-radius:14px;height:150px;overflow:hidden;
+    background:linear-gradient(#BFE9F7 0 58%, var(--verde) 58% 80%, var(--tierra) 80% 100%);
   }
-  .puntaje-final{
-    font-family:"Courier New",monospace;
-    font-size:38px;font-weight:bold;color:var(--verde-osc);margin:14px 0 4px;
+  .vitrina .sol{position:absolute;top:10px;right:14px;font-size:24px;}
+  .vitrina .pieza{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:58px;}
+  .cinta{
+    position:absolute;top:9px;left:9px;font-family:"Courier New",monospace;font-size:11px;letter-spacing:1px;
+    background:var(--papel);border:2px solid var(--tinta);border-radius:8px;padding:2px 8px;
   }
-  .reflexion{
-    text-align:left;background:#fff;
-    border:3px solid var(--tinta);border-radius:14px;
-    padding:16px 18px;margin-top:20px;
-    box-shadow:0 4px 0 var(--tinta);
+  .par2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .par2 button{padding:16px 8px;font-size:16px;font-weight:bold;text-align:center;}
+
+  .jardin{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+    background:linear-gradient(var(--verde) 0 70%, var(--tierra) 70% 100%);
+    border:3px solid var(--tinta);border-radius:14px;padding:14px 12px;
   }
-  .reflexion h3{
-    margin:0 0 10px;font-size:16px;color:var(--rosa);
+  .flor-btn{
+    background:var(--flor);border:3px solid var(--tinta);border-radius:50%;
+    aspect-ratio:1/1;font-family:"Courier New",monospace;font-weight:bold;font-size:19px;
+    display:flex;align-items:center;justify-content:center;padding:0;
+  }
+  .flor-btn.mala{background:#FFB3C6;}
+  .flor-btn.buena{background:var(--verde-claro);}
+
+  /* ---------- CANTERO ---------- */
+  .cantero{
+    display:grid;grid-template-columns:repeat(12,1fr);gap:4px;background:var(--tierra);
+    border:3px solid var(--tierra-osc);border-radius:14px 14px 6px 6px;padding:8px;
+    box-shadow:0 5px 0 var(--tierra-osc);
+  }
+  .celda{
+    aspect-ratio:1/1;background:#F0E4CD;border:2px dashed #B99B72;border-radius:8px;
+    box-shadow:none;padding:0;font-size:20px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .celda:hover:not(:disabled){transform:none;box-shadow:none;background:#FBF2E0;}
+  .celda.puesta{background:var(--verde-claro);border:2px solid var(--verde-osc);}
+  .regla{
+    display:grid;grid-template-columns:repeat(12,1fr);gap:4px;padding:6px 11px 0;
+    font-family:"Courier New",monospace;font-size:12px;text-align:center;color:var(--gris);
+  }
+  .contador{font-family:"Courier New",monospace;font-size:14px;margin:14px 0 0;}
+
+  /* ---------- BLOQUES ---------- */
+  .zona{border:3px dashed var(--gris);border-radius:14px;padding:12px;background:#fff;min-height:80px;}
+  .zona h4{margin:0 0 10px;font-family:"Courier New",monospace;font-size:12px;letter-spacing:1px;color:var(--gris);text-transform:uppercase;}
+  .bloques{display:grid;gap:8px;}
+  .bloque{
+    text-align:left;color:#fff;font-size:14px;font-weight:bold;border:3px solid rgba(0,0,0,.35);
+    border-radius:8px;padding:11px 14px;box-shadow:0 3px 0 rgba(0,0,0,.35);
     font-family:"Trebuchet MS",sans-serif;
   }
+  .bloque.indent{margin-left:20px;}
+  .b-evento{background:#F0A800;}
+  .b-movimiento{background:#4C97FF;}
+  .b-lapiz{background:#0FBD8C;}
+  .b-control{background:#E58B12;}
+  .b-apariencia{background:#9966FF;}
+  .b-sensores{background:#4EA3C7;}
+  .col2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  /* ---------- PAREJAS ---------- */
+  .parejas{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .parejas button{text-align:left;font-size:14px;padding:11px 13px;}
+  .parejas .concepto{font-family:"Trebuchet MS",sans-serif;font-weight:bold;background:var(--flor);}
+  .parejas button.sel{outline:4px solid var(--rosa);outline-offset:2px;}
+  .parejas button.listo{background:var(--verde-claro);color:var(--verde-osc);opacity:.7;}
+
+  /* ---------- CARTEL FLOTANTE ---------- */
+  .telon{
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:rgba(27,46,63,.72);
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;z-index:50;
+  }
+  .cartel{
+    background:var(--papel);border:3px solid var(--tinta);border-radius:20px;
+    box-shadow:0 8px 0 var(--tinta);
+    max-width:440px;width:100%;padding:26px 24px;text-align:center;
+  }
+  .cartel .rana{font-size:56px;line-height:1;}
+  .cartel h2{font-size:24px;margin:6px 0 8px;}
+  .cartel p{font-size:15px;margin:0 0 6px;}
+  .cartel .pts{font-family:"Courier New",monospace;font-weight:bold;color:var(--verde-osc);font-size:15px;}
+  .cartel .fila{justify-content:center;}
+  .cartel a.btn{
+    display:inline-block;text-decoration:none;font-family:inherit;font-size:15px;font-weight:bold;
+    border:3px solid var(--tinta);border-radius:12px;padding:12px 18px;
+    background:var(--flor);color:var(--tinta);box-shadow:0 4px 0 var(--tinta);
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  .cartel a.btn:hover{transform:translateY(2px);box-shadow:0 2px 0 var(--tinta);}
+  .cartel a.btn:focus-visible{outline:3px solid var(--rosa);outline-offset:3px;}
+  .aviso-pestana{font-size:12px;color:var(--gris);margin-top:12px;}
+
+  @media (prefers-reduced-motion:no-preference){
+    .cartel{animation:aparece .3s ease;}
+    @keyframes aparece{
+      0%{transform:scale(.85) translateY(14px);opacity:0;}
+      100%{transform:scale(1) translateY(0);opacity:1;}
+    }
+  }
+
+  /* ---------- CIERRE ---------- */
+  .cierre{text-align:center;}
+  .medalla{
+    font-size:52px;display:inline-flex;align-items:center;justify-content:center;
+    width:96px;height:96px;background:var(--flor);border:3px solid var(--tinta);
+    border-radius:50%;box-shadow:0 6px 0 var(--tinta);
+  }
+  .puntaje{font-family:"Courier New",monospace;font-size:34px;font-weight:bold;color:var(--verde-osc);margin:12px 0 2px;}
+  .reflexion{
+    text-align:left;background:#fff;border:3px solid var(--tinta);border-radius:14px;
+    padding:14px 16px;margin-top:18px;box-shadow:0 4px 0 var(--tinta);
+  }
+  .reflexion h3{color:var(--rosa);font-size:15px;}
   .reflexion ul{margin:0;padding-left:20px;}
   .reflexion li{margin-bottom:8px;font-size:14px;}
 
@@ -302,22 +262,28 @@
       50%{transform:translate(156px,0);}
       75%{transform:translate(234px,-30px);}
     }
+    .tiembla{animation:tiemble .3s ease;}
+    @keyframes tiemble{
+      0%,100%{transform:translateX(0);}
+      25%{transform:translateX(-7px);}
+      75%{transform:translateX(7px);}
+    }
   }
   @media (max-width:560px){
-    h1{font-size:23px;}
+    h1{font-size:22px;}
     .hoja{padding:18px 14px 18px 40px;}
-    .par-botones{grid-template-columns:1fr;}
+    .par2,.col2,.parejas{grid-template-columns:1fr;}
     .celda{font-size:14px;}
     .regla{font-size:9px;}
+    .jardin{grid-template-columns:repeat(2,1fr);}
   }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ============ HERO ============ -->
   <div class="hero">
-    <svg class="hero-svg" viewBox="0 0 400 110" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Número la rana saltando de flor en flor en el jardín">
+    <svg class="hero-svg" viewBox="0 0 400 110" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Número la rana saltando de flor en flor">
       <rect width="400" height="110" fill="#BFE9F7"/>
       <circle cx="356" cy="24" r="15" fill="#FFC93C"/>
       <rect y="82" width="400" height="28" fill="#2E9E4F"/>
@@ -340,123 +306,15 @@
     </svg>
     <div class="hero-txt">
       <div>
-        <p class="eyebrow">Etapa 1 · Pensamiento Computacional</p>
-        <h1>El jardín de Número</h1>
+        <p class="eyebrow">Pensamiento Computacional · 7 etapas</p>
+        <h1>Número, la rana</h1>
       </div>
       <div class="marcador">Puntos: <span id="puntos">0</span></div>
     </div>
   </div>
 
-  <!-- ============ INICIO ============ -->
-  <section class="hoja" id="pantalla-inicio">
-    <h2>Antes de abrir Scratch</h2>
-    <p class="consigna">
-      Número es una rana que aprendió a contar y vive en el jardín de la escuela.
-      Para poder armarle su jardín en Scratch, primero entrenamos tres cosas:
-      distinguir <strong>objetos</strong> de <strong>fondos</strong>, ubicar macetas
-      a <strong>igual distancia</strong> y repasar lo aprendido.
-    </p>
-    <div class="menu">
-      <button class="ir" data-destino="juego1">
-        <span class="icono">🐸</span>
-        <span><strong>¿Objeto o fondo?</strong>
-        <span class="desc">Ocho elementos del jardín para clasificar.</span></span>
-      </button>
-      <button class="ir" data-destino="juego2">
-        <span class="icono">🌷</span>
-        <span><strong>Macetas a igual distancia</strong>
-        <span class="desc">Ubicalas para que Número salte siempre lo mismo.</span></span>
-      </button>
-      <button class="ir" data-destino="juego3">
-        <span class="icono">✏️</span>
-        <span><strong>Lo que aprendimos</strong>
-        <span class="desc">Cinco preguntas para cerrar la etapa.</span></span>
-      </button>
-    </div>
-  </section>
-
-  <!-- ============ JUEGO 1 ============ -->
-  <section class="hoja oculto" id="juego1">
-    <h2><span class="num-paso">1</span>¿Objeto o fondo?</h2>
-    <p class="consigna">
-      En Scratch el <strong>fondo</strong> es la imagen que ocupa toda la pantalla y queda atrás de todo.
-      El <strong>objeto</strong> es un personaje que se programa aparte y puede moverse.
-      Decidí qué es cada elemento del jardín.
-    </p>
-
-    <div class="vitrina">
-      <span class="cinta">JARDÍN DE LA ESCUELA</span>
-      <span class="sol">☀️</span>
-      <span class="pieza" id="pieza">🐸</span>
-    </div>
-    <p class="item-texto" id="item-texto">…</p>
-
-    <div class="par-botones">
-      <button class="b-objeto" data-respuesta="objeto">Es un OBJETO</button>
-      <button class="b-fondo" data-respuesta="fondo">Es el FONDO</button>
-    </div>
-
-    <div class="feedback" id="fb1"></div>
-    <div class="puntitos" id="puntitos1"></div>
-    <div class="fila-botones">
-      <button class="btn-volver ir" data-destino="inicio">← Volver al inicio</button>
-    </div>
-  </section>
-
-  <!-- ============ JUEGO 2 ============ -->
-  <section class="hoja oculto" id="juego2">
-    <h2><span class="num-paso">2</span>Macetas a igual distancia</h2>
-    <p class="consigna" id="consigna2"></p>
-
-    <div class="cantero" id="cantero"></div>
-    <div class="regla" id="regla"></div>
-
-    <p class="contador" id="contador2"></p>
-    <div class="fila-botones">
-      <button class="btn-verde" id="revisar2">Revisar el cantero</button>
-      <button id="limpiar2">Sacar todas</button>
-    </div>
-
-    <div class="feedback" id="fb2"></div>
-    <div class="fila-botones">
-      <button class="btn-volver ir" data-destino="inicio">← Volver al inicio</button>
-    </div>
-  </section>
-
-  <!-- ============ JUEGO 3 ============ -->
-  <section class="hoja oculto" id="juego3">
-    <h2><span class="num-paso">3</span>Lo que aprendimos</h2>
-    <p class="pregunta" id="pregunta3">…</p>
-    <div class="opciones" id="opciones3"></div>
-    <div class="feedback" id="fb3"></div>
-    <div class="puntitos" id="puntitos3"></div>
-    <div class="fila-botones">
-      <button class="btn-volver ir" data-destino="inicio">← Volver al inicio</button>
-    </div>
-  </section>
-
-  <!-- ============ FINAL ============ -->
-  <section class="hoja oculto final" id="pantalla-final">
-    <div class="medalla">🐸</div>
-    <p class="puntaje-final"><span id="puntos-final">0</span> pts</p>
-    <h2 id="titulo-final">¡Terminaron la Etapa 1!</h2>
-    <p class="consigna" id="mensaje-final"></p>
-
-    <div class="reflexion">
-      <h3>Para conversar antes de ir a Scratch</h3>
-      <ul>
-        <li>¿Qué dificultades tendríamos si dibujáramos a Número dentro del fondo?</li>
-        <li>¿Qué ventaja tiene que Número sea un objeto y no parte del dibujo del jardín?</li>
-        <li>¿Cómo hacemos para que las flores queden a la misma distancia en Scratch?</li>
-        <li>¿Qué otras cosas de la vida diaria están a igual distancia una de otra?</li>
-      </ul>
-    </div>
-
-    <div class="fila-botones" style="justify-content:center;">
-      <button class="btn-flor" id="reiniciar">Jugar de nuevo</button>
-      <button class="btn-volver ir" data-destino="inicio">← Volver al inicio</button>
-    </div>
-  </section>
+  <nav class="pestanas" id="pestanas" aria-label="Etapas del proyecto"></nav>
+  <main id="contenido"></main>
 
 </div>
 
@@ -464,307 +322,810 @@
 (function(){
   "use strict";
 
+  var ETAPAS = [
+    {
+      n:1, clave:"numero",
+      titulo:"El jardín de Número",
+      sub:"Objetos, fondos y distancias iguales",
+      cierre:[
+        "¿Qué dificultades tendríamos si dibujáramos a Número dentro del fondo?",
+        "¿Qué ventaja tiene que Número sea un objeto y no parte del dibujo del jardín?",
+        "¿Cómo hacemos para que las flores queden a la misma distancia en Scratch?"
+      ],
+      actividades:[
+        {tipo:"quiz", render:"vitrina", titulo:"¿Objeto o fondo?",
+         consigna:"El <strong>fondo</strong> es la imagen que ocupa toda la pantalla y queda atrás de todo. El <strong>objeto</strong> es un personaje que se programa aparte y puede moverse.",
+         preguntas:[
+          {emoji:"🐸", p:"Número, la rana que salta de flor en flor", o:["Es un OBJETO","Es el FONDO"], c:0,
+           r:"Número tiene que moverse sola. Dibujada en el fondo quedaría pegada y no podríamos programarla."},
+          {emoji:"🏫", p:"El patio de la escuela con el cielo y el pasto", o:["Es un OBJETO","Es el FONDO"], c:1,
+           r:"Ocupa toda la pantalla y no se mueve: es el fondo del escenario."},
+          {emoji:"🌻", p:"Una flor que se ilumina cuando Número la toca", o:["Es un OBJETO","Es el FONDO"], c:0,
+           r:"Si tiene que cambiar o reaccionar, necesita ser un objeto con su propio programa."},
+          {emoji:"🔲", p:"La cuadrícula que nos ayuda a medir distancias", o:["Es un OBJETO","Es el FONDO"], c:1,
+           r:"Es parte del dibujo del escenario: sirve de guía, pero no se programa."},
+          {emoji:"⏱️", p:"El reloj que avisa cuánto tiempo queda", o:["Es un OBJETO","Es el FONDO"], c:0,
+           r:"El reloj cambia mientras el juego corre, así que va como objeto."},
+          {emoji:"☁️", p:"El cielo celeste del jardín", o:["Es un OBJETO","Es el FONDO"], c:1,
+           r:"Está dibujado detrás de todo y ocupa la pantalla entera."},
+          {emoji:"🪴", p:"Una maceta que se puede arrastrar de lugar", o:["Es un OBJETO","Es el FONDO"], c:0,
+           r:"Si la vamos a mover, tiene que ser un objeto."},
+          {emoji:"🌳", p:"Los árboles pintados al costado del patio", o:["Es un OBJETO","Es el FONDO"], c:1,
+           r:"Son parte del paisaje y no hacen nada: quedan en el fondo."}
+         ]},
+        {tipo:"cantero", titulo:"Macetas a igual distancia",
+         consigna:"Ubicá las macetas de modo que la distancia entre una y la siguiente sea siempre la misma. Así Número repite siempre el mismo salto."}
+      ]
+    },
+
+    {
+      n:2, clave:"salto",
+      titulo:"Desplazamiento de flor en flor",
+      sub:"Del algoritmo al programa · Eventos",
+      cierre:[
+        "¿Todos armaron el salto con los mismos bloques?",
+        "¿Qué pasa si cambiamos el orden de las instrucciones?",
+        "¿Qué otros eventos podríamos usar para que Número salte?"
+      ],
+      actividades:[
+        {tipo:"secuencia", titulo:"Armá el salto de Número",
+         consigna:"Tocá los bloques en el orden correcto para que Número salte a la flor siguiente dejando un rastro de color.",
+         bloques:[
+          {t:"al presionar tecla flecha derecha", cat:"evento"},
+          {t:"apuntar en dirección 90", cat:"movimiento"},
+          {t:"bajar lápiz", cat:"lapiz"},
+          {t:"mover 60 pasos", cat:"movimiento"},
+          {t:"subir lápiz", cat:"lapiz"}
+         ]},
+        {tipo:"quiz", render:"normal", titulo:"Eventos y programas",
+         consigna:"Cinco preguntas sobre lo que trabajamos en la videoconferencia.",
+         preguntas:[
+          {p:"¿Qué es un evento en Scratch?", o:["Un dibujo del escenario","Algo que ocurre y hace arrancar el programa","Un error del juego"], c:1,
+           r:"Un evento es información de entrada: presionar una tecla, hacer clic o tocar la bandera verde."},
+          {p:"¿Qué pasa si cambiamos el orden de las instrucciones?", o:["No cambia nada","El resultado puede ser distinto","El programa se borra"], c:1,
+           r:"El orden importa: la computadora ejecuta un paso después del otro."},
+          {p:"Para que Número dibuje un cuadrado, ¿cuánto tiene que girar en cada esquina?", o:["45 grados","60 grados","90 grados"], c:2,
+           r:"El cuadrado tiene ángulos de 90°, igual que el rectángulo."},
+          {p:"El bloque «mover 10 pasos» pertenece a la categoría…", o:["Movimiento","Apariencia","Sonido"], c:0,
+           r:"Los bloques azules de Movimiento cambian la posición del objeto."},
+          {p:"Un programa es…", o:["Un dibujo animado","Un algoritmo escrito para que lo interprete la computadora","Una carpeta de archivos"], c:1,
+           r:"Los bloques son símbolos que la computadora interpreta de una única manera."}
+         ]}
+      ]
+    },
+
+    {
+      n:3, clave:"jardin",
+      titulo:"Desafíos matemáticos en el jardín",
+      sub:"Interactividad · La rana pregunta",
+      cierre:[
+        "¿Cuándo decimos que un juego es interactivo?",
+        "¿En qué momento el personaje presenta el desafío matemático?",
+        "¿Qué programas interactivos usan todos los días?"
+      ],
+      actividades:[
+        {tipo:"quiz", render:"flores", titulo:"Saltá a la flor correcta",
+         consigna:"Número te lanza un desafío y tenés que llevarla hasta la flor con la respuesta correcta.",
+         preguntas:[
+          {p:"Número pregunta: ¿cuál de estos números es múltiplo de 5?", o:["12","27","35","44"], c:2,
+           r:"35 = 5 × 7, así que es múltiplo de 5."},
+          {p:"Número pregunta: ¿cuál tiene un 7 en el lugar de las decenas?", o:["378","731","217","907"], c:0,
+           r:"En 378 el 7 ocupa las decenas: 3 centenas, 7 decenas y 8 unidades."},
+          {p:"Número pregunta: ¿cuál es el doble de 24?", o:["42","46","48","44"], c:2,
+           r:"24 + 24 = 48."},
+          {p:"Número pregunta: ¿cuál de estos números es divisor de 36?", o:["7","8","9","10"], c:2,
+           r:"36 : 9 = 4 exacto, así que 9 es divisor de 36."},
+          {p:"Número pregunta: ¿cuál está entre 450 y 460?", o:["449","455","461","470"], c:1,
+           r:"455 queda justo entre 450 y 460 en la recta numérica."}
+         ]},
+        {tipo:"quiz", render:"normal", titulo:"Interactividad",
+         consigna:"Repasamos por qué el juego que están programando es interactivo.",
+         preguntas:[
+          {p:"¿Qué bloque hace que Número enuncie el desafío?", o:["«decir ( ) por 2 segundos»","«mover 10 pasos»","«esperar 1 segundos»"], c:0,
+           r:"«decir» es de la categoría Apariencia y muestra un globo de texto."},
+          {p:"Un juego es interactivo cuando…", o:["Tiene muchos colores","El usuario hace algo y el programa le responde","Dura mucho tiempo"], c:1,
+           r:"Una parte hace algo y la otra responde: eso es comunicación entre el dispositivo y el usuario."},
+          {p:"¿Cuál de estos NO es un evento?", o:["Presionar la bandera verde","Hacer clic en el objeto","Que la flor sea amarilla"], c:2,
+           r:"El color de la flor es una característica, no un suceso que dispare instrucciones."},
+          {p:"Un cajero automático se parece a nuestro juego porque…", o:["Está programado para responder a lo que hace la persona","Tiene una pantalla grande","Usa números"], c:0,
+           r:"Los dispositivos asocian eventos a secuencias de instrucciones."}
+         ]}
+      ]
+    },
+
+    {
+      n:4, clave:"condicion",
+      titulo:"Reglas del juego",
+      sub:"Alternativa condicional y sensores",
+      cierre:[
+        "¿Qué tipo de reglas nos permite expresar la alternativa condicional?",
+        "¿Cómo detectamos que Número llegó a la flor correcta?",
+        "¿Qué situaciones de la vida diaria podemos escribir como «si… entonces…»?"
+      ],
+      actividades:[
+        {tipo:"quiz", render:"normal", titulo:"Si… entonces…",
+         consigna:"Una <strong>condición</strong> es algo que puede ser verdadero o falso. Elegí cómo se completa cada regla.",
+         preguntas:[
+          {p:"Si está lloviendo, entonces…", o:["…llevo paraguas","…me pongo el traje de baño","…apago la luz"], c:0,
+           r:"La condición «está lloviendo» puede ser verdadera o falsa, y según eso decidimos la acción."},
+          {p:"Si Número toca la flor con el resultado correcto, entonces…", o:["…el juego se cierra","…dice «¡Muy bien!»","…cambia de color el cielo"], c:1,
+           r:"Esa es la regla del juego que programamos con la alternativa condicional."},
+          {p:"¿Qué bloque de la categoría Control sirve para programar una regla?", o:["«si ⟨ ⟩ entonces»","«mover 10 pasos»","«tocar sonido»"], c:0,
+           r:"El bloque «si… entonces» ejecuta instrucciones solo cuando la condición es verdadera."},
+          {p:"¿Qué bloque completa la condición para saber si la rana está sobre la flor?", o:["«¿tocando el color ( )?» (Sensores)","«esperar 1 segundos» (Control)","«decir Hola» (Apariencia)"], c:0,
+           r:"Los sensores detectan situaciones, igual que los eventos detectan acciones del usuario."},
+          {p:"La rama «si no» del bloque condicional sirve para…", o:["Repetir la acción muchas veces","Hacer algo distinto cuando la condición es falsa","Cambiar el fondo"], c:1,
+           r:"Con «si no» podemos avisar también cuando la respuesta es incorrecta."},
+          {p:"Un programa con alternativa condicional…", o:["Siempre hace lo mismo","Puede tener más de un comportamiento","No se puede detener"], c:1,
+           r:"Según se cumpla o no la condición, el programa actúa distinto."}
+         ]},
+        {tipo:"secuencia", titulo:"Armá la regla del juego",
+         consigna:"Ordená los bloques para que Número felicite al jugador cuando llega a la flor amarilla.",
+         bloques:[
+          {t:"al presionar tecla espacio", cat:"evento"},
+          {t:"mover 60 pasos", cat:"movimiento"},
+          {t:"si ⟨¿tocando el color amarillo?⟩ entonces", cat:"control"},
+          {t:"decir «¡Muy bien!» por 2 segundos", cat:"apariencia", indent:true}
+         ]}
+      ]
+    },
+
+    {
+      n:5, clave:"repetir",
+      titulo:"Complejidades y repeticiones",
+      sub:"Repetición simple · Tiempo para ganar",
+      cierre:[
+        "¿Cuál de todas las programaciones es más fácil de leer? ¿Por qué?",
+        "¿Todos resolvieron el reloj de la misma manera?",
+        "¿Qué ventajas tiene usar «repetir» en lugar de copiar el bloque muchas veces?"
+      ],
+      actividades:[
+        {tipo:"quiz", render:"normal", titulo:"Programas más cortos",
+         consigna:"Cuando un bloque se repite, podemos usar «repetir ( ) veces» y el programa queda más fácil de leer.",
+         preguntas:[
+          {p:"«mover 10 pasos» escrito 6 veces seguidas se reemplaza por…", o:["repetir 3 veces → mover 10 pasos","repetir 6 veces → mover 10 pasos","repetir 10 veces → mover 6 pasos"], c:1,
+           r:"El número del «repetir» es la cantidad de veces que aparecía el bloque."},
+          {p:"«mover 50 pasos» + «girar 90 grados», cuatro veces seguidas, dibuja…", o:["Un triángulo","Un cuadrado","Una línea recta"], c:1,
+           r:"Cuatro lados iguales con giros de 90°: un cuadrado."},
+          {p:"¿Por qué conviene usar la estructura repetitiva?", o:["Porque el programa corre más rápido","Porque es más fácil de leer y de corregir","Porque usa menos colores"], c:1,
+           r:"Programas más legibles se pueden analizar, comparar y corregir entre compañeros."},
+          {p:"¿Qué bloque hace que el juego termine cuando se acaba el tiempo?", o:["«detener todos»","«esconder»","«esperar 10 segundos»"], c:0,
+           r:"«detener todos» corta la ejecución de todos los programas del proyecto."},
+          {p:"Para que el reloj sepa que llegó al final de la pantalla usamos…", o:["Un evento de teclado","El sensor «¿tocando borde?»","El bloque «decir»"], c:1,
+           r:"Los sensores detectan situaciones dentro del escenario."}
+         ]},
+        {tipo:"secuencia", titulo:"Programá el reloj",
+         consigna:"Ordená los bloques del objeto que marca el tiempo disponible para responder.",
+         bloques:[
+          {t:"al presionar bandera verde", cat:"evento"},
+          {t:"repetir 20 veces", cat:"control"},
+          {t:"mover 10 pasos", cat:"movimiento", indent:true},
+          {t:"decir «¡Se acabó el tiempo!» por 2 segundos", cat:"apariencia"},
+          {t:"detener todos", cat:"control"}
+         ]}
+      ]
+    },
+
+    {
+      n:6, clave:"hogar",
+      titulo:"Número regresa a su hogar",
+      sub:"Reutilizar el programa · Muchas soluciones",
+      cierre:[
+        "¿Qué bloques usaron para programar el regreso de Número?",
+        "¿Todos lo resolvieron de la misma manera?",
+        "¿Qué partes del programa pudieron reutilizar?"
+      ],
+      actividades:[
+        {tipo:"secuencia", titulo:"El camino de vuelta",
+         consigna:"Ordená los bloques para que Número cambie de escenario, llegue a su hogar y festeje con piruetas.",
+         bloques:[
+          {t:"al presionar tecla flecha arriba", cat:"evento"},
+          {t:"cambiar fondo a «el estanque»", cat:"apariencia"},
+          {t:"deslizar en 1 segundos a x:0 y:-60", cat:"movimiento"},
+          {t:"repetir 4 veces", cat:"control"},
+          {t:"girar 90 grados", cat:"movimiento", indent:true},
+          {t:"decir «¡Llegué a mi hogar!» por 2 segundos", cat:"apariencia"}
+         ]},
+        {tipo:"quiz", render:"normal", titulo:"Reutilizar lo que ya hicimos",
+         consigna:"Programar también es aprovechar partes de programas que ya funcionan.",
+         preguntas:[
+          {p:"Para copiar un grupo de bloques que ya funciona usamos…", o:["Clic derecho → Duplicar","Borrar y escribir de nuevo","Cambiar de proyecto"], c:0,
+           r:"Duplicar evita repetir trabajo y reduce errores."},
+          {p:"La «mochila» de Scratch sirve para…", o:["Guardar programas, objetos y fondos para usarlos en otro proyecto","Cambiar el idioma","Subir el volumen"], c:0,
+           r:"Está disponible cuando entramos con usuario de Scratch."},
+          {p:"El bloque que cambia el escenario pertenece a…", o:["Apariencia","Sensores","Operadores"], c:0,
+           r:"«cambiar fondo a ( )» es un bloque violeta de Apariencia."},
+          {p:"Si dos compañeros resolvieron el regreso con bloques distintos y ambos funcionan…", o:["Uno está mal","Las dos soluciones son válidas","Hay que empezar de nuevo"], c:1,
+           r:"En programación casi siempre hay más de un modo de resolver el mismo problema."},
+          {p:"Las piruetas de Número se programan mejor con…", o:["Cuatro bloques «girar» copiados","«repetir 4 veces» con «girar» adentro","El bloque «esperar»"], c:1,
+           r:"La repetición deja el programa más corto y más claro."}
+         ]}
+      ]
+    },
+
+    {
+      n:7, clave:"programador",
+      titulo:"Cierre del proyecto",
+      sub:"Metacognición · Todo lo aprendido",
+      cierre:[
+        "¿Qué cosas de las que hicimos no conocían antes?",
+        "¿Qué hicieron para resolver los errores del programa?",
+        "¿Cómo se sintieron al empezar el proyecto y cómo se sienten ahora?"
+      ],
+      actividades:[
+        {tipo:"parejas", titulo:"Uní cada palabra con su significado",
+         consigna:"Tocá una palabra y después su definición. Son las palabras que usamos durante todo el proyecto.",
+         pares:[
+          {a:"Algoritmo", b:"Serie de pasos ordenados para resolver un problema"},
+          {a:"Programa", b:"Un algoritmo escrito para que lo interprete la computadora"},
+          {a:"Evento", b:"Un suceso, como presionar una tecla, que dispara instrucciones"},
+          {a:"Repetición", b:"Estructura que ejecuta varias veces las mismas instrucciones"},
+          {a:"Condicional", b:"Estructura «si… entonces…» que decide según una condición"},
+          {a:"Sensor", b:"Bloque que detecta situaciones, como tocar un color o un borde"}
+         ]},
+        {tipo:"quiz", render:"normal", titulo:"Repaso final",
+         consigna:"Las últimas preguntas del proyecto de Número.",
+         preguntas:[
+          {p:"¿Cuál es la diferencia entre un objeto y el escenario?", o:["El objeto se programa aparte y puede moverse","El escenario es más chico","No hay diferencia"], c:0,
+           r:"Lo trabajamos en la Etapa 1 y lo usamos durante todo el proyecto."},
+          {p:"Al publicar el proyecto en la web de Scratch agregamos el tag…", o:["#CeibalPC","#Scratch2024","#Rana"], c:0,
+           r:"Va en «Notas y créditos», junto al nombre de la escuela y el grupo."},
+          {p:"Además de las teclas, ¿de qué otra forma puede entrar información a un programa?", o:["Con el mouse, el micrófono o la cámara","Solo con el teclado","No hay otra forma"], c:0,
+           r:"Hay muchas maneras de ingresar información y el programa decide cómo reaccionar."},
+          {p:"Durante el proyecto usamos la computadora para…", o:["Usar programas hechos por otros","Crear algo nuevo: nuestro propio programa","Mirar videos"], c:1,
+           r:"De eso se trata la tarea de las y los programadores."},
+          {p:"Cuando el juego no funcionaba como esperábamos, lo mejor era…", o:["Borrar todo","Buscar el error, probar y corregir","Dejarlo así"], c:1,
+           r:"Encontrar y reflexionar sobre los errores es parte de programar."}
+         ]}
+      ]
+    }
+  ];
+
+  /* ==================== ESTADO ==================== */
   var puntos = 0;
+  var etapaActiva = 0;
+  var abiertas = [];
+  var progreso = [];
+  var cartelVisto = [];
+  for(var z=0; z<ETAPAS.length; z++){ abiertas.push(false); progreso.push(0); cartelVisto.push(false); }
+  var URL_SCRATCH = "https://scratch.mit.edu/projects/editor";
+
   var elPuntos = document.getElementById("puntos");
+  var elPest = document.getElementById("pestanas");
+  var elCont = document.getElementById("contenido");
 
   function sumar(n){ puntos += n; elPuntos.textContent = puntos; }
 
-  function mostrar(id){
-    var ids = ["pantalla-inicio","juego1","juego2","juego3","pantalla-final"];
-    for(var i=0;i<ids.length;i++){ document.getElementById(ids[i]).classList.add("oculto"); }
-    if(id === "inicio"){ id = "pantalla-inicio"; }
-    document.getElementById(id).classList.remove("oculto");
-    window.scrollTo(0,0);
-  }
-
-  var irs = document.querySelectorAll(".ir");
-  for(var i=0;i<irs.length;i++){
-    irs[i].addEventListener("click", function(){
-      var d = this.getAttribute("data-destino");
-      if(d === "juego1"){ iniciarJuego1(); }
-      if(d === "juego2"){ iniciarJuego2(); }
-      if(d === "juego3"){ iniciarJuego3(); }
-      mostrar(d);
-    });
+  function norm(s){
+    s = String(s).toLowerCase().replace(/^\s+|\s+$/g,"");
+    if(s.normalize){ s = s.normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+    return s;
   }
 
   function mezclar(arr){
     var a = arr.slice();
     for(var i=a.length-1;i>0;i--){
       var j = Math.floor(Math.random()*(i+1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
+      var t=a[i]; a[i]=a[j]; a[j]=t;
     }
     return a;
   }
 
-  function pintarPuntitos(cont, total, actual){
-    cont.innerHTML = "";
-    for(var i=0;i<total;i++){
-      var d = document.createElement("span");
-      d.className = "puntito" + (i < actual ? " hecho" : (i === actual ? " actual" : ""));
-      cont.appendChild(d);
+  function el(tag, clase, texto){
+    var e = document.createElement(tag);
+    if(clase){ e.className = clase; }
+    if(texto !== undefined && texto !== null){ e.textContent = texto; }
+    return e;
+  }
+
+  /* ==================== PESTAÑAS ==================== */
+  function pintarPestanas(){
+    elPest.innerHTML = "";
+    for(var i=0;i<ETAPAS.length;i++){
+      (function(i){
+        var e = ETAPAS[i];
+        var b = el("button","pes");
+        var completa = abiertas[i] && progreso[i] >= e.actividades.length;
+        b.textContent = "Etapa " + e.n + (abiertas[i] ? (completa ? " ✓" : "") : " 🔒");
+        if(abiertas[i]){ b.className += " abierta"; }
+        if(completa){ b.className += " lista"; }
+        if(i === etapaActiva){ b.className += " activa"; }
+        b.addEventListener("click", function(){ etapaActiva = i; render(); });
+        elPest.appendChild(b);
+      })(i);
     }
-    var t = document.createElement("span");
-    t.textContent = (actual < total ? (actual+1) : total) + "/" + total;
-    cont.appendChild(t);
   }
 
-  /* ================= JUEGO 1 ================= */
-  var items = [
-    {emoji:"🐸", texto:"Número, la rana que salta de flor en flor", tipo:"objeto",
-     razon:"Número tiene que moverse sola, así que va como objeto. Dibujada en el fondo quedaría pegada y no podríamos programarla."},
-    {emoji:"🏫", texto:"El patio de la escuela con el cielo y el pasto", tipo:"fondo",
-     razon:"El patio ocupa toda la pantalla y no se mueve: es el fondo del escenario."},
-    {emoji:"🌻", texto:"Una flor que se ilumina cuando Número la toca", tipo:"objeto",
-     razon:"Si tiene que cambiar o reaccionar, necesita ser un objeto con su propio programa."},
-    {emoji:"🔲", texto:"La cuadrícula que nos ayuda a medir distancias", tipo:"fondo",
-     razon:"La cuadrícula es parte del dibujo del escenario. Nos sirve de guía, pero no se programa."},
-    {emoji:"⏱️", texto:"El reloj que avisa cuánto tiempo queda", tipo:"objeto",
-     razon:"El reloj cambia mientras el juego corre, así que va como objeto."},
-    {emoji:"☁️", texto:"El cielo celeste del jardín", tipo:"fondo",
-     razon:"El cielo está dibujado detrás de todo y ocupa la pantalla entera: fondo."},
-    {emoji:"🪴", texto:"Una maceta que se puede arrastrar de lugar", tipo:"objeto",
-     razon:"Si la vamos a mover, tiene que ser un objeto. En el fondo quedaría fija."},
-    {emoji:"🌳", texto:"Los árboles pintados al costado del patio", tipo:"fondo",
-     razon:"Son parte del paisaje y no hacen nada: quedan dibujados en el fondo."}
-  ];
-  var idx1 = 0, mezcla1 = [];
+  /* ==================== RENDER ==================== */
+  function render(){
+    pintarPestanas();
+    elCont.innerHTML = "";
+    var hoja = el("div","hoja");
+    elCont.appendChild(hoja);
+    var e = ETAPAS[etapaActiva];
 
-  function iniciarJuego1(){
-    mezcla1 = mezclar(items);
-    idx1 = 0;
-    pintarItem();
+    if(!abiertas[etapaActiva]){ renderCandado(hoja, e); return; }
+
+    hoja.appendChild(el("p","sub","Etapa " + e.n + " · " + e.sub));
+    hoja.appendChild(el("h2", null, e.titulo));
+
+    if(progreso[etapaActiva] >= e.actividades.length){
+      renderCierre(hoja, e);
+      if(!cartelVisto[etapaActiva]){
+        cartelVisto[etapaActiva] = true;
+        mostrarCartel(e);
+      }
+      return;
+    }
+
+    var act = e.actividades[progreso[etapaActiva]];
+    hoja.appendChild(el("h3", null, act.titulo));
+    var c = el("p","consigna"); c.innerHTML = act.consigna; hoja.appendChild(c);
+
+    var host = el("div"); hoja.appendChild(host);
+
+    if(act.tipo === "quiz"){ juegoQuiz(host, act); }
+    if(act.tipo === "cantero"){ juegoCantero(host); }
+    if(act.tipo === "secuencia"){ juegoSecuencia(host, act); }
+    if(act.tipo === "parejas"){ juegoParejas(host, act); }
+    window.scrollTo(0,0);
   }
 
-  function pintarItem(){
-    var it = mezcla1[idx1];
-    var p = document.getElementById("pieza");
-    p.textContent = it.emoji;
-    p.classList.remove("brinca");
-    void p.offsetWidth;
-    p.classList.add("brinca");
-    document.getElementById("item-texto").textContent = it.texto;
-    document.getElementById("fb1").className = "feedback";
-    pintarPuntitos(document.getElementById("puntitos1"), mezcla1.length, idx1);
-    activarBotones1(true);
+  function terminarActividad(){
+    progreso[etapaActiva]++;
+    render();
   }
 
-  function activarBotones1(estado){
-    var bs = document.querySelectorAll(".par-botones button");
-    for(var i=0;i<bs.length;i++){ bs[i].disabled = !estado; }
+  function botonSiguiente(host, texto){
+    var f = el("div","fila");
+    var b = el("button","btn-verde", texto || "Siguiente →");
+    b.addEventListener("click", terminarActividad);
+    f.appendChild(b);
+    host.appendChild(f);
+    b.focus();
   }
 
-  var bots1 = document.querySelectorAll(".par-botones button");
-  for(var k=0;k<bots1.length;k++){
-    bots1[k].addEventListener("click", function(){
-      var elegido = this.getAttribute("data-respuesta");
-      var it = mezcla1[idx1];
-      var fb = document.getElementById("fb1");
-      if(elegido === it.tipo){
-        sumar(10);
-        fb.className = "feedback ok";
-        fb.innerHTML = "<strong>¡Correcto!</strong> " + it.razon;
+  /* ==================== CANDADO ==================== */
+  function renderCandado(hoja, e){
+    var d = el("div","candado");
+    d.appendChild(el("div","icono","🔒"));
+    d.appendChild(el("h2",null,"Etapa " + e.n + " bloqueada"));
+    var p = el("p","consigna");
+    p.innerHTML = "Esta etapa se abre con una clave. Pedísela a tu docente cuando lleguemos a esta parte del proyecto.";
+    p.style.textAlign = "center";
+    d.appendChild(p);
+
+    var inp = document.createElement("input");
+    inp.type = "text";
+    inp.setAttribute("placeholder","clave");
+    inp.setAttribute("aria-label","Clave de la etapa " + e.n);
+    inp.setAttribute("autocomplete","off");
+    d.appendChild(inp);
+
+    var fb = el("div","feedback");
+    var f = el("div","fila");
+    f.style.justifyContent = "center";
+    var b = el("button","btn-flor","Abrir etapa");
+
+    function intentar(){
+      if(norm(inp.value) === e.clave){
+        abiertas[etapaActiva] = true;
+        render();
       }else{
         fb.className = "feedback mal";
-        fb.innerHTML = "<strong>Casi.</strong> Era " +
-          (it.tipo === "objeto" ? "un OBJETO" : "el FONDO") + ". " + it.razon;
+        fb.innerHTML = "Esa no es la clave. Escribila de nuevo (las mayúsculas no importan).";
+        inp.value = "";
+        inp.focus();
+        inp.className = "";
+        void inp.offsetWidth;
+        inp.className = "tiembla";
       }
-      activarBotones1(false);
-      idx1++;
-      pintarPuntitos(document.getElementById("puntitos1"), mezcla1.length, idx1);
-      if(idx1 < mezcla1.length){ setTimeout(pintarItem, 2600); }
-      else { setTimeout(irAlFinal, 2600); }
+    }
+    b.addEventListener("click", intentar);
+    inp.addEventListener("keydown", function(ev){ if(ev.keyCode === 13){ intentar(); } });
+    f.appendChild(b);
+    d.appendChild(f);
+    d.appendChild(fb);
+    hoja.appendChild(d);
+    inp.focus();
+  }
+
+  /* ==================== QUIZ ==================== */
+  function juegoQuiz(host, act){
+    var lista = mezclar(act.preguntas);
+    var i = 0;
+    var pieza = null;
+
+    if(act.render === "vitrina"){
+      var vitrina = el("div","vitrina");
+      vitrina.appendChild(el("span","cinta","JARDÍN DE LA ESCUELA"));
+      vitrina.appendChild(el("span","sol","☀️"));
+      pieza = el("span","pieza","🐸");
+      vitrina.appendChild(pieza);
+      host.appendChild(vitrina);
+    }
+
+    var preg = el("p","pregunta");
+    preg.style.marginTop = "16px";
+    host.appendChild(preg);
+
+    var claseCont = "opciones";
+    if(act.render === "flores"){ claseCont = "jardin"; }
+    if(act.render === "vitrina"){ claseCont = "par2"; }
+    var cont = el("div", claseCont);
+    host.appendChild(cont);
+
+    var fb = el("div","feedback"); host.appendChild(fb);
+    var dots = el("div","puntitos"); host.appendChild(dots);
+    var pie = el("div"); host.appendChild(pie);
+
+    function dibujarDots(){
+      dots.innerHTML = "";
+      for(var k=0;k<lista.length;k++){
+        dots.appendChild(el("span","puntito" + (k<i ? " hecho" : (k===i ? " actual":""))));
+      }
+      dots.appendChild(el("span","txt",(i<lista.length ? i+1 : lista.length) + "/" + lista.length));
+    }
+
+    function pintar(){
+      var q = lista[i];
+      if(pieza){
+        pieza.textContent = q.emoji || "🐸";
+        pieza.className = "pieza";
+        void pieza.offsetWidth;
+        pieza.className = "pieza brinca";
+      }
+      preg.textContent = q.p;
+      cont.innerHTML = "";
+      fb.className = "feedback";
+      pie.innerHTML = "";
+      for(var k=0;k<q.o.length;k++){
+        (function(k){
+          var b;
+          if(act.render === "flores"){ b = el("button","flor-btn", q.o[k]); }
+          else if(act.render === "vitrina"){ b = el("button", k===0 ? "btn-flor" : "", q.o[k]); }
+          else { b = el("button", null, q.o[k]); }
+          b.addEventListener("click", function(){ responder(k, b); });
+          cont.appendChild(b);
+        })(k);
+      }
+      dibujarDots();
+    }
+
+    function responder(k, boton){
+      var q = lista[i];
+      var bs = cont.getElementsByTagName("button");
+      for(var j=0;j<bs.length;j++){ bs[j].disabled = true; }
+      if(k === q.c){
+        sumar(10);
+        fb.className = "feedback ok";
+        fb.innerHTML = "<strong>¡Correcto!</strong> " + q.r;
+        if(act.render === "flores"){ boton.className = "flor-btn buena"; }
+      }else{
+        fb.className = "feedback mal";
+        fb.innerHTML = "<strong>No era esa.</strong> La respuesta correcta es «" + q.o[q.c] + "». " + q.r;
+        if(act.render === "flores"){
+          boton.className = "flor-btn mala";
+          bs[q.c].className = "flor-btn buena";
+        }
+      }
+      i++;
+      dibujarDots();
+      var f = el("div","fila");
+      if(i < lista.length){
+        var b1 = el("button","btn-verde","Siguiente pregunta →");
+        b1.addEventListener("click", pintar);
+        f.appendChild(b1);
+      }else{
+        var b2 = el("button","btn-verde","Terminar actividad →");
+        b2.addEventListener("click", terminarActividad);
+        f.appendChild(b2);
+      }
+      pie.appendChild(f);
+      f.getElementsByTagName("button")[0].focus();
+    }
+
+    pintar();
+  }
+
+  /* ==================== CANTERO ==================== */
+  function juegoCantero(host){
+    var TOTAL = 12;
+    var pedidas = 3 + Math.floor(Math.random()*2);
+    var sel = [];
+
+    var aviso = el("p","consigna");
+    aviso.innerHTML = "Ubicá <strong>" + pedidas + " macetas</strong>. Tocá un casillero para poner o sacar una.";
+    host.appendChild(aviso);
+
+    var cantero = el("div","cantero");
+    var regla = el("div","regla");
+    host.appendChild(cantero); host.appendChild(regla);
+
+    var contador = el("p","contador"); host.appendChild(contador);
+
+    var fila = el("div","fila");
+    var bRev = el("button","btn-verde","Revisar el cantero");
+    var bLim = el("button",null,"Sacar todas");
+    fila.appendChild(bRev); fila.appendChild(bLim);
+    host.appendChild(fila);
+
+    var fb = el("div","feedback"); host.appendChild(fb);
+    var pie = el("div"); host.appendChild(pie);
+
+    function actualizar(){
+      contador.textContent = "Macetas puestas: " + sel.length + " de " + pedidas;
+    }
+
+    for(var i=0;i<TOTAL;i++){
+      (function(pos){
+        var b = el("button","celda");
+        b.setAttribute("aria-label","Casillero " + pos);
+        b.addEventListener("click", function(){
+          var idx = sel.indexOf(pos);
+          if(idx >= 0){
+            sel.splice(idx,1); b.className = "celda"; b.textContent = "";
+          }else{
+            if(sel.length >= pedidas){
+              fb.className = "feedback mal";
+              fb.innerHTML = "Ya hay " + pedidas + " macetas. Sacá una si querés cambiarla de lugar.";
+              return;
+            }
+            sel.push(pos); b.className = "celda puesta"; b.textContent = "🌷";
+          }
+          fb.className = "feedback";
+          actualizar();
+        });
+        cantero.appendChild(b);
+        regla.appendChild(el("span",null,String(pos)));
+      })(i);
+    }
+    actualizar();
+
+    bLim.addEventListener("click", function(){
+      sel = [];
+      var cs = cantero.getElementsByTagName("button");
+      for(var j=0;j<cs.length;j++){ cs[j].className = "celda"; cs[j].textContent = ""; }
+      fb.className = "feedback";
+      pie.innerHTML = "";
+      actualizar();
+    });
+
+    bRev.addEventListener("click", function(){
+      if(sel.length !== pedidas){
+        fb.className = "feedback mal";
+        fb.innerHTML = "Faltan macetas: tenés que poner exactamente " + pedidas + ".";
+        return;
+      }
+      var orden = sel.slice().sort(function(a,b){ return a-b; });
+      var paso = orden[1]-orden[0];
+      var iguales = true, det = [];
+      for(var j=1;j<orden.length;j++){
+        det.push(orden[j]-orden[j-1]);
+        if(orden[j]-orden[j-1] !== paso){ iguales = false; }
+      }
+      if(iguales){
+        sumar(20);
+        fb.className = "feedback ok";
+        fb.innerHTML = "<strong>¡Perfecto!</strong> Entre maceta y maceta hay siempre " + paso +
+          " casillero(s). En Scratch se logra usando siempre el mismo número en «mover ( ) pasos».";
+        bRev.disabled = true;
+        pie.innerHTML = "";
+        botonSiguiente(pie, "Terminar actividad →");
+      }else{
+        fb.className = "feedback mal";
+        fb.innerHTML = "<strong>Todavía no.</strong> Las distancias son: " + det.join(", ") +
+          ". Si Número salta siempre lo mismo, no va a caer en todas las macetas.";
+      }
     });
   }
 
-  /* ================= JUEGO 2 ================= */
-  var TOTAL_CELDAS = 12;
-  var macetasPedidas = 4;
-  var seleccion = [];
+  /* ==================== SECUENCIA ==================== */
+  function juegoSecuencia(host, act){
+    var correcto = act.bloques;
+    var restantes = mezclar(correcto);
+    var puestos = 0, errores = 0;
 
-  function iniciarJuego2(){
-    macetasPedidas = 3 + Math.floor(Math.random()*2);
-    seleccion = [];
-    document.getElementById("consigna2").innerHTML =
-      "Ubicá <strong>" + macetasPedidas + " macetas</strong> en el cantero de modo que la distancia " +
-      "entre una y la siguiente sea siempre la misma. Así Número puede repetir siempre el mismo salto. " +
-      "Tocá un casillero para poner o sacar una maceta.";
-    var cantero = document.getElementById("cantero");
-    var regla = document.getElementById("regla");
-    cantero.innerHTML = "";
-    regla.innerHTML = "";
-    for(var i=0;i<TOTAL_CELDAS;i++){
-      var b = document.createElement("button");
-      b.className = "celda";
-      b.setAttribute("data-pos", i);
-      b.setAttribute("aria-label", "Casillero " + i);
-      b.addEventListener("click", toggleCelda);
-      cantero.appendChild(b);
-      var n = document.createElement("span");
-      n.textContent = i;
-      regla.appendChild(n);
-    }
-    document.getElementById("fb2").className = "feedback";
-    actualizarContador();
-  }
+    var cols = el("div","col2");
+    var zonaA = el("div","zona");
+    zonaA.appendChild(el("h4",null,"Bloques sueltos"));
+    var listaA = el("div","bloques");
+    zonaA.appendChild(listaA);
 
-  function toggleCelda(){
-    var pos = parseInt(this.getAttribute("data-pos"), 10);
-    var i = seleccion.indexOf(pos);
-    var fb = document.getElementById("fb2");
-    if(i >= 0){
-      seleccion.splice(i,1);
-      this.classList.remove("puesta");
-      this.textContent = "";
-    }else{
-      if(seleccion.length >= macetasPedidas){
-        fb.className = "feedback mal";
-        fb.innerHTML = "Ya hay " + macetasPedidas + " macetas. Sacá una si querés cambiarla de lugar.";
+    var zonaB = el("div","zona");
+    zonaB.appendChild(el("h4",null,"Programa de Número"));
+    var listaB = el("div","bloques");
+    zonaB.appendChild(listaB);
+
+    cols.appendChild(zonaA); cols.appendChild(zonaB);
+    host.appendChild(cols);
+
+    var fb = el("div","feedback"); host.appendChild(fb);
+    var pie = el("div"); host.appendChild(pie);
+
+    function pintarSueltos(){
+      listaA.innerHTML = "";
+      if(restantes.length === 0){
+        listaA.appendChild(el("p","consigna","¡No quedan bloques!"));
         return;
       }
-      seleccion.push(pos);
-      this.classList.add("puesta");
-      this.textContent = "🌷";
+      for(var i=0;i<restantes.length;i++){
+        (function(bl){
+          var b = el("button","bloque b-" + bl.cat, bl.t);
+          b.addEventListener("click", function(){ elegir(bl); });
+          listaA.appendChild(b);
+        })(restantes[i]);
+      }
     }
-    fb.className = "feedback";
-    actualizarContador();
+
+    function elegir(bl){
+      if(bl === correcto[puestos]){
+        listaB.appendChild(el("div","bloque b-" + bl.cat + (bl.indent ? " indent" : ""), bl.t));
+        restantes.splice(restantes.indexOf(bl),1);
+        puestos++;
+        fb.className = "feedback";
+        pintarSueltos();
+        if(puestos === correcto.length){
+          var gan = Math.max(10, 30 - errores*5);
+          sumar(gan);
+          fb.className = "feedback ok";
+          fb.innerHTML = "<strong>¡Programa armado!</strong> Ganaste " + gan + " puntos." +
+            (errores > 0 ? " Tuviste " + errores + " intento(s) fuera de orden." : " ¡Sin ningún error!");
+          botonSiguiente(pie, "Terminar actividad →");
+        }
+      }else{
+        errores++;
+        fb.className = "feedback mal";
+        fb.innerHTML = "<strong>Ese bloque todavía no va.</strong> Pensá qué tiene que pasar " +
+          (puestos === 0 ? "primero de todo para que el programa arranque."
+                         : "justo después de «" + correcto[puestos-1].t + "».");
+      }
+    }
+
+    pintarSueltos();
   }
 
-  function actualizarContador(){
-    document.getElementById("contador2").textContent =
-      "Macetas puestas: " + seleccion.length + " de " + macetasPedidas;
+  /* ==================== PAREJAS ==================== */
+  function juegoParejas(host, act){
+    var conceptos = mezclar(act.pares);
+    var definiciones = mezclar(act.pares);
+    var seleccionado = null, botonSel = null, hechas = 0;
+
+    var grid = el("div","parejas");
+    var colA = el("div","bloques");
+    var colB = el("div","bloques");
+    grid.appendChild(colA); grid.appendChild(colB);
+    host.appendChild(grid);
+
+    var fb = el("div","feedback"); host.appendChild(fb);
+    var pie = el("div"); host.appendChild(pie);
+
+    function limpiarSel(){
+      if(botonSel){ botonSel.className = "concepto"; }
+      seleccionado = null; botonSel = null;
+    }
+
+    for(var i=0;i<conceptos.length;i++){
+      (function(par){
+        var b = el("button","concepto", par.a);
+        b.addEventListener("click", function(){
+          limpiarSel();
+          seleccionado = par; botonSel = b;
+          b.className = "concepto sel";
+          fb.className = "feedback";
+        });
+        colA.appendChild(b);
+      })(conceptos[i]);
+    }
+
+    for(var j=0;j<definiciones.length;j++){
+      (function(par){
+        var b = el("button", null, par.b);
+        b.addEventListener("click", function(){
+          if(!seleccionado){
+            fb.className = "feedback mal";
+            fb.innerHTML = "Elegí primero una palabra de la columna amarilla.";
+            return;
+          }
+          if(seleccionado === par){
+            sumar(10);
+            hechas++;
+            botonSel.className = "concepto listo"; botonSel.disabled = true;
+            b.className = "listo"; b.disabled = true;
+            seleccionado = null; botonSel = null;
+            fb.className = "feedback ok";
+            if(hechas === act.pares.length){
+              fb.innerHTML = "<strong>¡Uniste todas!</strong> Estas son las palabras que usamos durante todo el proyecto.";
+              botonSiguiente(pie, "Terminar actividad →");
+            }else{
+              fb.innerHTML = "<strong>¡Bien!</strong> Quedan " + (act.pares.length - hechas) + " palabras.";
+            }
+          }else{
+            fb.className = "feedback mal";
+            fb.innerHTML = "Esa definición no corresponde a «" + seleccionado.a + "». Volvé a leerla y probá otra.";
+            limpiarSel();
+          }
+        });
+        colB.appendChild(b);
+      })(definiciones[j]);
+    }
   }
 
-  document.getElementById("limpiar2").addEventListener("click", iniciarJuego2);
+  /* ==================== CARTEL FLOTANTE ==================== */
+  function mostrarCartel(e){
+    var telon = el("div","telon");
+    var c = el("div","cartel");
+    c.setAttribute("role","dialog");
+    c.setAttribute("aria-modal","true");
 
-  document.getElementById("revisar2").addEventListener("click", function(){
-    var fb = document.getElementById("fb2");
-    if(seleccion.length !== macetasPedidas){
-      fb.className = "feedback mal";
-      fb.innerHTML = "Faltan macetas: tenés que poner exactamente " + macetasPedidas + ".";
-      return;
-    }
-    var orden = seleccion.slice().sort(function(a,b){ return a-b; });
-    var paso = orden[1] - orden[0];
-    var iguales = true;
-    for(var i=1;i<orden.length;i++){
-      if(orden[i] - orden[i-1] !== paso){ iguales = false; }
-    }
-    if(iguales){
-      sumar(20);
-      fb.className = "feedback ok";
-      fb.innerHTML = "<strong>¡Perfecto!</strong> Entre maceta y maceta hay siempre " + paso +
-        " casillero(s). En Scratch esto se logra usando el mismo número en el bloque " +
-        "<em>mover ( ) pasos</em> cada vez que salta.";
-      setTimeout(irAlFinal, 3400);
-    }else{
-      var detalle = [];
-      for(var j=1;j<orden.length;j++){ detalle.push(orden[j]-orden[j-1]); }
-      fb.className = "feedback mal";
-      fb.innerHTML = "<strong>Todavía no.</strong> Las distancias que quedaron son: " +
-        detalle.join(", ") + ". Si Número salta siempre lo mismo, no va a caer en todas las macetas. " +
-        "Probá contando los casilleros entre una y otra.";
-    }
-  });
+    c.appendChild(el("div","rana","🐸"));
+    c.appendChild(el("h2",null,"¡Excelente, buen trabajo!"));
+    c.appendChild(el("p",null,"Terminaron los juegos de la Etapa " + e.n + ". Ahora seguimos en Scratch: esta página es solo una guía, el proyecto se programa allá."));
+    c.appendChild(el("p","pts","Llevás " + puntos + " puntos"));
 
-  /* ================= JUEGO 3 ================= */
-  var preguntas = [
-    {p:"En Scratch, ¿qué es el escenario?",
-     o:["La imagen que ocupa toda la pantalla, atrás de todo",
-        "Un personaje que se mueve solo",
-        "El botón para guardar el proyecto"],
-     c:0,
-     r:"El escenario es la imagen de fondo. Se puede cambiar con bloques de Apariencia, pero no se mueve como un personaje."},
-    {p:"¿Por qué conviene que Número sea un objeto y no parte del dibujo del fondo?",
-     o:["Porque queda más lindo",
-        "Porque así la podemos programar aparte para que se mueva",
-        "Porque el fondo no se puede pintar"],
-     c:1,
-     r:"Un objeto tiene su propio programa: puede moverse, hablar e interactuar con el escenario."},
-    {p:"Que las macetas estén equidistantes significa que…",
-     o:["Están todas del mismo color",
-        "Hay siempre la misma distancia entre una y la siguiente",
-        "Están todas juntas en un rincón"],
-     c:1,
-     r:"Equidistante = a igual distancia. Por eso Número puede repetir siempre el mismo salto."},
-    {p:"¿Para qué nos sirve elegir un fondo con cuadrícula?",
-     o:["Para que el juego vaya más rápido",
-        "Para medir y ubicar las flores a la misma distancia",
-        "Para que aparezcan más objetos"],
-     c:1,
-     r:"La cuadrícula funciona como una recta numérica: ayuda a contar y medir dentro del escenario."},
-    {p:"En el proyecto de Número, ¿cuál de estos sería un objeto?",
-     o:["El cielo del jardín",
-        "El pasto dibujado atrás",
-        "La rana que salta de flor en flor"],
-     c:2,
-     r:"La rana se mueve y responde: es un objeto. El cielo y el pasto son parte del fondo."}
-  ];
-  var idx3 = 0, mezcla3 = [];
+    var f = el("div","fila");
+    var a = document.createElement("a");
+    a.className = "btn";
+    a.href = URL_SCRATCH;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = "Abrir Scratch →";
+    f.appendChild(a);
 
-  function iniciarJuego3(){
-    mezcla3 = mezclar(preguntas);
-    idx3 = 0;
-    pintarPregunta();
+    var b = el("button",null,"Quedarme acá");
+    b.addEventListener("click", cerrar);
+    f.appendChild(b);
+    c.appendChild(f);
+
+    c.appendChild(el("p","aviso-pestana","Scratch se abre en otra pestaña, así no perdés lo que hiciste acá."));
+
+    function cerrar(){
+      if(telon.parentNode){ document.body.removeChild(telon); }
+      document.removeEventListener("keydown", porTecla);
+    }
+    function porTecla(ev){ if(ev.keyCode === 27){ cerrar(); } }
+
+    telon.addEventListener("click", function(ev){ if(ev.target === telon){ cerrar(); } });
+    document.addEventListener("keydown", porTecla);
+
+    telon.appendChild(c);
+    document.body.appendChild(telon);
+    a.focus();
   }
 
-  function pintarPregunta(){
-    var q = mezcla3[idx3];
-    document.getElementById("pregunta3").textContent = q.p;
-    var cont = document.getElementById("opciones3");
-    cont.innerHTML = "";
-    for(var i=0;i<q.o.length;i++){
-      var b = document.createElement("button");
-      b.textContent = q.o[i];
-      b.setAttribute("data-i", i);
-      b.addEventListener("click", responder3);
-      cont.appendChild(b);
+  /* ==================== CIERRE ==================== */
+  function renderCierre(hoja, e){
+    var d = el("div","cierre");
+    d.appendChild(el("div","medalla","🐸"));
+    d.appendChild(el("p","puntaje", puntos + " pts"));
+    d.appendChild(el("h3",null,"¡Etapa " + e.n + " completa!"));
+    d.appendChild(el("p","consigna","Buen trabajo. Ahora vamos a Scratch a programar esta parte del proyecto."));
+
+    var r = el("div","reflexion");
+    r.appendChild(el("h3",null,"Para conversar entre todos"));
+    var ul = document.createElement("ul");
+    for(var i=0;i<e.cierre.length;i++){ ul.appendChild(el("li",null,e.cierre[i])); }
+    r.appendChild(ul);
+    d.appendChild(r);
+
+    var f = el("div","fila");
+    f.style.justifyContent = "center";
+    var bS = el("button","btn-flor","Abrir Scratch →");
+    bS.addEventListener("click", function(){ mostrarCartel(e); });
+    f.appendChild(bS);
+    var b1 = el("button",null,"Repetir la etapa");
+    b1.addEventListener("click", function(){ progreso[etapaActiva] = 0; render(); });
+    f.appendChild(b1);
+    if(etapaActiva < ETAPAS.length-1){
+      var b2 = el("button","btn-verde","Ir a la Etapa " + ETAPAS[etapaActiva+1].n + " →");
+      b2.addEventListener("click", function(){ etapaActiva++; render(); });
+      f.appendChild(b2);
     }
-    document.getElementById("fb3").className = "feedback";
-    pintarPuntitos(document.getElementById("puntitos3"), mezcla3.length, idx3);
+    d.appendChild(f);
+    hoja.appendChild(d);
   }
 
-  function responder3(){
-    var elegida = parseInt(this.getAttribute("data-i"), 10);
-    var q = mezcla3[idx3];
-    var fb = document.getElementById("fb3");
-    var bs = document.getElementById("opciones3").getElementsByTagName("button");
-    for(var i=0;i<bs.length;i++){ bs[i].disabled = true; }
-    if(elegida === q.c){
-      sumar(15);
-      fb.className = "feedback ok";
-      fb.innerHTML = "<strong>¡Muy bien!</strong> " + q.r;
-    }else{
-      fb.className = "feedback mal";
-      fb.innerHTML = "<strong>No era esa.</strong> La correcta es “" + q.o[q.c] + "”. " + q.r;
-    }
-    idx3++;
-    pintarPuntitos(document.getElementById("puntitos3"), mezcla3.length, idx3);
-    if(idx3 < mezcla3.length){ setTimeout(pintarPregunta, 2800); }
-    else { setTimeout(irAlFinal, 2800); }
-  }
-
-  /* ================= FINAL ================= */
-  function irAlFinal(){
-    document.getElementById("puntos-final").textContent = puntos;
-    var msj = document.getElementById("mensaje-final");
-    if(puntos >= 120){
-      msj.textContent = "Ya distinguen objetos de fondos y saben ubicar las macetas. ¡Listos para armar el jardín de Número en Scratch!";
-    }else if(puntos >= 60){
-      msj.textContent = "Buen trabajo. Repasen los elementos que costaron y después vamos a Scratch a crear el escenario.";
-    }else{
-      msj.textContent = "Juguemos una vez más antes de abrir Scratch: cada intento ayuda a entender mejor la diferencia entre objeto y fondo.";
-    }
-    mostrar("pantalla-final");
-  }
-
-  document.getElementById("reiniciar").addEventListener("click", function(){
-    puntos = 0;
-    elPuntos.textContent = "0";
-    mostrar("inicio");
-  });
-
-  mostrar("inicio");
+  render();
 })();
 </script>
 </body>
