@@ -6,594 +6,547 @@
 <title>Número, la rana — Juegos del proyecto</title>
 <style>
 /* ============================================================
-   DESIGN SYSTEM
+   TOKENS
    ============================================================ */
 :root{
-  /* tinta */
-  --ink-900:#12281F;
-  --ink-700:#2C4A3E;
-  --ink-500:#5A7A6E;
-  --ink-300:#93AAA1;
+  /* neutros (tinta verdosa, una sola familia) */
+  --ink:#13241D;
+  --ink-2:#3A4F45;
+  --ink-3:#688075;
+  --ink-4:#9BAFA5;
+  --line:#E2E7E1;
+  --line-2:#EDF0EA;
 
   /* papel */
-  --paper:#FCF8EF;
-  --paper-2:#F6F0E2;
-  --rule:#DDE8E0;
-  --margin:#E3A9A0;
+  --paper:#FCFAF4;
+  --paper-2:#F4F1E7;
+  --rule:#E6EBE3;
+  --margin:#DFB0A6;
 
-  /* verdes */
-  --leaf:#2E8B57;
-  --leaf-600:#25764A;
-  --leaf-700:#1B5C39;
-  --leaf-100:#E3F2E8;
-  --leaf-050:#F1F9F4;
+  /* verde (primario) */
+  --leaf:#2F8A5B;
+  --leaf-d:#246E48;
+  --leaf-dd:#1A5335;
+  --leaf-l:#E6F2EA;
+  --leaf-ll:#F2F8F4;
 
-  /* sol */
-  --sun:#EFA820;
-  --sun-600:#D18F0E;
-  --sun-100:#FDF1D6;
+  /* sol (acento único) */
+  --sun:#E5A21F;
+  --sun-d:#B87F0C;
+  --sun-l:#FBF0D8;
 
-  /* tecnología */
-  --tech:#2A7A8C;
-  --tech-100:#DDEEF1;
-
-  /* tierra / pétalo */
-  --soil:#A97C50;
-  --soil-700:#7B5837;
-  --soil-100:#EFE2D2;
-  --petal:#D9557A;
-  --petal-100:#FBE6EC;
+  /* usos puntuales */
+  --soil:#A87B4E;
+  --soil-d:#8A6339;
+  --petal:#C9527A;
+  --petal-l:#FAE9EF;
 
   /* categorías de bloques */
-  --cat-evento:#E0A32B;
-  --cat-movimiento:#3E7FD1;
-  --cat-control:#D97B2B;
-  --cat-apariencia:#8460CC;
-  --cat-lapiz:#189E7C;
+  --c-evento:#D79A26;
+  --c-movimiento:#3D77C4;
+  --c-control:#CE7429;
+  --c-apariencia:#7C5EC0;
+  --c-lapiz:#189176;
 
-  /* radios */
-  --r-sm:8px;
-  --r-md:12px;
-  --r-lg:18px;
-  --r-xl:26px;
+  /* escala de espacio: 4 */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s7:32px; --s8:40px; --s9:56px;
 
-  /* sombras */
-  --sh-1:0 1px 2px rgba(18,40,31,.06);
-  --sh-2:0 2px 4px rgba(18,40,31,.06), 0 10px 22px -14px rgba(18,40,31,.35);
-  --sh-3:0 4px 8px rgba(18,40,31,.07), 0 24px 48px -24px rgba(18,40,31,.45);
-  --sh-in:inset 0 1px 0 rgba(255,255,255,.7);
+  /* radios: 10 / 14 / 20 */
+  --r1:10px; --r2:14px; --r3:20px;
 
-  /* tipografía */
+  /* elevación */
+  --e0:0 1px 1px rgba(19,36,29,.04);
+  --e1:0 1px 2px rgba(19,36,29,.06), 0 1px 1px rgba(19,36,29,.03);
+  --e2:0 2px 6px rgba(19,36,29,.07), 0 1px 2px rgba(19,36,29,.04);
+  --e3:0 18px 40px -22px rgba(19,36,29,.42), 0 2px 6px rgba(19,36,29,.05);
+
   --font:system-ui,-apple-system,"Segoe UI",Cantarell,"Noto Sans","DejaVu Sans",sans-serif;
   --mono:ui-monospace,"DejaVu Sans Mono",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.22,.7,.25,1);
 }
 
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{
   font-family:var(--font);
-  color:var(--ink-900);
+  color:var(--ink);
   font-size:16px;
   line-height:1.55;
-  background:
-    radial-gradient(1200px 500px at 50% -10%, #F4FBF6 0%, transparent 60%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='none' stroke='%232E8B57' stroke-opacity='.09' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M18 44c10-11 24-11 33 0-9 11-23 11-33 0z'/%3E%3Cpath d='M34 44v14'/%3E%3Cpath d='M92 104c8-9 20-9 27 0-7 9-19 9-27 0z'/%3E%3Cpath d='M105 104v11'/%3E%3Ccircle cx='112' cy='30' r='3'/%3E%3Ccircle cx='46' cy='114' r='2.4'/%3E%3Ccircle cx='76' cy='62' r='1.8'/%3E%3C/g%3E%3C/svg%3E"),
-    linear-gradient(180deg,#E9F4EC 0%,#DFEEE6 100%);
+  background:linear-gradient(180deg,#EDF3EE 0%,#E4EDE7 40%,#DFE9E2 100%);
   background-attachment:fixed;
   -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
-.app{max-width:1000px;margin:0 auto;padding:20px 16px 80px;}
+.app{max-width:960px;margin:0 auto;padding:var(--s6) var(--s4) var(--s9);}
 
-h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
+h1,h2,h3{font-weight:750;letter-spacing:-.021em;margin:0;line-height:1.18;}
+p{margin:0;}
 .eyebrow{
-  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--leaf-600);margin:0;font-weight:600;
+  font-size:12px;letter-spacing:.02em;color:var(--ink-3);font-weight:600;margin:0;
 }
-.svg-ico{width:1em;height:1em;display:inline-block;vertical-align:-.13em;fill:none;
-  stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.svg-ico{
+  width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:none;
+  stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;
+}
 .svg-ico.fill{fill:currentColor;stroke:none;}
+::selection{background:var(--leaf-l);}
+
+/* foco único en todo el producto */
+:focus-visible{outline:2.5px solid var(--leaf);outline-offset:2px;}
 
 /* ============================================================
    HERO
    ============================================================ */
 .hero{
-  position:relative;background:#fff;border-radius:var(--r-xl);
-  box-shadow:var(--sh-3);overflow:hidden;border:1px solid rgba(18,40,31,.06);
+  background:#fff;border-radius:var(--r3);overflow:hidden;box-shadow:var(--e3);
 }
 #escena{display:block;width:100%;height:auto;}
 .hero-bar{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
-  gap:16px;padding:16px 22px 18px;border-top:1px solid rgba(18,40,31,.07);
-  background:linear-gradient(180deg,#fff,var(--leaf-050));
+  gap:var(--s4);padding:var(--s5) var(--s6) var(--s5);
+  border-top:1px solid var(--line-2);
 }
-.hero-bar h1{font-size:clamp(22px,3.4vw,30px);}
-.hero-bar .lema{font-size:13px;color:var(--ink-500);margin:2px 0 0;}
+.hero-bar h1{font-size:clamp(21px,3vw,27px);margin-top:2px;}
+.hero-bar .lema{font-size:13.5px;color:var(--ink-3);margin-top:var(--s1);}
 
-/* --- marcador --- */
-.marcador{
-  min-width:206px;background:#fff;border:1px solid rgba(18,40,31,.09);
-  border-radius:var(--r-lg);padding:10px 14px;box-shadow:var(--sh-1);
+.marcador{min-width:190px;}
+.marcador .top{display:flex;align-items:baseline;gap:var(--s2);}
+.marcador .estrella{color:var(--sun);font-size:15px;align-self:center;display:flex;}
+.marcador .cifra{
+  font-family:var(--mono);font-size:23px;font-weight:600;letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
 }
-.marcador .top{display:flex;align-items:center;gap:8px;}
-.marcador .estrella{color:var(--sun);font-size:20px;display:flex;}
-.marcador .cifra{font-family:var(--mono);font-size:22px;font-weight:700;letter-spacing:-.02em;}
-.marcador .lbl{font-size:12px;color:var(--ink-500);margin-left:auto;}
-.marcador .barra{height:7px;border-radius:99px;background:var(--leaf-100);margin-top:8px;overflow:hidden;}
+.marcador .lbl{font-size:12.5px;color:var(--ink-3);}
+.marcador .barra{
+  height:5px;border-radius:99px;background:var(--line);margin-top:var(--s2);overflow:hidden;
+}
 .marcador .relleno{
-  height:100%;width:0;border-radius:99px;
-  background:linear-gradient(90deg,var(--leaf),var(--sun));
-  transition:width .6s cubic-bezier(.2,.7,.3,1);
+  height:100%;width:0;border-radius:99px;background:var(--leaf);
+  transition:width .65s var(--ease);
 }
-.marcador.pulso .cifra{animation:pop .45s cubic-bezier(.2,1.4,.4,1);}
-@keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.22);}100%{transform:scale(1);}}
+.marcador.pulso .cifra{animation:pop .4s var(--ease);}
+@keyframes pop{0%{transform:scale(1);}40%{transform:scale(1.13);}100%{transform:scale(1);}}
 .chip-suma{
-  position:absolute;font-family:var(--mono);font-weight:700;font-size:15px;color:var(--leaf-600);
-  background:var(--leaf-100);border-radius:99px;padding:3px 10px;pointer-events:none;z-index:60;
-  animation:sube 1s ease forwards;
+  position:fixed;font-family:var(--mono);font-weight:600;font-size:13.5px;color:var(--leaf-d);
+  pointer-events:none;z-index:60;animation:sube .95s var(--ease) forwards;
 }
 @keyframes sube{
-  0%{opacity:0;transform:translateY(6px) scale(.9);}
-  20%{opacity:1;transform:translateY(-2px) scale(1);}
-  100%{opacity:0;transform:translateY(-32px) scale(1);}
+  0%{opacity:0;transform:translateY(4px);}
+  22%{opacity:1;transform:translateY(-2px);}
+  100%{opacity:0;transform:translateY(-30px);}
 }
 
 /* ============================================================
    CAMINO DE ETAPAS
    ============================================================ */
-.camino{position:relative;margin:22px 0 20px;}
-.camino .rail{
-  display:flex;gap:10px;overflow-x:auto;padding:6px 2px 14px;
-  scroll-snap-type:x proximity;scrollbar-width:thin;
+.camino{margin:var(--s6) 0 var(--s5);}
+.rail{
+  display:flex;gap:var(--s2);overflow-x:auto;padding:var(--s1) 2px var(--s3);
+  scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:rgba(19,36,29,.16) transparent;
 }
-.camino .rail::-webkit-scrollbar{height:6px;}
-.camino .rail::-webkit-scrollbar-thumb{background:rgba(18,40,31,.18);border-radius:99px;}
+.rail::-webkit-scrollbar{height:5px;}
+.rail::-webkit-scrollbar-thumb{background:rgba(19,36,29,.15);border-radius:99px;}
+.rail::-webkit-scrollbar-track{background:transparent;}
 .etapa-card{
-  flex:none;width:172px;scroll-snap-align:start;text-align:left;cursor:pointer;
-  background:#fff;border:1px solid rgba(18,40,31,.09);border-radius:var(--r-lg);
-  padding:12px 13px;box-shadow:var(--sh-1);font-family:inherit;color:var(--ink-900);
-  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+  flex:none;width:164px;scroll-snap-align:start;text-align:left;cursor:pointer;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r2);
+  padding:var(--s3);box-shadow:var(--e0);font-family:inherit;color:var(--ink);
+  transition:border-color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease), background .2s var(--ease);
 }
-.etapa-card:hover{transform:translateY(-2px);box-shadow:var(--sh-2);}
-.etapa-card:focus-visible{outline:3px solid var(--tech);outline-offset:2px;}
-.etapa-card .fila1{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.etapa-card:hover{border-color:var(--ink-4);box-shadow:var(--e2);transform:translateY(-1px);}
+.etapa-card .fila1{display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2);}
 .etapa-card .badge{
-  width:28px;height:28px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-weight:700;font-size:13px;
-  background:var(--leaf-100);color:var(--leaf-700);
+  font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink-3);letter-spacing:.02em;
 }
-.etapa-card .estado{margin-left:auto;display:flex;align-items:center;font-size:15px;color:var(--ink-300);}
-.etapa-card .nom{font-size:12.5px;font-weight:700;line-height:1.3;letter-spacing:-.01em;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:33px;}
-.etapa-card .dots{display:flex;gap:4px;margin-top:9px;}
-.etapa-card .dots i{width:100%;height:4px;border-radius:99px;background:rgba(18,40,31,.10);}
+.etapa-card .estado{margin-left:auto;display:flex;font-size:15px;color:var(--ink-4);}
+.etapa-card .nom{
+  font-size:13px;font-weight:650;line-height:1.35;letter-spacing:-.012em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:35px;
+}
+.etapa-card .dots{display:flex;gap:3px;margin-top:var(--s3);}
+.etapa-card .dots i{flex:1;height:3px;border-radius:99px;background:var(--line);transition:background .3s var(--ease);}
 .etapa-card .dots i.on{background:var(--leaf);}
 
-.etapa-card.bloqueada{background:var(--paper-2);border-style:dashed;border-color:rgba(18,40,31,.16);}
-.etapa-card.bloqueada .badge{background:rgba(18,40,31,.07);color:var(--ink-500);}
-.etapa-card.bloqueada .nom{color:var(--ink-500);}
-.etapa-card.completa{background:linear-gradient(180deg,#fff,var(--leaf-050));border-color:rgba(46,139,87,.35);}
+.etapa-card.bloqueada{background:var(--paper-2);border-color:transparent;box-shadow:none;}
+.etapa-card.bloqueada .nom{color:var(--ink-3);}
+.etapa-card.bloqueada .dots i{background:rgba(19,36,29,.08);}
 .etapa-card.completa .estado{color:var(--leaf);}
 .etapa-card.activa{
-  border-color:var(--leaf);box-shadow:0 0 0 3px var(--leaf-100), var(--sh-2);transform:translateY(-2px);
+  border-color:var(--leaf);box-shadow:inset 0 0 0 1px var(--leaf), var(--e2);
 }
+.etapa-card.activa .badge{color:var(--leaf-d);}
 
 /* ============================================================
-   HOJA DE CUADERNO
+   HOJA
    ============================================================ */
 .hoja{
-  position:relative;background:var(--paper);border-radius:var(--r-xl);
-  box-shadow:var(--sh-3);border:1px solid rgba(18,40,31,.07);
-  padding:34px 34px 34px 62px;overflow:hidden;
+  position:relative;background:var(--paper);border-radius:var(--r3);
+  box-shadow:var(--e3);padding:var(--s7) var(--s7) var(--s7) var(--s9);overflow:hidden;
 }
 .hoja::before{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background:
-    repeating-linear-gradient(to bottom, transparent 0 33px, var(--rule) 33px 34px),
-    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.85), transparent 70%);
-  opacity:.55;
+  background:repeating-linear-gradient(to bottom, transparent 0 33px, var(--rule) 33px 34px);
+  opacity:.5;
 }
 .hoja::after{
-  content:"";position:absolute;top:0;bottom:0;left:46px;width:1px;
-  background:var(--margin);opacity:.5;pointer-events:none;
+  content:"";position:absolute;top:0;bottom:0;left:38px;width:1px;
+  background:var(--margin);opacity:.45;pointer-events:none;
 }
-.espiral{position:absolute;top:26px;bottom:26px;left:16px;width:16px;pointer-events:none;
-  display:flex;flex-direction:column;justify-content:space-between;}
+.espiral{
+  position:absolute;top:var(--s7);bottom:var(--s7);left:15px;width:9px;pointer-events:none;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
 .espiral i{
-  width:12px;height:12px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, #fff, #D7DED8 60%, #B9C4BC);
-  box-shadow:inset 0 -1px 2px rgba(0,0,0,.18);
+  width:9px;height:9px;border-radius:50%;background:#EAEDE6;
+  box-shadow:inset 0 1px 1.5px rgba(19,36,29,.22);
 }
 .hoja > *{position:relative;z-index:1;}
 
-.enc{display:flex;align-items:flex-start;gap:14px;margin-bottom:6px;}
-.enc .icono-etapa{
-  width:44px;height:44px;flex:none;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  background:var(--leaf-100);color:var(--leaf-700);font-size:22px;box-shadow:var(--sh-in);
-}
-.enc h2{font-size:clamp(20px,2.6vw,26px);}
-.titulo-act{font-size:18px;margin:24px 0 4px;}
-.consigna{margin:6px 0 18px;font-size:15px;color:var(--ink-700);max-width:64ch;}
-.consigna strong{color:var(--ink-900);}
+.enc{margin-bottom:var(--s6);}
+.enc h2{font-size:clamp(20px,2.4vw,25px);margin-top:var(--s1);}
+.titulo-act{font-size:17px;font-weight:700;letter-spacing:-.015em;}
+.consigna{margin-top:var(--s2);font-size:14.5px;color:var(--ink-2);max-width:62ch;}
+.consigna strong{color:var(--ink);font-weight:650;}
+.bloque-act{margin-top:var(--s6);}
+.lienzo{margin-top:var(--s5);}
 
 /* ============================================================
    BOTONES
    ============================================================ */
 .btn{
-  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;
-  border:1px solid transparent;border-radius:var(--r-md);padding:12px 18px;
-  background:#fff;color:var(--ink-900);box-shadow:var(--sh-1);
-  display:inline-flex;align-items:center;gap:9px;text-decoration:none;
-  transition:transform .14s ease, box-shadow .14s ease, background .14s ease, border-color .14s ease;
+  font-family:inherit;font-size:14.5px;font-weight:650;cursor:pointer;letter-spacing:-.005em;
+  border:1px solid transparent;border-radius:var(--r1);padding:11px 17px;
+  background:#fff;color:var(--ink);box-shadow:var(--e1);
+  display:inline-flex;align-items:center;gap:var(--s2);text-decoration:none;
+  transition:background .18s var(--ease), border-color .18s var(--ease),
+             box-shadow .18s var(--ease), transform .18s var(--ease), color .18s var(--ease);
 }
-.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--sh-2);}
-.btn:active:not(:disabled){transform:translateY(0);box-shadow:var(--sh-1);}
-.btn:disabled{opacity:.5;cursor:default;}
-.btn:focus-visible{outline:3px solid var(--tech);outline-offset:2px;}
-.btn-1{background:var(--leaf);color:#fff;}
-.btn-1:hover:not(:disabled){background:var(--leaf-600);}
-.btn-2{border-color:rgba(18,40,31,.14);}
-.btn-sol{background:var(--sun);color:#3B2A05;}
-.btn-sol:hover:not(:disabled){background:var(--sun-600);}
-.btn-cta{
-  background:linear-gradient(135deg,var(--leaf),var(--tech));color:#fff;
-  font-size:16px;padding:15px 24px;border-radius:14px;
-}
-.fila{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+.btn .svg-ico{font-size:16px;}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:var(--e2);}
+.btn:active:not(:disabled){transform:translateY(0);box-shadow:var(--e0);}
+.btn:disabled{opacity:.45;cursor:default;box-shadow:none;}
+.btn-1{background:var(--leaf);color:#fff;box-shadow:0 1px 2px rgba(19,36,29,.14);}
+.btn-1:hover:not(:disabled){background:var(--leaf-d);}
+.btn-2{border-color:var(--line);color:var(--ink-2);}
+.btn-2:hover:not(:disabled){border-color:var(--ink-4);color:var(--ink);}
+.btn-sol{background:var(--sun);color:#3A2704;box-shadow:0 1px 2px rgba(19,36,29,.14);}
+.btn-sol:hover:not(:disabled){background:var(--sun-d);color:#fff;}
+.btn-cta{background:var(--leaf);color:#fff;font-size:15.5px;padding:13px 22px;box-shadow:0 2px 4px rgba(19,36,29,.16);}
+.btn-cta:hover:not(:disabled){background:var(--leaf-d);}
+.fila{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s6);align-items:center;}
 
 /* ============================================================
    FEEDBACK
    ============================================================ */
 .fb{
-  display:none;margin-top:18px;padding:14px 16px;border-radius:var(--r-lg);
-  border:1px solid transparent;gap:13px;align-items:flex-start;
+  display:none;margin-top:var(--s5);padding:var(--s4);border-radius:var(--r2);
+  gap:var(--s3);align-items:flex-start;border:1px solid transparent;
 }
-.fb.on{display:flex;animation:entra .28s ease;}
-@keyframes entra{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
-.fb .ic{
-  width:32px;height:32px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:17px;color:#fff;
-}
-.fb .tit{font-weight:800;font-size:15px;margin-bottom:2px;letter-spacing:-.01em;}
-.fb .txt{font-size:14px;color:var(--ink-700);}
+.fb.on{display:flex;animation:entra .26s var(--ease);}
+@keyframes entra{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.fb .ic{font-size:19px;line-height:1;margin-top:1px;flex:none;}
+.fb .tit{font-weight:700;font-size:14.5px;letter-spacing:-.012em;}
+.fb .txt{font-size:14px;color:var(--ink-2);margin-top:2px;}
 .fb .pista{
-  margin-top:8px;font-size:13.5px;color:var(--ink-700);
-  background:rgba(255,255,255,.75);border-radius:10px;padding:8px 11px;
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid rgba(19,36,29,.09);
+  font-size:13.5px;color:var(--ink-2);display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap;
 }
-.fb-ok{background:var(--leaf-050);border-color:rgba(46,139,87,.28);}
-.fb-ok .ic{background:var(--leaf);}
-.fb-casi{background:var(--sun-100);border-color:rgba(239,168,32,.35);}
-.fb-casi .ic{background:var(--sun);color:#3B2A05;}
-.fb-info{background:var(--tech-100);border-color:rgba(42,122,140,.28);}
-.fb-info .ic{background:var(--tech);}
+.fb-ok{background:var(--leaf-ll);border-color:rgba(47,138,91,.22);}
+.fb-ok .ic,.fb-ok .tit{color:var(--leaf-d);}
+.fb-casi{background:var(--sun-l);border-color:rgba(229,162,31,.3);}
+.fb-casi .ic,.fb-casi .tit{color:var(--sun-d);}
+.fb-info{background:#fff;border-color:var(--line);}
+.fb-info .ic,.fb-info .tit{color:var(--ink-3);}
 
-.pasos{display:flex;gap:6px;align-items:center;margin-top:18px;flex-wrap:wrap;}
-.pasos i{width:26px;height:5px;border-radius:99px;background:rgba(18,40,31,.12);transition:background .3s ease;}
+.pasos{display:flex;gap:var(--s1);align-items:center;margin-top:var(--s5);flex-wrap:wrap;}
+.pasos i{width:22px;height:3px;border-radius:99px;background:var(--line);transition:background .3s var(--ease);}
 .pasos i.hecho{background:var(--leaf);}
 .pasos i.actual{background:var(--sun);}
-.pasos .n{font-family:var(--mono);font-size:12px;color:var(--ink-500);margin-left:6px;}
+.pasos .n{font-family:var(--mono);font-size:11.5px;color:var(--ink-4);margin-left:var(--s2);font-variant-numeric:tabular-nums;}
 
 /* ============================================================
-   ACTIVIDAD · VITRINA
+   VITRINA
    ============================================================ */
 .vitrina{
-  position:relative;border-radius:var(--r-lg);overflow:hidden;height:180px;
-  border:1px solid rgba(18,40,31,.09);box-shadow:var(--sh-1);
-  background:linear-gradient(180deg,#DFF1F7 0%,#EAF6F0 52%,#BFDFC6 52%,#A9D2B4 78%,#C9AE8B 78%,#BB9E78 100%);
-  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r2);height:158px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#EDF5F2 0%,#E4F0E9 62%,#D5E7DB 62%,#CFE3D5 100%);
+  box-shadow:inset 0 0 0 1px rgba(19,36,29,.05);
 }
-.vitrina .halo{
-  position:absolute;width:118px;height:118px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.9),rgba(255,255,255,0) 70%);
-}
-.vitrina .pieza{position:relative;font-size:62px;line-height:1;filter:drop-shadow(0 6px 6px rgba(18,40,31,.18));}
-.vitrina .pieza.entra{animation:brinco .6s cubic-bezier(.2,1.3,.4,1);}
+.vitrina .pieza{font-size:60px;line-height:1;filter:drop-shadow(0 8px 8px rgba(19,36,29,.14));}
+.vitrina .pieza.entra{animation:brinco .55s var(--ease);}
 @keyframes brinco{
-  0%{transform:translateY(10px) scale(.7);opacity:0;}
-  55%{transform:translateY(-12px) scale(1.07);opacity:1;}
-  100%{transform:translateY(0) scale(1);opacity:1;}
+  0%{transform:translateY(8px) scale(.82);opacity:0;}
+  55%{transform:translateY(-9px) scale(1.04);opacity:1;}
+  100%{transform:none;opacity:1;}
 }
-.vitrina .cinta{
-  position:absolute;top:12px;left:12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
-  background:rgba(255,255,255,.85);color:var(--ink-700);border-radius:99px;padding:4px 11px;font-weight:600;
-}
-.vitrina .sol{position:absolute;top:16px;right:20px;width:34px;height:34px;border-radius:50%;
-  background:radial-gradient(circle,#FFDE8A,#EFA820);box-shadow:0 0 26px rgba(239,168,32,.55);}
 
-.tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;}
+.tarjetas{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-top:var(--s4);}
 .tarjeta-op{
-  text-align:left;cursor:pointer;font-family:inherit;color:var(--ink-900);
-  background:#fff;border:1.5px solid rgba(18,40,31,.10);border-radius:var(--r-lg);
-  padding:16px;box-shadow:var(--sh-1);display:flex;gap:13px;align-items:flex-start;
-  transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+  text-align:left;cursor:pointer;font-family:inherit;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:var(--r2);
+  padding:var(--s4);box-shadow:var(--e0);display:flex;gap:var(--s3);align-items:flex-start;
+  transition:border-color .18s var(--ease), box-shadow .18s var(--ease), transform .18s var(--ease), background .18s var(--ease);
 }
-.tarjeta-op:hover:not(:disabled){transform:translateY(-3px);box-shadow:var(--sh-2);border-color:var(--leaf);}
-.tarjeta-op:focus-visible{outline:3px solid var(--tech);outline-offset:2px;}
+.tarjeta-op:hover:not(:disabled){border-color:var(--leaf);box-shadow:var(--e2);transform:translateY(-1px);}
 .tarjeta-op:disabled{cursor:default;}
-.tarjeta-op .mini{
-  width:40px;height:40px;flex:none;border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-size:20px;background:var(--tech-100);color:var(--tech);
-}
-.tarjeta-op.op-objeto .mini{background:var(--sun-100);color:var(--sun-600);}
-.tarjeta-op .t{font-weight:800;font-size:15px;letter-spacing:-.01em;}
-.tarjeta-op .d{font-size:12.5px;color:var(--ink-500);line-height:1.4;margin-top:2px;}
-.tarjeta-op.acierto{border-color:var(--leaf);background:var(--leaf-050);}
-.tarjeta-op.fallo{border-color:var(--sun);background:var(--sun-100);}
-.tarjeta-op.opaca{opacity:.45;}
+.tarjeta-op .mini{font-size:19px;color:var(--ink-3);margin-top:1px;flex:none;transition:color .18s var(--ease);}
+.tarjeta-op:hover:not(:disabled) .mini{color:var(--leaf);}
+.tarjeta-op .t{font-weight:700;font-size:14.5px;letter-spacing:-.012em;display:block;}
+.tarjeta-op .d{font-size:12.5px;color:var(--ink-3);line-height:1.42;margin-top:2px;display:block;}
+.tarjeta-op.acierto{border-color:var(--leaf);background:var(--leaf-ll);}
+.tarjeta-op.acierto .mini{color:var(--leaf);}
+.tarjeta-op.fallo{border-color:var(--sun);background:var(--sun-l);}
+.tarjeta-op.fallo .mini{color:var(--sun-d);}
+.tarjeta-op.opaca{opacity:.4;}
 
 /* ============================================================
-   ACTIVIDAD · PREGUNTAS
+   PREGUNTAS
    ============================================================ */
-.mision{
-  display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--tech);
-  background:var(--tech-100);border-radius:99px;padding:5px 12px;font-weight:700;
-}
-.pregunta{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:12px 0 16px;max-width:58ch;}
-.opciones{display:grid;gap:11px;}
+.pregunta{font-size:18.5px;font-weight:700;letter-spacing:-.02em;line-height:1.35;margin-top:var(--s5);max-width:56ch;}
+.opciones{display:grid;gap:var(--s2);margin-top:var(--s4);}
 .op{
-  text-align:left;cursor:pointer;font-family:inherit;font-size:15px;color:var(--ink-900);
-  background:#fff;border:1.5px solid rgba(18,40,31,.10);border-radius:var(--r-md);
-  padding:14px 16px;box-shadow:var(--sh-1);display:flex;align-items:center;gap:12px;
-  transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
+  text-align:left;cursor:pointer;font-family:inherit;font-size:14.5px;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:var(--r1);
+  padding:13px 15px;box-shadow:var(--e0);display:flex;align-items:center;gap:var(--s3);
+  transition:border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
 }
-.op:hover:not(:disabled){transform:translateX(3px);border-color:var(--leaf);box-shadow:var(--sh-2);}
-.op:focus-visible{outline:3px solid var(--tech);outline-offset:2px;}
+.op:hover:not(:disabled){border-color:var(--leaf);box-shadow:var(--e2);}
 .op .marca{
-  width:22px;height:22px;flex:none;border-radius:50%;border:2px solid rgba(18,40,31,.18);
-  display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;
-  transition:background .2s ease, border-color .2s ease;
+  width:18px;height:18px;flex:none;border-radius:50%;border:1.5px solid var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;
+  transition:background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
 }
-.op.acierto{border-color:var(--leaf);background:var(--leaf-050);}
-.op.acierto .marca{background:var(--leaf);border-color:var(--leaf);}
-.op.fallo{border-color:var(--sun);background:var(--sun-100);}
-.op.fallo .marca{background:var(--sun);border-color:var(--sun);color:#3B2A05;}
-.op.opaca{opacity:.5;}
+.op:hover:not(:disabled) .marca{border-color:var(--ink-4);}
+.op.acierto{border-color:var(--leaf);background:var(--leaf-ll);}
+.op.acierto .marca{background:var(--leaf);border-color:var(--leaf);color:#fff;}
+.op.fallo{border-color:var(--sun);background:var(--sun-l);}
+.op.fallo .marca{background:var(--sun);border-color:var(--sun);color:#fff;}
+.op.opaca{opacity:.42;}
 
-/* jardín de flores */
 .jardin{
-  position:relative;border-radius:var(--r-lg);padding:26px 18px 20px;
-  background:linear-gradient(180deg,#E4F3EA 0%,#CBE7D3 58%,#B7885C 58%,#A2764E 100%);
-  border:1px solid rgba(18,40,31,.09);box-shadow:var(--sh-1);
-  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);margin-top:var(--s4);
+  padding:var(--s6) var(--s4) var(--s5);border-radius:var(--r2);
+  background:linear-gradient(180deg,#EAF3EC 0%,#DCEBE1 66%,#C2A883 66%,#B49874 100%);
+  box-shadow:inset 0 0 0 1px rgba(19,36,29,.05);
 }
 .flor{
-  background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;
-  transition:transform .16s ease;
+  background:none;border:0;padding:0;cursor:pointer;display:flex;justify-content:center;
+  transition:transform .2s var(--ease);
 }
-.flor:hover:not(:disabled){transform:translateY(-5px);}
-.flor:focus-visible{outline:3px solid var(--tech);outline-offset:4px;border-radius:12px;}
-.flor svg{width:100%;max-width:96px;height:auto;overflow:visible;}
-.flor .petalos{transform-origin:50% 78%;transition:transform .2s ease;}
-.flor:hover:not(:disabled) .petalos{transform:rotate(-6deg);}
-.flor.buena .petalos{animation:florece .55s cubic-bezier(.2,1.4,.4,1);}
-@keyframes florece{0%{transform:scale(1);}50%{transform:scale(1.16) rotate(6deg);}100%{transform:scale(1.06);}}
-.flor.mala{opacity:.75;}
-.flor.mala .petalos{animation:niega .4s ease;}
-@keyframes niega{0%,100%{transform:translateX(0);}30%{transform:translateX(-5px);}70%{transform:translateX(5px);}}
+.flor:hover:not(:disabled){transform:translateY(-4px);}
+.flor:focus-visible{border-radius:var(--r1);}
+.flor svg{width:100%;max-width:92px;height:auto;overflow:visible;}
+.flor .petalos{transform-origin:50% 74%;transition:transform .22s var(--ease);}
+.flor:hover:not(:disabled) .petalos{transform:rotate(-5deg);}
+.flor.buena .petalos{animation:florece .5s var(--ease) forwards;}
+@keyframes florece{0%{transform:scale(1);}50%{transform:scale(1.13) rotate(5deg);}100%{transform:scale(1.05);}}
+.flor.mala{opacity:.5;}
 
 /* ============================================================
-   ACTIVIDAD · CANTERO
+   CANTERO
    ============================================================ */
-.cantero-wrap{border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-2);border:1px solid rgba(18,40,31,.10);}
-.cantero{
-  display:grid;grid-template-columns:repeat(12,1fr);gap:6px;padding:14px;
-  background:linear-gradient(180deg,#B2814F,#94693C);
-}
+.cantero-wrap{border-radius:var(--r2);overflow:hidden;box-shadow:var(--e2);margin-top:var(--s4);}
+.cantero{display:grid;grid-template-columns:repeat(12,1fr);gap:5px;padding:var(--s3);background:var(--soil);}
 .hueco{
-  aspect-ratio:1/1;border:0;cursor:pointer;border-radius:10px;padding:0;
-  background:linear-gradient(180deg,#E8DAC2,#DCCAAE);
-  box-shadow:inset 0 2px 4px rgba(93,64,32,.28);
+  aspect-ratio:1/1;border:0;cursor:pointer;border-radius:8px;padding:0;background:#E5D8C0;
+  box-shadow:inset 0 1.5px 3px rgba(84,58,28,.24);
   display:flex;align-items:center;justify-content:center;
-  transition:transform .14s ease, background .16s ease;
+  transition:background .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease);
 }
-.hueco:hover:not(:disabled){background:linear-gradient(180deg,#F3E9D6,#E5D6BC);transform:translateY(-2px);}
-.hueco:focus-visible{outline:3px solid var(--sun);outline-offset:2px;}
-.hueco svg{width:78%;height:78%;overflow:visible;}
-.hueco.puesta{background:linear-gradient(180deg,#DFF0E3,#C9E5D2);box-shadow:inset 0 2px 4px rgba(27,92,57,.2);}
-.hueco.puesta svg{animation:planta .45s cubic-bezier(.2,1.5,.4,1);}
-@keyframes planta{0%{transform:translateY(9px) scale(.4);opacity:0;}60%{transform:translateY(-3px) scale(1.1);opacity:1;}100%{transform:none;opacity:1;}}
-.hueco.resaltada{box-shadow:inset 0 0 0 3px var(--sun);}
+.hueco:hover:not(:disabled){background:#F0E6D3;transform:translateY(-1px);}
+.hueco svg{width:76%;height:76%;overflow:visible;}
+.hueco.puesta{background:#DCEBE0;box-shadow:inset 0 1.5px 3px rgba(26,83,53,.18);}
+.hueco.puesta svg{animation:planta .42s var(--ease);}
+@keyframes planta{0%{transform:translateY(7px) scale(.5);opacity:0;}62%{transform:translateY(-2px) scale(1.07);opacity:1;}100%{transform:none;opacity:1;}}
+.hueco.resaltada{box-shadow:inset 0 0 0 2px var(--sun);}
 .reglita{
-  display:grid;grid-template-columns:repeat(12,1fr);gap:6px;padding:8px 14px 12px;
-  background:#8D6236;font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.85);text-align:center;
+  display:grid;grid-template-columns:repeat(12,1fr);gap:5px;padding:0 var(--s3) var(--s3);
+  background:var(--soil-d);font-family:var(--mono);font-size:10.5px;
+  color:rgba(255,255,255,.72);text-align:center;padding-top:var(--s2);
+  font-variant-numeric:tabular-nums;
 }
-.distancias{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.distancias{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s4);}
 .dist{
-  font-family:var(--mono);font-size:12.5px;font-weight:700;border-radius:99px;padding:5px 12px;
-  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:12px;border-radius:99px;padding:4px 11px;
+  display:inline-flex;align-items:center;gap:var(--s2);font-variant-numeric:tabular-nums;
 }
-.dist.igual{background:var(--leaf-100);color:var(--leaf-700);}
-.dist.difiere{background:var(--sun-100);color:#8A5A00;box-shadow:inset 0 0 0 1.5px rgba(239,168,32,.6);}
-.contador{font-family:var(--mono);font-size:13px;color:var(--ink-500);margin:14px 0 0;}
+.dist strong{font-weight:600;}
+.dist.igual{background:var(--leaf-l);color:var(--leaf-dd);}
+.dist.difiere{background:var(--sun-l);color:var(--sun-d);box-shadow:inset 0 0 0 1px rgba(229,162,31,.45);}
+.contador{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);margin-top:var(--s3);}
 
 /* ============================================================
-   ACTIVIDAD · BLOQUES
+   BLOQUES
    ============================================================ */
-.taller{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.taller{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-top:var(--s4);}
 .panel{
-  background:#fff;border:1px solid rgba(18,40,31,.09);border-radius:var(--r-lg);
-  padding:14px;box-shadow:var(--sh-1);min-height:200px;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r2);
+  padding:var(--s4);box-shadow:var(--e0);min-height:216px;
 }
-.panel.destino{background:linear-gradient(180deg,#fff,var(--leaf-050));border-style:dashed;border-color:rgba(46,139,87,.4);}
+.panel.destino{background:var(--leaf-ll);border-style:dashed;border-color:rgba(47,138,91,.32);box-shadow:none;}
 .panel h4{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--ink-500);margin-bottom:12px;display:flex;align-items:center;gap:7px;
+  font-size:12px;font-weight:650;color:var(--ink-3);margin:0 0 var(--s3);
+  display:flex;align-items:center;gap:var(--s2);
 }
-.pila{display:grid;gap:9px;}
+.panel h4 .svg-ico{font-size:14px;}
+.pila{display:grid;gap:var(--s2);}
 .bloque{
-  position:relative;text-align:left;font-family:inherit;font-size:13.5px;font-weight:700;color:#fff;
-  border:0;border-radius:10px;padding:12px 13px 12px 40px;cursor:pointer;width:100%;
-  box-shadow:0 2px 0 rgba(0,0,0,.18), var(--sh-1);letter-spacing:-.01em;line-height:1.35;
-  transition:transform .14s ease, box-shadow .14s ease, filter .14s ease;
+  position:relative;text-align:left;font-family:inherit;font-size:13px;font-weight:650;color:#fff;
+  border:0;border-radius:9px;padding:11px 12px 11px 36px;cursor:pointer;width:100%;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.16);letter-spacing:-.008em;line-height:1.35;
+  transition:filter .18s var(--ease), transform .18s var(--ease), box-shadow .18s var(--ease);
 }
 .bloque .cat-ic{
-  position:absolute;left:12px;top:50%;transform:translateY(-50%);
-  width:20px;height:20px;display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.22);border-radius:6px;font-size:12px;
+  position:absolute;left:11px;top:11.5px;font-size:15px;opacity:.9;
 }
-.bloque:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.06);}
-.bloque:focus-visible{outline:3px solid var(--ink-900);outline-offset:2px;}
-.bloque.puesto{cursor:default;box-shadow:0 2px 0 rgba(0,0,0,.18);animation:encastra .35s cubic-bezier(.2,1.4,.4,1);}
-@keyframes encastra{0%{transform:translateX(-14px) scale(.96);opacity:0;}100%{transform:none;opacity:1;}}
-.bloque.sangria{margin-left:18px;}
-.b-evento{background:var(--cat-evento);}
-.b-movimiento{background:var(--cat-movimiento);}
-.b-control{background:var(--cat-control);}
-.b-apariencia{background:var(--cat-apariencia);}
-.b-lapiz{background:var(--cat-lapiz);}
-.vacio{font-size:13px;color:var(--ink-300);text-align:center;padding:22px 8px;}
+.bloque:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.07);box-shadow:inset 0 -2px 0 rgba(0,0,0,.16), var(--e2);}
+.bloque.puesto{cursor:default;animation:encastra .32s var(--ease);}
+@keyframes encastra{0%{transform:translateY(-6px);opacity:0;}100%{transform:none;opacity:1;}}
+.bloque.sangria{margin-left:16px;}
+.b-evento{background:var(--c-evento);}
+.b-movimiento{background:var(--c-movimiento);}
+.b-control{background:var(--c-control);}
+.b-apariencia{background:var(--c-apariencia);}
+.b-lapiz{background:var(--c-lapiz);}
+.vacio{font-size:13px;color:var(--ink-4);text-align:center;padding:var(--s7) var(--s2);line-height:1.5;}
 .pill-cat{
-  display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:3px 11px;
-  font-size:12px;font-weight:700;color:#fff;
+  display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 10px;
+  font-size:12px;font-weight:650;color:#fff;
 }
+.pill-cat .svg-ico{font-size:13px;}
 
 /* ============================================================
-   ACTIVIDAD · PAREJAS
+   PAREJAS
    ============================================================ */
-.parejas{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.parejas .col{display:grid;gap:10px;align-content:start;}
-.parejas .cab{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-500);
-}
+.parejas{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-top:var(--s4);}
+.parejas .col{display:grid;gap:var(--s2);align-content:start;}
+.parejas .cab{font-size:12px;font-weight:650;color:var(--ink-3);padding-left:2px;}
 .par-btn{
-  text-align:left;font-family:inherit;font-size:14px;cursor:pointer;color:var(--ink-900);
-  background:#fff;border:1.5px solid rgba(18,40,31,.10);border-radius:var(--r-md);
-  padding:12px 14px;box-shadow:var(--sh-1);display:flex;align-items:center;gap:10px;
-  transition:transform .14s ease, box-shadow .14s ease, border-color .14s ease, background .14s ease;
+  text-align:left;font-family:inherit;font-size:14px;cursor:pointer;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:var(--r1);
+  padding:11px 13px;box-shadow:var(--e0);display:flex;align-items:center;gap:var(--s2);
+  transition:border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
 }
-.par-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--sh-2);border-color:var(--tech);}
-.par-btn:focus-visible{outline:3px solid var(--tech);outline-offset:2px;}
-.par-btn.concepto{font-weight:800;background:var(--sun-100);border-color:rgba(239,168,32,.45);}
-.par-btn.elegido{border-color:var(--petal);box-shadow:0 0 0 3px var(--petal-100), var(--sh-1);}
-.par-btn.unido{background:var(--leaf-050);border-color:var(--leaf);color:var(--leaf-700);cursor:default;}
-.par-btn.unido .pin{background:var(--leaf);color:#fff;border-color:var(--leaf);}
-.par-btn .pin{
-  width:20px;height:20px;flex:none;border-radius:6px;border:1.5px dashed rgba(18,40,31,.25);
-  display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--ink-300);
-}
+.par-btn:hover:not(:disabled){border-color:var(--ink-4);box-shadow:var(--e2);}
+.par-btn.concepto{font-weight:700;}
+.par-btn.elegido{border-color:var(--petal);background:var(--petal-l);}
+.par-btn.elegido .pin{color:var(--petal);}
+.par-btn.unido{background:var(--leaf-ll);border-color:rgba(47,138,91,.35);color:var(--leaf-dd);cursor:default;box-shadow:none;}
+.par-btn.unido .pin{color:var(--leaf);}
+.par-btn .pin{font-size:15px;flex:none;color:var(--ink-4);display:flex;transition:color .18s var(--ease);}
 
 /* ============================================================
    CANDADO
    ============================================================ */
-.candado{text-align:center;max-width:460px;margin:8px auto;}
-.candado .escena-rana{width:150px;height:auto;margin:0 auto 6px;display:block;}
-.candado h2{font-size:24px;margin-bottom:6px;}
-.candado p.exp{font-size:14.5px;color:var(--ink-700);margin:0 auto 20px;max-width:38ch;}
-.letras{display:flex;justify-content:center;gap:8px;margin-bottom:18px;}
-.letras i{
-  width:26px;height:34px;border-radius:8px;background:#fff;
-  border:1.5px solid rgba(18,40,31,.12);box-shadow:var(--sh-1);
-  display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;color:var(--ink-300);
-}
-.letras i::after{content:"";width:12px;height:2px;background:rgba(18,40,31,.18);border-radius:2px;}
+.candado{text-align:center;max-width:420px;margin:var(--s3) auto var(--s2);}
+.candado .escena-rana{width:138px;height:auto;margin:0 auto var(--s4);display:block;}
+.candado h2{font-size:22px;}
+.candado p.exp{font-size:14.5px;color:var(--ink-2);margin:var(--s2) auto var(--s6);max-width:36ch;}
+.letras{display:flex;justify-content:center;gap:6px;margin-bottom:var(--s4);}
+.letras i{width:22px;height:2px;border-radius:99px;background:var(--ink-4);opacity:.5;}
 .candado input{
-  font-family:var(--mono);font-size:20px;text-align:center;letter-spacing:.22em;
-  border:1.5px solid rgba(18,40,31,.14);border-radius:var(--r-md);padding:14px 16px;
-  width:280px;max-width:100%;background:#fff;color:var(--ink-900);box-shadow:var(--sh-1);
+  font-family:var(--mono);font-size:19px;text-align:center;letter-spacing:.2em;font-weight:500;
+  border:1px solid var(--line);border-radius:var(--r1);padding:13px 16px;
+  width:260px;max-width:100%;background:#fff;color:var(--ink);box-shadow:var(--e1);
+  transition:border-color .18s var(--ease), box-shadow .18s var(--ease);
 }
-.candado input:focus{outline:3px solid var(--leaf);outline-offset:2px;}
-.candado input.error{border-color:var(--sun);animation:tiembla .34s ease;}
-@keyframes tiembla{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}60%{transform:translateX(8px);}}
+.candado input::placeholder{color:var(--ink-4);letter-spacing:.3em;}
+.candado input.error{border-color:var(--sun);animation:tiembla .32s var(--ease);}
+@keyframes tiembla{0%,100%{transform:translateX(0);}22%{transform:translateX(-6px);}66%{transform:translateX(6px);}}
+.candado .fila{justify-content:center;margin-top:var(--s4);}
 .candado .fb{text-align:left;}
 
 /* ============================================================
-   CIERRE DE ETAPA
+   CIERRE
    ============================================================ */
-.cierre{text-align:center;}
+.cierre{max-width:520px;margin:0 auto;}
 .cierre .sello{
-  width:88px;height:88px;margin:4px auto 14px;border-radius:50%;
-  background:linear-gradient(140deg,var(--leaf),var(--tech));color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:38px;
-  box-shadow:0 10px 26px -10px rgba(46,139,87,.8);animation:sello .5s cubic-bezier(.2,1.4,.4,1);
+  width:52px;height:52px;border-radius:50%;background:var(--leaf);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  animation:sello .45s var(--ease);
 }
-@keyframes sello{0%{transform:scale(.4) rotate(-14deg);opacity:0;}100%{transform:none;opacity:1;}}
-.cierre h2{font-size:26px;}
-.cierre .sub{color:var(--ink-500);font-size:14.5px;margin:6px 0 20px;}
-.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:22px;}
-.stat{
-  background:#fff;border:1px solid rgba(18,40,31,.09);border-radius:var(--r-lg);
-  padding:12px 20px;box-shadow:var(--sh-1);min-width:132px;
+@keyframes sello{0%{transform:scale(.5);opacity:0;}100%{transform:none;opacity:1;}}
+.cierre h2{font-size:23px;margin-top:var(--s4);}
+.cierre .sub{color:var(--ink-3);font-size:14.5px;margin-top:var(--s1);}
+.stats{display:flex;gap:var(--s7);margin:var(--s6) 0;padding:var(--s4) 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.stat .v{font-family:var(--mono);font-size:21px;font-weight:600;color:var(--leaf-d);font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+.stat .l{font-size:12.5px;color:var(--ink-3);margin-top:1px;}
+.aprendido{display:flex;gap:var(--s3);margin-bottom:var(--s5);}
+.aprendido .ic{font-size:19px;color:var(--sun-d);flex:none;margin-top:2px;}
+.aprendido .t{font-size:12.5px;font-weight:650;color:var(--ink-3);}
+.aprendido .d{font-size:14.5px;color:var(--ink);margin-top:2px;}
+.meta-card{background:#fff;border:1px solid var(--line);border-radius:var(--r2);padding:var(--s4) var(--s5);box-shadow:var(--e0);}
+.meta-card .t{font-size:12.5px;font-weight:650;color:var(--ink-3);margin-bottom:var(--s3);}
+.meta-card ul{margin:0;padding:0;list-style:none;display:grid;gap:var(--s3);}
+.meta-card li{
+  font-size:14.5px;color:var(--ink-2);padding-left:var(--s4);position:relative;line-height:1.45;
 }
-.stat .v{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--leaf-700);}
-.stat .l{font-size:11.5px;color:var(--ink-500);letter-spacing:.04em;text-transform:uppercase;font-family:var(--mono);}
-.bloque-concepto{
-  text-align:left;background:var(--tech-100);border:1px solid rgba(42,122,140,.25);
-  border-radius:var(--r-lg);padding:16px 18px;margin-bottom:16px;display:flex;gap:13px;
+.meta-card li::before{
+  content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--petal);
 }
-.bloque-concepto .ic{width:32px;height:32px;flex:none;border-radius:10px;background:var(--tech);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:17px;}
-.bloque-concepto .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--tech);font-weight:700;}
-.bloque-concepto .d{font-size:14.5px;color:var(--ink-900);margin-top:3px;}
-.meta-card{
-  text-align:left;background:#fff;border:1px solid rgba(18,40,31,.09);border-radius:var(--r-lg);
-  padding:16px 18px;box-shadow:var(--sh-1);
-}
-.meta-card .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--petal);font-weight:700;margin-bottom:10px;}
-.meta-card ul{margin:0;padding:0;list-style:none;display:grid;gap:9px;}
-.meta-card li{font-size:14.5px;color:var(--ink-700);display:flex;gap:10px;align-items:flex-start;}
-.meta-card li span.q{
-  width:22px;height:22px;flex:none;border-radius:7px;background:var(--petal-100);color:var(--petal);
-  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;
-}
+.cierre .fila{justify-content:flex-start;}
 
 /* ============================================================
-   MODAL SCRATCH
+   MODAL
    ============================================================ */
 .telon{
-  position:fixed;inset:0;background:rgba(12,32,25,.55);backdrop-filter:blur(3px);
-  display:flex;align-items:center;justify-content:center;padding:20px;z-index:80;
-  animation:fade .25s ease;
+  position:fixed;inset:0;background:rgba(13,28,22,.5);
+  display:flex;align-items:center;justify-content:center;padding:var(--s5);z-index:80;
+  animation:fade .22s var(--ease);
 }
 @keyframes fade{from{opacity:0;}to{opacity:1;}}
 .modal{
-  background:var(--paper);border-radius:var(--r-xl);box-shadow:var(--sh-3);
-  max-width:470px;width:100%;padding:30px 28px 26px;text-align:center;
-  border:1px solid rgba(18,40,31,.1);animation:sube-modal .32s cubic-bezier(.2,1.1,.3,1);
+  background:var(--paper);border-radius:var(--r3);box-shadow:var(--e3);
+  max-width:432px;width:100%;padding:var(--s7) var(--s6) var(--s6);text-align:center;
+  animation:sube-modal .3s var(--ease);
 }
-@keyframes sube-modal{from{transform:translateY(20px) scale(.96);opacity:0;}to{transform:none;opacity:1;}}
-.modal .rana-svg{width:104px;height:auto;margin:0 auto 10px;display:block;}
-.modal h2{font-size:24px;margin-bottom:8px;}
-.modal p{font-size:14.5px;color:var(--ink-700);margin:0 0 6px;}
+@keyframes sube-modal{from{transform:translateY(14px) scale(.98);opacity:0;}to{transform:none;opacity:1;}}
+.modal .rana-svg{width:92px;height:auto;margin:0 auto var(--s4);display:block;}
+.modal h2{font-size:22px;}
+.modal p{font-size:14.5px;color:var(--ink-2);margin-top:var(--s2);}
 .modal .puntos-mini{
-  display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-weight:700;font-size:14px;
-  background:var(--sun-100);color:#8A5A00;border-radius:99px;padding:6px 14px;margin:10px 0 4px;
+  display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;
+  color:var(--sun-d);margin-top:var(--s4);font-variant-numeric:tabular-nums;
 }
-.modal .fila{justify-content:center;}
-.modal .nota{font-size:12px;color:var(--ink-500);margin-top:14px;}
+.modal .fila{justify-content:center;margin-top:var(--s5);}
+.modal .nota{font-size:12.5px;color:var(--ink-4);margin-top:var(--s4);}
 
-/* partículas */
-.particula{position:fixed;width:9px;height:9px;border-radius:2px;pointer-events:none;z-index:90;}
+.particula{position:fixed;width:7px;height:7px;pointer-events:none;z-index:90;}
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
-@media (max-width:820px){
+@media (max-width:840px){
   .taller,.parejas,.tarjetas{grid-template-columns:1fr;}
+  .panel{min-height:0;}
 }
-@media (max-width:600px){
-  .app{padding:14px 12px 70px;}
-  .hoja{padding:26px 20px 26px 50px;}
-  .hero-bar{padding:14px 16px 16px;}
+@media (max-width:620px){
+  .app{padding:var(--s4) var(--s3) var(--s8);}
+  .hoja{padding:var(--s6) var(--s5) var(--s6) var(--s8);}
+  .hoja::after{left:30px;}
+  .espiral{left:12px;}
+  .hero-bar{padding:var(--s4) var(--s5);gap:var(--s3);}
   .marcador{min-width:100%;}
   .jardin{grid-template-columns:repeat(2,1fr);}
-  .cantero{grid-template-columns:repeat(6,1fr);}
-  .reglita{grid-template-columns:repeat(6,1fr);}
+  .cantero,.reglita{grid-template-columns:repeat(6,1fr);}
   .pregunta{font-size:17px;}
+  .stats{gap:var(--s6);}
+  .etapa-card{width:150px;}
 }
-@media (max-height:740px){
-  #escena{max-height:158px;}
+@media (max-height:760px){
+  #escena{max-height:150px;}
 }
-
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;
-    transition-duration:.001ms !important;scroll-behavior:auto !important;}
+  *,*::before,*::after{
+    animation-duration:.001ms !important;animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;scroll-behavior:auto !important;
+  }
 }
 @media (prefers-reduced-motion:no-preference){
-  .flor-hero{transform-origin:50% 100%;animation:mece 5s ease-in-out infinite;}
-  @keyframes mece{0%,100%{transform:rotate(-2.2deg);}50%{transform:rotate(2.2deg);}}
-  #rana-hero{animation:respira 3.6s ease-in-out infinite;}
-  @keyframes respira{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+  .flor-hero{transform-origin:50% 100%;animation:mece 6s ease-in-out infinite;}
+  @keyframes mece{0%,100%{transform:rotate(-1.6deg);}50%{transform:rotate(1.6deg);}}
+  #rana-hero{animation:respira 4s ease-in-out infinite;}
+  @keyframes respira{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
 }
 </style>
 </head>
@@ -601,7 +554,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
 <div class="app">
 
   <header class="hero">
-    <svg id="escena" viewBox="0 0 800 210" role="img" aria-label="El jardín de Número: la rana avanza por la recta numérica del proyecto"></svg>
+    <svg id="escena" viewBox="0 0 800 196" role="img" aria-label="El jardín de Número: la rana avanza por la recta numérica del proyecto"></svg>
     <div class="hero-bar">
       <div>
         <p class="eyebrow">Pensamiento Computacional · Ceibal</p>
@@ -612,7 +565,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
         <div class="top">
           <span class="estrella" id="ic-estrella"></span>
           <span class="cifra" id="puntos">0</span>
-          <span class="lbl">puntos de la sesión</span>
+          <span class="lbl">puntos</span>
         </div>
         <div class="barra"><div class="relleno" id="relleno"></div></div>
       </div>
@@ -632,39 +585,39 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   "use strict";
 
   /* ============================================================
-     ICONOGRAFÍA SVG
+     ICONOGRAFÍA
      ============================================================ */
   function svg(d, extra){
     return '<svg class="svg-ico' + (extra||'') + '" viewBox="0 0 24 24" aria-hidden="true">' + d + '</svg>';
   }
   var ICO = {
-    candado: svg('<path d="M7.5 10.5V7.8a4.5 4.5 0 0 1 9 0v2.7"/><rect x="4.6" y="10.5" width="14.8" height="9.4" rx="2.6"/><circle cx="12" cy="15" r="1.2" fill="currentColor" stroke="none"/>'),
-    tilde: svg('<path d="M4.5 12.5l5 5 10-11"/>'),
-    circulo: svg('<circle cx="12" cy="12" r="7.5"/>'),
-    estrella: svg('<path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5 6.1 20.6l1.2-6.5-4.8-4.6 6.6-.9z"/>','fill'),
-    brote: svg('<path d="M12 21v-7.5"/><path d="M12 13.5C12 10.5 9.6 8.4 6 8.4c0 3 2.4 5.1 6 5.1z"/><path d="M12 13.5c0-3.6 2.6-6.1 6.2-6.1 0 3.6-2.6 6.1-6.2 6.1z"/>'),
-    flor: svg('<circle cx="12" cy="9.5" r="2.4"/><path d="M12 7.1c0-2 1-3.1 2.6-3.1 1.1 1.9.5 3.4-1 4.2"/><path d="M12 7.1c0-2-1-3.1-2.6-3.1-1.1 1.9-.5 3.4 1 4.2"/><path d="M14.4 9.5c1.9-.6 3.3 0 3.8 1.5-1.5 1.4-3.1 1.2-4-.1"/><path d="M9.6 9.5c-1.9-.6-3.3 0-3.8 1.5 1.5 1.4 3.1 1.2 4-.1"/><path d="M12 12v9"/>'),
-    lampara: svg('<path d="M9.5 18.2h5"/><path d="M10.4 21h3.2"/><path d="M12 3.2a6 6 0 0 0-3.4 10.9c.5.4.8 1 .8 1.6v.5h5.2v-.5c0-.6.3-1.2.8-1.6A6 6 0 0 0 12 3.2z"/>'),
-    diana: svg('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.4"/>'),
-    bloques: svg('<rect x="3.5" y="4.5" width="17" height="5.4" rx="1.8"/><rect x="3.5" y="13.6" width="17" height="5.4" rx="1.8"/>'),
-    cuadricula: svg('<rect x="3.5" y="3.5" width="17" height="17" rx="2.4"/><path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17"/>'),
-    union: svg('<path d="M9.5 14.5l5-5"/><path d="M13.4 6.6l1.2-1.2a3.6 3.6 0 0 1 5.1 5.1l-1.2 1.2"/><path d="M10.6 17.4l-1.2 1.2a3.6 3.6 0 0 1-5.1-5.1l1.2-1.2"/>'),
-    cohete: svg('<path d="M13 3.5c3.8 0 7.5 3.7 7.5 7.5-2.2 3.4-5.5 5.5-8.5 6.5l-3-3c1-3 3.1-6.3 6.5-8.5"/><circle cx="14.6" cy="9.4" r="1.6"/><path d="M9 15c-1.6.6-2.5 2-2.8 4.8C9 19.5 10.4 18.6 11 17"/>'),
-    flecha: svg('<path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/>'),
-    banderin: svg('<path d="M6 21V4.5"/><path d="M6 5.2h11l-2.4 3.4L17 12H6z"/>'),
-    mover: svg('<path d="M4 12h16M14.5 7l5 5-5 5"/>'),
-    bucle: svg('<path d="M4.5 11.5A6 6 0 0 1 10.5 5.5h6.8"/><path d="M14.5 2.8l3 2.7-3 2.7"/><path d="M19.5 12.5a6 6 0 0 1-6 6H6.7"/><path d="M9.5 21.2l-3-2.7 3-2.7"/>'),
-    ojo: svg('<path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12 18 18.2 12 18.2 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.6"/>'),
-    lapiz: svg('<path d="M16.4 3.9l3.7 3.7L8.2 19.5l-4.6.9.9-4.6z"/>'),
-    libro: svg('<path d="M4 5.2a2 2 0 0 1 2-2h5.2v17.6H6a2 2 0 0 0-2 2z"/><path d="M20 5.2a2 2 0 0 0-2-2h-5.2v17.6H18a2 2 0 0 1 2 2z"/>')
+    candado: svg('<path d="M7.6 10.4V7.9a4.4 4.4 0 0 1 8.8 0v2.5"/><rect x="4.8" y="10.4" width="14.4" height="9.2" rx="2.6"/>'),
+    tilde: svg('<path d="M4.8 12.4l4.8 4.8L19.2 7"/>'),
+    circulo: svg('<circle cx="12" cy="12" r="7"/>'),
+    estrella: svg('<path d="M12 2.8l2.85 5.9 6.45.9-4.7 4.5 1.15 6.35L12 17.4l-5.75 3.05L7.4 14.1 2.7 9.6l6.45-.9z"/>','fill'),
+    brote: svg('<path d="M12 20.8v-7.4"/><path d="M12 13.4c0-3-2.4-5.1-6-5.1 0 3 2.4 5.1 6 5.1z"/><path d="M12 13.4c0-3.5 2.6-6 6.2-6 0 3.5-2.6 6-6.2 6z"/>'),
+    flor: svg('<circle cx="12" cy="9.4" r="2.3"/><path d="M12 7.1c0-2 1-3.1 2.6-3.1 1.1 1.9.5 3.4-1 4.2"/><path d="M12 7.1c0-2-1-3.1-2.6-3.1-1.1 1.9-.5 3.4 1 4.2"/><path d="M14.3 9.4c1.9-.6 3.3 0 3.8 1.5-1.5 1.4-3.1 1.2-4-.1"/><path d="M9.7 9.4c-1.9-.6-3.3 0-3.8 1.5 1.5 1.4 3.1 1.2 4-.1"/><path d="M12 11.7v9.1"/>'),
+    lampara: svg('<path d="M9.6 18.1h4.8"/><path d="M10.5 20.9h3"/><path d="M12 3.3a5.9 5.9 0 0 0-3.4 10.7c.5.4.8 1 .8 1.6v.5h5.2v-.5c0-.6.3-1.2.8-1.6A5.9 5.9 0 0 0 12 3.3z"/>'),
+    diana: svg('<circle cx="12" cy="12" r="7.6"/><circle cx="12" cy="12" r="3.2"/>'),
+    bloques: svg('<rect x="3.8" y="4.6" width="16.4" height="5.2" rx="1.8"/><rect x="3.8" y="14.2" width="16.4" height="5.2" rx="1.8"/>'),
+    cuadricula: svg('<rect x="3.8" y="3.8" width="16.4" height="16.4" rx="2.4"/><path d="M9.3 3.8v16.4M14.7 3.8v16.4M3.8 9.3h16.4M3.8 14.7h16.4"/>'),
+    union: svg('<path d="M9.6 14.4l4.8-4.8"/><path d="M13.4 6.7l1.1-1.1a3.5 3.5 0 0 1 5 5l-1.1 1.1"/><path d="M10.6 17.3l-1.1 1.1a3.5 3.5 0 0 1-5-5l1.1-1.1"/>'),
+    cohete: svg('<path d="M13.2 3.6c3.7 0 7.2 3.5 7.2 7.2-2.1 3.3-5.3 5.3-8.2 6.3l-2.9-2.9c1-2.9 3-6.1 6.3-8.2"/><circle cx="14.6" cy="9.4" r="1.5"/><path d="M9.3 15c-1.6.6-2.5 2-2.8 4.7 2.7-.3 4.1-1.2 4.7-2.8"/>'),
+    flecha: svg('<path d="M5 12h13M13.2 6.6L18.6 12l-5.4 5.4"/>'),
+    banderin: svg('<path d="M6.2 20.8V4.4"/><path d="M6.2 5.2h10.6l-2.3 3.3 2.3 3.3H6.2z"/>'),
+    mover: svg('<path d="M4.2 12h15.6M14.4 7.2l4.8 4.8-4.8 4.8"/>'),
+    bucle: svg('<path d="M4.6 11.4a5.8 5.8 0 0 1 5.8-5.8h6.6"/><path d="M14.6 3l2.9 2.6-2.9 2.6"/><path d="M19.4 12.6a5.8 5.8 0 0 1-5.8 5.8H7"/><path d="M9.4 21l-2.9-2.6L9.4 15.8"/>'),
+    ojo: svg('<path d="M2.8 12S6.2 6 12 6s9.2 6 9.2 6-3.4 6-9.2 6-9.2-6-9.2-6z"/><circle cx="12" cy="12" r="2.5"/>'),
+    lapiz: svg('<path d="M16.3 4l3.7 3.7L8.3 19.4l-4.5.8.8-4.5z"/>'),
+    libro: svg('<path d="M4.2 5.4a2 2 0 0 1 2-2h5v17.2h-5a2 2 0 0 0-2 2z"/><path d="M19.8 5.4a2 2 0 0 0-2-2h-5v17.2h5a2 2 0 0 1 2 2z"/>')
   };
   var CAT_ICO = {evento:ICO.banderin, movimiento:ICO.mover, control:ICO.bucle, apariencia:ICO.ojo, lapiz:ICO.lapiz};
   var CAT_NOM = {evento:"Eventos", movimiento:"Movimiento", control:"Control", apariencia:"Apariencia", lapiz:"Lápiz"};
-  var CAT_COL = {evento:"var(--cat-evento)", movimiento:"var(--cat-movimiento)", control:"var(--cat-control)",
-                 apariencia:"var(--cat-apariencia)", lapiz:"var(--cat-lapiz)"};
+  var CAT_COL = {evento:"var(--c-evento)", movimiento:"var(--c-movimiento)", control:"var(--c-control)",
+                 apariencia:"var(--c-apariencia)", lapiz:"var(--c-lapiz)"};
 
   /* ============================================================
-     DATOS DEL PROYECTO  (contenido pedagógico — sin cambios)
+     DATOS DEL PROYECTO
      ============================================================ */
   var ETAPAS = [
     {
@@ -992,126 +945,113 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   function sumar(n, origen){
     puntos += n;
     puntosEtapa[etapaActiva] += n;
-    animarPuntos(n, origen);
-    pintarHero();
-  }
-
-  function animarPuntos(n, origen){
     elPuntos.textContent = puntos;
     elRelleno.style.width = Math.min(100, (puntos/MAX_PUNTOS)*100) + "%";
     elMarcador.className = "marcador";
     void elMarcador.offsetWidth;
     elMarcador.className = "marcador pulso";
-    if(reduceMotion()){ return; }
-    var chip = el("div","chip-suma","+" + n);
-    var base = origen && origen.getBoundingClientRect ? origen.getBoundingClientRect() : elMarcador.getBoundingClientRect();
-    chip.style.position = "fixed";
-    chip.style.left = (base.left + base.width/2 - 22) + "px";
-    chip.style.top  = (base.top - 6) + "px";
-    document.body.appendChild(chip);
-    setTimeout(function(){ if(chip.parentNode){ chip.parentNode.removeChild(chip); } }, 1000);
+    if(!reduceMotion()){
+      var chip = el("div","chip-suma","+" + n);
+      var r = origen && origen.getBoundingClientRect ? origen.getBoundingClientRect() : elMarcador.getBoundingClientRect();
+      chip.style.left = (r.left + r.width/2 - 12) + "px";
+      chip.style.top  = (r.top - 4) + "px";
+      document.body.appendChild(chip);
+      setTimeout(function(){ if(chip.parentNode){ chip.parentNode.removeChild(chip); } }, 950);
+    }
+    pintarHero();
   }
 
-  function particulas(x, y){
+  function celebrar(x, y){
     if(reduceMotion()){ return; }
-    var cols = ["#2E8B57","#EFA820","#D9557A","#2A7A8C","#8BD3A2"];
-    for(var i=0;i<18;i++){
+    var cols = ["#2F8A5B","#E5A21F","#8FCFA4","#C9527A"];
+    for(var i=0;i<10;i++){
       (function(i){
         var p = el("div","particula");
         p.style.background = cols[i % cols.length];
         p.style.left = x + "px";
         p.style.top = y + "px";
-        p.style.borderRadius = (i%2 ? "50%" : "2px");
+        p.style.borderRadius = (i % 2 ? "50%" : "2px");
         document.body.appendChild(p);
-        var ang = (Math.PI*2) * (i/18) + Math.random()*0.4;
-        var dist = 60 + Math.random()*90;
-        var dx = Math.cos(ang)*dist, dy = Math.sin(ang)*dist - 30;
+        var ang = (Math.PI*2)*(i/10) + Math.random()*0.5;
+        var dist = 52 + Math.random()*62;
         p.animate([
           {transform:"translate(0,0) scale(1)", opacity:1},
-          {transform:"translate("+dx+"px,"+dy+"px) rotate(220deg) scale(.3)", opacity:0}
-        ], {duration:750 + Math.random()*350, easing:"cubic-bezier(.2,.7,.3,1)"});
-        setTimeout(function(){ if(p.parentNode){ p.parentNode.removeChild(p); } }, 1150);
+          {transform:"translate("+(Math.cos(ang)*dist)+"px,"+(Math.sin(ang)*dist-26)+"px) rotate(180deg) scale(.4)", opacity:0}
+        ], {duration:640 + Math.random()*260, easing:"cubic-bezier(.22,.7,.25,1)"});
+        setTimeout(function(){ if(p.parentNode){ p.parentNode.removeChild(p); } }, 950);
       })(i);
     }
   }
 
   /* ============================================================
-     HERO · ESCENA DEL JARDÍN
+     HERO
      ============================================================ */
   function pintarHero(){
-    var W = 800, H = 210, base = 158;
-    var x0 = 62, paso = (W - 124) / (ETAPAS.length - 1);
+    var W = 800, H = 196, base = 146;
+    var x0 = 64, paso = (W - 128) / (ETAPAS.length - 1);
     var s = [];
 
     s.push('<defs>');
-    s.push('<linearGradient id="gCielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E4F4FA"/><stop offset="1" stop-color="#F3FAF3"/></linearGradient>');
-    s.push('<linearGradient id="gPasto" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BFE3C9"/><stop offset="1" stop-color="#9CCFAC"/></linearGradient>');
-    s.push('<linearGradient id="gTierra" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B98F63"/><stop offset="1" stop-color="#9A7247"/></linearGradient>');
-    s.push('<radialGradient id="gSol"><stop offset="0" stop-color="#FFE9A8"/><stop offset="1" stop-color="#EFA820"/></radialGradient>');
+    s.push('<linearGradient id="gCielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E9F3F1"/><stop offset="1" stop-color="#F3F8F2"/></linearGradient>');
+    s.push('<linearGradient id="gPasto" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C6E2CD"/><stop offset="1" stop-color="#A9D2B5"/></linearGradient>');
     s.push('</defs>');
 
     s.push('<rect width="'+W+'" height="'+H+'" fill="url(#gCielo)"/>');
-    s.push('<circle cx="718" cy="42" r="24" fill="url(#gSol)" opacity=".95"/>');
-    s.push('<circle cx="718" cy="42" r="38" fill="#EFA820" opacity=".10"/>');
-    /* colinas */
-    s.push('<path d="M-20 '+(base-14)+' q 120 -58 250 -18 q 130 42 250 -14 q 120 -50 340 6 L820 '+H+' L-20 '+H+' Z" fill="#CDE9D4" opacity=".85"/>');
-    s.push('<path d="M-20 '+(base+2)+' q 160 -40 330 -6 q 150 30 300 -10 q 110 -28 230 8 L820 '+H+' L-20 '+H+' Z" fill="url(#gPasto)"/>');
-    /* tierra del cantero */
-    s.push('<rect x="0" y="'+(base+30)+'" width="'+W+'" height="'+(H-base-30)+'" fill="url(#gTierra)"/>');
-    /* recta numérica */
-    s.push('<line x1="34" y1="'+(base+30)+'" x2="766" y2="'+(base+30)+'" stroke="#6E8F79" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>');
+    s.push('<circle cx="712" cy="40" r="19" fill="#E5A21F" opacity=".22"/>');
+    s.push('<path d="M-20 '+(base-16)+' q 130 -46 260 -12 q 130 34 250 -10 q 120 -38 330 8 L820 '+H+' L-20 '+H+' Z" fill="#D6E9DA"/>');
+    s.push('<path d="M-20 '+(base+2)+' q 170 -32 340 -4 q 150 24 300 -8 q 110 -22 220 6 L820 '+H+' L-20 '+H+' Z" fill="url(#gPasto)"/>');
+    s.push('<rect x="0" y="'+(base+26)+'" width="'+W+'" height="'+(H-base-26)+'" fill="#B08050"/>');
+    s.push('<line x1="40" y1="'+(base+26)+'" x2="760" y2="'+(base+26)+'" stroke="#7A9A83" stroke-width="1.6" stroke-linecap="round" opacity=".5"/>');
 
     for(var i=0;i<ETAPAS.length;i++){
       var x = x0 + paso*i;
       var completa = abiertas[i] && progreso[i] >= ETAPAS[i].actividades.length;
-      var abierta = abiertas[i];
-      /* tallo + marca sobre la recta */
-      s.push('<line x1="'+x+'" y1="'+(base+22)+'" x2="'+x+'" y2="'+(base+38)+'" stroke="#5C7D68" stroke-width="2" opacity=".6"/>');
-      s.push('<text x="'+x+'" y="'+(base+50)+'" font-size="11" font-family="ui-monospace,monospace" fill="rgba(255,255,255,.85)" text-anchor="middle">'+ETAPAS[i].n+'</text>');
+      s.push('<line x1="'+x+'" y1="'+(base+20)+'" x2="'+x+'" y2="'+(base+32)+'" stroke="#6D8E77" stroke-width="1.6" opacity=".5"/>');
+      s.push('<text x="'+x+'" y="'+(base+44)+'" font-size="10" font-family="ui-monospace,monospace" fill="rgba(255,255,255,.72)" text-anchor="middle">'+ETAPAS[i].n+'</text>');
 
-      var g = '<g class="flor-hero" style="animation-delay:'+(i*0.42)+'s" transform="translate('+x+','+(base+22)+')">';
+      var g = '<g class="flor-hero" style="animation-delay:'+(i*0.5)+'s" transform="translate('+x+','+(base+20)+')">';
       if(completa){
-        var tono = ["#EFA820","#D9557A","#E8894B","#C86FA8"][i % 4];
-        g += '<path d="M0 0 L0 -30" stroke="#3E8B5B" stroke-width="3" stroke-linecap="round"/>';
-        g += '<path d="M0 -14 q -13 -3 -15 -13 q 12 -2 15 13z" fill="#4FA972"/>';
-        g += '<g transform="translate(0,-34)">';
+        var tono = ["#E5A21F","#C9527A","#DD8543","#A868B8"][i % 4];
+        g += '<path d="M0 0 L0 -28" stroke="#3F8A5C" stroke-width="2.4" stroke-linecap="round"/>';
+        g += '<path d="M0 -13 q -12 -3 -14 -12 q 11 -2 14 12z" fill="#59A87C"/>';
+        g += '<g transform="translate(0,-32)">';
         for(var p=0;p<5;p++){
           var a = (p/5)*Math.PI*2;
-          g += '<ellipse cx="'+(Math.cos(a)*8).toFixed(1)+'" cy="'+(Math.sin(a)*8).toFixed(1)+'" rx="6.4" ry="4.6" fill="'+tono+'" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+(Math.cos(a)*8).toFixed(1)+' '+(Math.sin(a)*8).toFixed(1)+')"/>';
+          var cx = (Math.cos(a)*7.2).toFixed(1), cy = (Math.sin(a)*7.2).toFixed(1);
+          g += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="5.8" ry="4.2" fill="'+tono+'" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+cx+' '+cy+')"/>';
         }
-        g += '<circle r="4.4" fill="#FFF3D0"/><circle r="2" fill="#E0A32B"/></g>';
-      }else if(abierta){
-        g += '<path d="M0 0 L0 -20" stroke="#4FA972" stroke-width="3" stroke-linecap="round"/>';
-        g += '<ellipse cx="0" cy="-25" rx="6" ry="8" fill="#8CC7A2"/>';
-        g += '<path d="M0 -9 q -11 -2 -13 -11 q 10 -2 13 11z" fill="#69B487"/>';
+        g += '<circle r="3.8" fill="#FCFAF4"/></g>';
+      }else if(abiertas[i]){
+        g += '<path d="M0 0 L0 -19" stroke="#59A87C" stroke-width="2.4" stroke-linecap="round"/>';
+        g += '<ellipse cx="0" cy="-23" rx="5" ry="7" fill="#93C9A7"/>';
+        g += '<path d="M0 -9 q -10 -2 -12 -10 q 9 -2 12 10z" fill="#73B893"/>';
       }else{
-        g += '<path d="M0 0 L0 -11" stroke="#7EA98C" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>';
-        g += '<path d="M0 -6 q -9 -2 -10 -9 q 8 -1 10 9z" fill="#9BC4A8" opacity=".85"/>';
-        g += '<path d="M0 -6 q 9 -2 10 -9 q -8 -1 -10 9z" fill="#9BC4A8" opacity=".65"/>';
+        g += '<path d="M0 0 L0 -10" stroke="#8FB29B" stroke-width="2" stroke-linecap="round"/>';
+        g += '<path d="M0 -6 q -8 -2 -9 -8 q 7 -1 9 8z" fill="#A6C7B1"/>';
+        g += '<path d="M0 -6 q 8 -2 9 -8 q -7 -1 -9 8z" fill="#A6C7B1" opacity=".7"/>';
       }
       g += '</g>';
       s.push(g);
     }
 
-    /* rana protagonista */
     var rx = x0 + paso*etapaActiva;
-    s.push('<g id="rana-grupo" style="transform:translate('+rx+'px,'+(base+18)+'px);transition:transform .7s cubic-bezier(.34,1.3,.5,1)">');
-    s.push('<ellipse cx="0" cy="4" rx="20" ry="5" fill="#1B5C39" opacity=".18"/>');
+    s.push('<g style="transform:translate('+rx+'px,'+(base+17)+'px);transition:transform .75s cubic-bezier(.34,1.25,.5,1)">');
+    s.push('<ellipse cx="0" cy="3" rx="17" ry="4" fill="#1A5335" opacity=".16"/>');
     s.push('<g id="rana-hero">');
-    s.push('<ellipse cx="-13" cy="-6" rx="8" ry="5" fill="#237A4B"/><ellipse cx="13" cy="-6" rx="8" ry="5" fill="#237A4B"/>');
-    s.push('<ellipse cx="0" cy="-13" rx="17" ry="12" fill="#2E8B57"/>');
-    s.push('<ellipse cx="0" cy="-9" rx="11" ry="6.5" fill="#8FCFA4" opacity=".55"/>');
-    s.push('<circle cx="-7" cy="-24" r="6.2" fill="#2E8B57"/><circle cx="7" cy="-24" r="6.2" fill="#2E8B57"/>');
-    s.push('<circle cx="-7" cy="-25" r="3.9" fill="#FCF8EF"/><circle cx="7" cy="-25" r="3.9" fill="#FCF8EF"/>');
-    s.push('<circle cx="-6.2" cy="-25" r="2" fill="#12281F"/><circle cx="7.8" cy="-25" r="2" fill="#12281F"/>');
-    s.push('<path d="M-5 -12 q 5 4 10 0" stroke="#1B5C39" stroke-width="2" fill="none" stroke-linecap="round"/>');
+    s.push('<ellipse cx="-12" cy="-6" rx="7.4" ry="4.6" fill="#246E48"/><ellipse cx="12" cy="-6" rx="7.4" ry="4.6" fill="#246E48"/>');
+    s.push('<ellipse cx="0" cy="-12" rx="15.6" ry="11" fill="#2F8A5B"/>');
+    s.push('<ellipse cx="0" cy="-8" rx="10" ry="6" fill="#8FCFA4" opacity=".5"/>');
+    s.push('<circle cx="-6.4" cy="-22" r="5.8" fill="#2F8A5B"/><circle cx="6.4" cy="-22" r="5.8" fill="#2F8A5B"/>');
+    s.push('<circle cx="-6.4" cy="-23" r="3.6" fill="#FCFAF4"/><circle cx="6.4" cy="-23" r="3.6" fill="#FCFAF4"/>');
+    s.push('<circle cx="-5.6" cy="-23" r="1.8" fill="#13241D"/><circle cx="7.2" cy="-23" r="1.8" fill="#13241D"/>');
+    s.push('<path d="M-4.5 -11 q 4.5 3.6 9 0" stroke="#1A5335" stroke-width="1.8" fill="none" stroke-linecap="round"/>');
     s.push('</g></g>');
 
     elEscena.innerHTML = s.join("");
   }
 
   /* ============================================================
-     CAMINO DE ETAPAS
+     CAMINO
      ============================================================ */
   function pintarRail(){
     elRail.innerHTML = "";
@@ -1123,9 +1063,8 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
         card.setAttribute("aria-current", i===etapaActiva ? "true" : "false");
 
         var f1 = el("div","fila1");
-        f1.appendChild(html("span","badge", String(e.n)));
-        var est = html("span","estado", abiertas[i] ? (completa ? ICO.tilde : ICO.circulo) : ICO.candado);
-        f1.appendChild(est);
+        f1.appendChild(el("span","badge","0" + e.n));
+        f1.appendChild(html("span","estado", abiertas[i] ? (completa ? ICO.tilde : ICO.circulo) : ICO.candado));
         card.appendChild(f1);
 
         card.appendChild(el("div","nom", abiertas[i] ? e.titulo : "Etapa bloqueada"));
@@ -1143,23 +1082,17 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   }
 
   /* ============================================================
-     COMPONENTES COMPARTIDOS
+     COMPARTIDOS
      ============================================================ */
   function feedback(tipo, titulo, texto, pistaHTML){
-    var clase = tipo === "ok" ? "fb fb-ok on" : (tipo === "casi" ? "fb fb-casi on" : "fb fb-info on");
-    var ic = tipo === "ok" ? ICO.tilde : ICO.lampara;
-    var d = el("div", clase);
-    d.appendChild(html("span","ic", ic));
-    var cuerpo = el("div");
-    cuerpo.appendChild(el("div","tit", titulo));
-    cuerpo.appendChild(el("div","txt", texto));
-    if(pistaHTML){ cuerpo.appendChild(html("div","pista", pistaHTML)); }
-    d.appendChild(cuerpo);
+    var d = el("div", "fb fb-" + tipo + " on");
+    d.appendChild(html("span","ic", tipo === "ok" ? ICO.tilde : (tipo === "casi" ? ICO.lampara : ICO.circulo)));
+    var c = el("div");
+    c.appendChild(el("div","tit", titulo));
+    c.appendChild(el("div","txt", texto));
+    if(pistaHTML){ c.appendChild(html("div","pista", pistaHTML)); }
+    d.appendChild(c);
     return d;
-  }
-  function limpiarFB(host){
-    var v = host.querySelector(".fb");
-    if(v){ host.removeChild(v); }
   }
   function pasos(total, actual){
     var d = el("div","pasos");
@@ -1171,7 +1104,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   }
   function botonSiguiente(host, texto){
     var f = el("div","fila");
-    var b = html("button","btn btn-1", texto + " " + ICO.flecha);
+    var b = html("button","btn btn-1", texto + ICO.flecha);
     b.addEventListener("click", terminarActividad);
     f.appendChild(b);
     host.appendChild(f);
@@ -1179,7 +1112,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   }
 
   /* ============================================================
-     RENDER PRINCIPAL
+     RENDER
      ============================================================ */
   function render(){
     pintarRail();
@@ -1187,36 +1120,34 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     elCont.innerHTML = "";
     var hoja = el("section","hoja");
     var esp = el("div","espiral");
-    for(var s=0;s<9;s++){ esp.appendChild(el("i")); }
+    for(var s=0;s<8;s++){ esp.appendChild(el("i")); }
     hoja.appendChild(esp);
     elCont.appendChild(hoja);
 
     var e = ETAPAS[etapaActiva];
-
     if(!abiertas[etapaActiva]){ renderCandado(hoja, e); return; }
 
     var enc = el("div","enc");
-    enc.appendChild(html("span","icono-etapa", e.icono));
-    var tit = el("div");
-    tit.appendChild(el("p","eyebrow","Etapa " + e.n + " · " + e.sub));
-    tit.appendChild(el("h2",null,e.titulo));
-    enc.appendChild(tit);
+    enc.appendChild(el("p","eyebrow","Etapa " + e.n + " · " + e.sub));
+    enc.appendChild(el("h2",null,e.titulo));
     hoja.appendChild(enc);
 
     if(progreso[etapaActiva] >= e.actividades.length){
       renderCierre(hoja, e);
       if(!cartelVisto[etapaActiva]){
         cartelVisto[etapaActiva] = true;
-        setTimeout(function(){ mostrarCartel(e); }, 480);
+        setTimeout(function(){ mostrarCartel(e); }, 460);
       }
       return;
     }
 
     var act = e.actividades[progreso[etapaActiva]];
-    hoja.appendChild(el("h3","titulo-act", act.titulo));
-    hoja.appendChild(html("p","consigna", act.consigna));
+    var cab = el("div","bloque-act");
+    cab.appendChild(el("h3","titulo-act", act.titulo));
+    cab.appendChild(html("p","consigna", act.consigna));
+    hoja.appendChild(cab);
 
-    var host = el("div");
+    var host = el("div","lienzo");
     hoja.appendChild(host);
 
     if(act.tipo === "quiz"){ juegoQuiz(host, act); }
@@ -1239,22 +1170,22 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     var d = el("div","candado");
 
     d.appendChild(html("div", null,
-      '<svg class="escena-rana" viewBox="0 0 150 118" aria-hidden="true">' +
-      '<ellipse cx="75" cy="106" rx="42" ry="7" fill="#12281F" opacity=".10"/>' +
-      '<rect x="46" y="60" width="58" height="42" rx="10" fill="#EFA820"/>' +
-      '<path d="M60 60V48a15 15 0 0 1 30 0v12" fill="none" stroke="#D18F0E" stroke-width="7" stroke-linecap="round"/>' +
-      '<circle cx="75" cy="80" r="6" fill="#8A5A00"/><rect x="72.4" y="80" width="5.2" height="12" rx="2.6" fill="#8A5A00"/>' +
-      '<g transform="translate(28,74)">' +
-      '<ellipse cx="-10" cy="6" rx="7" ry="4.4" fill="#237A4B"/><ellipse cx="10" cy="6" rx="7" ry="4.4" fill="#237A4B"/>' +
-      '<ellipse cx="0" cy="0" rx="16" ry="11" fill="#2E8B57"/>' +
-      '<circle cx="-6" cy="-11" r="5.8" fill="#2E8B57"/><circle cx="6" cy="-11" r="5.8" fill="#2E8B57"/>' +
-      '<circle cx="-6" cy="-12" r="3.6" fill="#FCF8EF"/><circle cx="6" cy="-12" r="3.6" fill="#FCF8EF"/>' +
-      '<circle cx="-5.2" cy="-12" r="1.9" fill="#12281F"/><circle cx="6.8" cy="-12" r="1.9" fill="#12281F"/>' +
-      '<path d="M-4 2 q 4 3 8 0" stroke="#1B5C39" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
+      '<svg class="escena-rana" viewBox="0 0 140 104" aria-hidden="true">' +
+      '<ellipse cx="70" cy="95" rx="40" ry="6" fill="#13241D" opacity=".09"/>' +
+      '<rect x="54" y="56" width="50" height="36" rx="8" fill="#E5A21F"/>' +
+      '<path d="M66 56V46a13 13 0 0 1 26 0v10" fill="none" stroke="#B87F0C" stroke-width="6" stroke-linecap="round"/>' +
+      '<circle cx="79" cy="72" r="4.6" fill="#7A5406"/><rect x="76.9" y="72" width="4.2" height="9" rx="2.1" fill="#7A5406"/>' +
+      '<g transform="translate(32,72)">' +
+      '<ellipse cx="-9" cy="5" rx="6.4" ry="4" fill="#246E48"/><ellipse cx="9" cy="5" rx="6.4" ry="4" fill="#246E48"/>' +
+      '<ellipse cx="0" cy="0" rx="15" ry="10.4" fill="#2F8A5B"/>' +
+      '<circle cx="-5.6" cy="-10" r="5.4" fill="#2F8A5B"/><circle cx="5.6" cy="-10" r="5.4" fill="#2F8A5B"/>' +
+      '<circle cx="-5.6" cy="-11" r="3.4" fill="#FCFAF4"/><circle cx="5.6" cy="-11" r="3.4" fill="#FCFAF4"/>' +
+      '<circle cx="-4.9" cy="-11" r="1.7" fill="#13241D"/><circle cx="6.3" cy="-11" r="1.7" fill="#13241D"/>' +
+      '<path d="M-3.6 2 q 3.6 2.8 7.2 0" stroke="#1A5335" stroke-width="1.7" fill="none" stroke-linecap="round"/>' +
       '</g></svg>'));
 
     d.appendChild(el("h2",null,"Etapa " + e.n + " · todavía cerrada"));
-    d.appendChild(el("p","exp","Número está esperando la palabra secreta. Tu docente la da cuando el grupo llega a esta parte del proyecto."));
+    d.appendChild(el("p","exp","Número espera la palabra secreta. Tu docente la da cuando el grupo llega a esta parte del proyecto."));
 
     var letras = el("div","letras");
     for(var i=0;i<e.clave.length;i++){ letras.appendChild(el("i")); }
@@ -1262,30 +1193,31 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
 
     var inp = document.createElement("input");
     inp.type = "text";
-    inp.setAttribute("placeholder","· · · · ·");
+    inp.setAttribute("placeholder","·····");
     inp.setAttribute("aria-label","Palabra secreta de la etapa " + e.n);
     inp.setAttribute("autocomplete","off");
     inp.setAttribute("spellcheck","false");
     d.appendChild(inp);
 
     var f = el("div","fila");
-    f.style.justifyContent = "center";
-    var b = html("button","btn btn-sol", ICO.candado + " Abrir la etapa");
+    var b = html("button","btn btn-sol", ICO.candado + "Abrir la etapa");
     f.appendChild(b);
     d.appendChild(f);
+
+    var zonaFB = el("div");
+    d.appendChild(zonaFB);
     hoja.appendChild(d);
 
     function intentar(){
-      limpiarFB(d);
+      zonaFB.innerHTML = "";
       if(norm(inp.value) === e.clave){
         var r = b.getBoundingClientRect();
-        particulas(r.left + r.width/2, r.top);
+        celebrar(r.left + r.width/2, r.top);
         abiertas[etapaActiva] = true;
-        setTimeout(render, reduceMotion() ? 0 : 260);
+        setTimeout(render, reduceMotion() ? 0 : 240);
       }else{
-        d.appendChild(feedback("casi","Esa no es la palabra",
-          "Fijate que tenga " + e.clave.length + " letras. No importan las mayúsculas ni los acentos.",
-          null));
+        zonaFB.appendChild(feedback("casi","Esa no es la palabra",
+          "Tiene " + e.clave.length + " letras. No importan las mayúsculas ni los acentos.", null));
         inp.value = "";
         inp.className = "";
         void inp.offsetWidth;
@@ -1299,20 +1231,16 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   }
 
   /* ============================================================
-     ACTIVIDAD · QUIZ
+     QUIZ
      ============================================================ */
   function juegoQuiz(host, act){
-    var lista = mezclar(act.preguntas), i = 0;
-    var pieza = null;
+    var lista = mezclar(act.preguntas), i = 0, pieza = null;
 
     if(act.render === "vitrina"){
-      var v = html("div","vitrina",
-        '<span class="cinta">JARDÍN DE LA ESCUELA</span><span class="sol"></span><span class="halo"></span>');
+      var v = el("div","vitrina");
       pieza = el("span","pieza","🐸");
       v.appendChild(pieza);
       host.appendChild(v);
-    }else{
-      host.appendChild(html("span","mision", ICO.diana + " Misión " + (act.render === "flores" ? "en el jardín" : "de repaso")));
     }
 
     var preg = el("p","pregunta");
@@ -1329,15 +1257,15 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
       var petalos = '';
       for(var p=0;p<6;p++){
         var a = (p/6)*Math.PI*2;
-        var cx = (Math.cos(a)*17).toFixed(1), cy = (Math.sin(a)*17).toFixed(1);
-        petalos += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="13" ry="9.4" fill="'+tono+'" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+cx+' '+cy+')"/>';
+        var cx = (Math.cos(a)*16).toFixed(1), cy = (Math.sin(a)*16).toFixed(1);
+        petalos += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="12" ry="8.6" fill="'+tono+'" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+cx+' '+cy+')"/>';
       }
-      return '<svg viewBox="-40 -46 80 92" aria-hidden="true">' +
-        '<path d="M0 46 L0 -2" stroke="#3E8B5B" stroke-width="5" stroke-linecap="round"/>' +
-        '<path d="M0 24 q -18 -4 -21 -18 q 17 -3 21 18z" fill="#4FA972"/>' +
+      return '<svg viewBox="-38 -44 76 88" aria-hidden="true">' +
+        '<path d="M0 44 L0 -2" stroke="#3F8A5C" stroke-width="4" stroke-linecap="round"/>' +
+        '<path d="M0 23 q -16 -4 -19 -16 q 15 -3 19 16z" fill="#59A87C"/>' +
         '<g class="petalos">' + petalos +
-        '<circle r="13.5" fill="#FFF6E2"/>' +
-        '<text y="5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" font-weight="700" fill="#12281F">'+num+'</text>' +
+        '<circle r="12.6" fill="#FCFAF4"/>' +
+        '<text y="5" text-anchor="middle" font-family="ui-monospace,monospace" font-size="15" fill="#13241D">'+num+'</text>' +
         '</g></svg>';
     }
 
@@ -1353,7 +1281,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
       cont.innerHTML = "";
       zonaFB.innerHTML = "";
       pie.innerHTML = "";
-      var tonos = ["#EFA820","#D9557A","#E8894B","#B06FC8"];
+      var tonos = ["#E5A21F","#C9527A","#DD8543","#A868B8"];
 
       for(var k=0;k<q.o.length;k++){
         (function(k){
@@ -1362,8 +1290,8 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
             b = html("button","flor", florSVG(q.o[k], tonos[k % tonos.length]));
             b.setAttribute("aria-label","Flor con el número " + q.o[k]);
           }else if(act.render === "vitrina"){
-            var esObjeto = k === 0;
-            b = html("button","tarjeta-op " + (esObjeto ? "op-objeto" : "op-fondo"),
+            var esObjeto = (k === 0);
+            b = html("button","tarjeta-op",
               '<span class="mini">' + (esObjeto ? ICO.mover : ICO.cuadricula) + '</span>' +
               '<span><span class="t">' + q.o[k] + '</span>' +
               '<span class="d">' + (esObjeto ? "Se programa aparte y puede moverse" : "Ocupa toda la pantalla, atrás de todo") + '</span></span>');
@@ -1378,24 +1306,26 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
       zonaPasos.appendChild(pasos(lista.length, i));
     }
 
-    function responder(k, boton){
-      var q = lista[i];
-      var bs = cont.children;
-      for(var j=0;j<bs.length;j++){ bs[j].disabled = true; }
-      var ok = (k === q.c);
+    function marcar(nodo, clase, claseFlor){
+      if(!nodo){ return; }
+      nodo.className += " " + (act.render === "flores" ? claseFlor : clase);
+    }
 
-      if(ok){
+    function responder(k, boton){
+      var q = lista[i], bs = cont.children;
+      for(var j=0;j<bs.length;j++){ bs[j].disabled = true; }
+
+      if(k === q.c){
         sumar(10, boton);
-        marcar(boton, "acierto", "buena");
+        marcar(boton,"acierto","buena");
         zonaFB.appendChild(feedback("ok","¡Muy bien!", q.r, null));
       }else{
-        marcar(boton, "fallo", "mala");
-        marcar(bs[q.c], "acierto", "buena");
+        marcar(boton,"fallo","mala");
+        marcar(bs[q.c],"acierto","buena");
         for(var m=0;m<bs.length;m++){
           if(m !== k && m !== q.c){ bs[m].className += " opaca"; }
         }
-        zonaFB.appendChild(feedback("casi","Casi…", q.r,
-          '<strong>La respuesta era:</strong> ' + q.o[q.c]));
+        zonaFB.appendChild(feedback("casi","Casi…", q.r, "La respuesta era: " + q.o[q.c]));
       }
 
       i++;
@@ -1403,38 +1333,26 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
       zonaPasos.appendChild(pasos(lista.length, i));
 
       var f = el("div","fila");
-      if(i < lista.length){
-        var b1 = html("button","btn btn-1", "Siguiente pregunta " + ICO.flecha);
-        b1.addEventListener("click", pintar);
-        f.appendChild(b1);
-      }else{
-        var b2 = html("button","btn btn-1", "Terminar actividad " + ICO.flecha);
-        b2.addEventListener("click", terminarActividad);
-        f.appendChild(b2);
-      }
+      var b = html("button","btn btn-1", (i < lista.length ? "Siguiente pregunta" : "Terminar actividad") + ICO.flecha);
+      b.addEventListener("click", i < lista.length ? pintar : terminarActividad);
+      f.appendChild(b);
       pie.appendChild(f);
-      f.querySelector("button").focus();
-    }
-
-    function marcar(nodo, claseNormal, claseFlor){
-      if(!nodo){ return; }
-      nodo.className += " " + (act.render === "flores" ? claseFlor : claseNormal);
+      b.focus();
     }
 
     pintar();
   }
 
   /* ============================================================
-     ACTIVIDAD · CANTERO
+     CANTERO
      ============================================================ */
   function juegoCantero(host){
     var TOTAL = 12;
     var pedidas = 3 + Math.floor(Math.random()*2);
     var sel = [], celdas = [];
 
-    host.appendChild(html("span","mision", ICO.cuadricula + " Cantero de " + TOTAL + " casilleros"));
     host.appendChild(html("p","consigna",
-      "Plantá <strong>" + pedidas + " macetas</strong>. Tocá un casillero para poner o sacar una."));
+      "Plantá <strong>" + pedidas + " macetas</strong> en el cantero. Tocá un casillero para poner o sacar una."));
 
     var wrap = el("div","cantero-wrap");
     var cantero = el("div","cantero");
@@ -1446,7 +1364,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     var zonaDist = el("div"); host.appendChild(zonaDist);
 
     var fila = el("div","fila");
-    var bRev = html("button","btn btn-1", ICO.tilde + " Revisar el cantero");
+    var bRev = html("button","btn btn-1", ICO.tilde + "Revisar el cantero");
     var bLim = html("button","btn btn-2", "Sacar todas");
     fila.appendChild(bRev); fila.appendChild(bLim);
     host.appendChild(fila);
@@ -1455,15 +1373,16 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     var pie = el("div"); host.appendChild(pie);
 
     var MACETA = '<svg viewBox="0 0 40 40" aria-hidden="true">' +
-      '<path d="M20 22V13" stroke="#3E8B5B" stroke-width="2.6" stroke-linecap="round"/>' +
-      '<g><circle cx="20" cy="9" r="3.4" fill="#FFF3D0"/>' +
-      '<ellipse cx="20" cy="4.2" rx="3.4" ry="2.6" fill="#EFA820"/><ellipse cx="20" cy="13.8" rx="3.4" ry="2.6" fill="#EFA820"/>' +
-      '<ellipse cx="15.2" cy="9" rx="2.6" ry="3.4" fill="#EFA820"/><ellipse cx="24.8" cy="9" rx="2.6" ry="3.4" fill="#EFA820"/></g>' +
-      '<path d="M11 23h18l-2 12a2 2 0 0 1-2 1.6H15a2 2 0 0 1-2-1.6z" fill="#C0703F"/>' +
-      '<rect x="9.4" y="20.4" width="21.2" height="4.6" rx="2.3" fill="#D5834F"/></svg>';
+      '<path d="M20 22V12.5" stroke="#3F8A5C" stroke-width="2.4" stroke-linecap="round"/>' +
+      '<circle cx="20" cy="8.6" r="3.2" fill="#FBF0D8"/>' +
+      '<ellipse cx="20" cy="4.2" rx="3.1" ry="2.4" fill="#E5A21F"/><ellipse cx="20" cy="13" rx="3.1" ry="2.4" fill="#E5A21F"/>' +
+      '<ellipse cx="15.6" cy="8.6" rx="2.4" ry="3.1" fill="#E5A21F"/><ellipse cx="24.4" cy="8.6" rx="2.4" ry="3.1" fill="#E5A21F"/>' +
+      '<path d="M11.6 23.4h16.8l-1.9 11.2a1.8 1.8 0 0 1-1.8 1.5H15.3a1.8 1.8 0 0 1-1.8-1.5z" fill="#B96F41"/>' +
+      '<rect x="10.2" y="21" width="19.6" height="4.2" rx="2.1" fill="#CC7F4C"/></svg>';
 
-    function actualizar(){
-      contador.textContent = "Macetas plantadas: " + sel.length + " de " + pedidas;
+    function actualizar(){ contador.textContent = "Macetas plantadas: " + sel.length + " de " + pedidas; }
+    function limpiarResaltado(){
+      for(var q=0;q<celdas.length;q++){ celdas[q].className = celdas[q].className.replace(" resaltada",""); }
     }
 
     for(var i=0;i<TOTAL;i++){
@@ -1472,9 +1391,8 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
         b.setAttribute("aria-label","Casillero " + pos);
         celdas.push(b);
         b.addEventListener("click", function(){
-          zonaFB.innerHTML = "";
-          zonaDist.innerHTML = "";
-          for(var q=0;q<celdas.length;q++){ celdas[q].className = celdas[q].className.replace(" resaltada",""); }
+          zonaFB.innerHTML = ""; zonaDist.innerHTML = "";
+          limpiarResaltado();
           var idx = sel.indexOf(pos);
           if(idx >= 0){
             sel.splice(idx,1); b.className = "hueco"; b.innerHTML = "";
@@ -1503,6 +1421,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
 
     bRev.addEventListener("click", function(){
       zonaFB.innerHTML = ""; zonaDist.innerHTML = "";
+      limpiarResaltado();
       if(sel.length !== pedidas){
         zonaFB.appendChild(feedback("info","Faltan macetas",
           "Necesitás plantar exactamente " + pedidas + " para poder revisar el cantero.", null));
@@ -1518,20 +1437,19 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
 
       var chips = el("div","distancias");
       for(var k=0;k<gaps.length;k++){
-        var okGap = (gaps[k].d === paso);
-        chips.appendChild(html("span","dist " + (okGap ? "igual" : "difiere"),
-          '<span>' + gaps[k].de + ' → ' + gaps[k].a + '</span><strong>' + gaps[k].d + '</strong>'));
+        chips.appendChild(html("span","dist " + (gaps[k].d === paso ? "igual" : "difiere"),
+          '<span>' + gaps[k].de + '→' + gaps[k].a + '</span><strong>' + gaps[k].d + '</strong>'));
       }
       zonaDist.appendChild(chips);
 
       if(iguales){
         sumar(20, bRev);
-        zonaFB.appendChild(feedback("ok","¡Cantero perfecto!",
+        zonaFB.appendChild(feedback("ok","Cantero perfecto",
           "Entre maceta y maceta hay siempre " + paso + " casillero(s), así que Número repite exactamente el mismo salto.",
           "En Scratch se logra usando siempre el mismo número en «mover ( ) pasos»."));
         bRev.disabled = true;
         var r = bRev.getBoundingClientRect();
-        particulas(r.left + r.width/2, r.top);
+        celebrar(r.left + r.width/2, r.top);
         pie.innerHTML = "";
         botonSiguiente(pie, "Terminar actividad");
       }else{
@@ -1541,14 +1459,14 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
           }
         }
         zonaFB.appendChild(feedback("casi","Casi…",
-          "Mirá los saltos marcados arriba: no todos miden lo mismo. Los casilleros resaltados son los que sobran o faltan.",
-          "Contá cuántos casilleros vacíos quedan entre una maceta y la siguiente. Tienen que ser siempre la misma cantidad."));
+          "Mirá los saltos de arriba: no todos miden lo mismo. Los casilleros marcados son los que sobran o faltan.",
+          "Contá cuántos casilleros vacíos hay entre una maceta y la siguiente. Tiene que ser siempre la misma cantidad."));
       }
     });
   }
 
   /* ============================================================
-     ACTIVIDAD · SECUENCIA DE BLOQUES
+     SECUENCIA
      ============================================================ */
   function juegoSecuencia(host, act){
     var correcto = act.bloques;
@@ -1558,11 +1476,11 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     var taller = el("div","taller");
 
     var pA = el("div","panel");
-    pA.appendChild(html("h4", null, ICO.bloques + " Bloques sueltos"));
+    pA.appendChild(html("h4", null, ICO.bloques + "Bloques sueltos"));
     var listaA = el("div","pila"); pA.appendChild(listaA);
 
     var pB = el("div","panel destino");
-    pB.appendChild(html("h4", null, ICO.banderin + " Programa de Número"));
+    pB.appendChild(html("h4", null, ICO.banderin + "Programa de Número"));
     var listaB = el("div","pila"); pB.appendChild(listaB);
 
     taller.appendChild(pA); taller.appendChild(pB);
@@ -1571,32 +1489,27 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     var zonaFB = el("div"); host.appendChild(zonaFB);
     var pie = el("div"); host.appendChild(pie);
 
-    function vacioB(){
-      if(listaB.children.length === 0){
-        listaB.appendChild(el("p","vacio","Acá se va armando el programa, de arriba hacia abajo."));
-      }
-    }
-
     function pintarSueltos(){
       listaA.innerHTML = "";
       if(restantes.length === 0){
-        listaA.appendChild(el("p","vacio","¡No queda ningún bloque suelto!"));
+        listaA.appendChild(el("p","vacio","No queda ningún bloque suelto."));
         return;
       }
       for(var i=0;i<restantes.length;i++){
         (function(bl){
           var b = html("button","bloque b-" + bl.cat,
             '<span class="cat-ic">' + CAT_ICO[bl.cat] + '</span>' + bl.t);
-          b.addEventListener("click", function(){ elegir(bl, b); });
+          b.addEventListener("click", function(){ elegir(bl); });
           listaA.appendChild(b);
         })(restantes[i]);
       }
     }
 
-    function elegir(bl, boton){
+    function elegir(bl){
       zonaFB.innerHTML = "";
       if(bl === correcto[puestos]){
-        if(listaB.querySelector(".vacio")){ listaB.innerHTML = ""; }
+        var v = listaB.querySelector(".vacio");
+        if(v){ listaB.innerHTML = ""; }
         listaB.appendChild(html("div","bloque puesto b-" + bl.cat + (bl.indent ? " sangria" : ""),
           '<span class="cat-ic">' + CAT_ICO[bl.cat] + '</span>' + bl.t));
         restantes.splice(restantes.indexOf(bl),1);
@@ -1605,40 +1518,35 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
         if(puestos === correcto.length){
           var gan = Math.max(10, 30 - errores*5);
           sumar(gan, pB);
-          zonaFB.appendChild(feedback("ok","¡Programa armado!",
+          zonaFB.appendChild(feedback("ok","Programa armado",
             "Ganaste " + gan + " puntos. " + (errores > 0
               ? "Probaste " + errores + " bloque(s) fuera de orden, y así también se aprende."
-              : "Lo ordenaste sin equivocarte ni una vez."),
-            null));
+              : "Lo ordenaste sin equivocarte ni una vez."), null));
           var r = pB.getBoundingClientRect();
-          particulas(r.left + r.width/2, r.top + 40);
+          celebrar(r.left + r.width/2, r.top + 40);
           botonSiguiente(pie, "Terminar actividad");
         }
       }else{
         errores++;
         var cat = correcto[puestos].cat;
-        var pista = '<span>El próximo bloque es de la categoría</span>' +
-          '<span class="pill-cat" style="background:' + CAT_COL[cat] + '">' + CAT_ICO[cat] + CAT_NOM[cat] + '</span>';
         zonaFB.appendChild(feedback("casi","Todavía no va ahí",
           puestos === 0
             ? "Pensá qué tiene que pasar primero de todo para que el programa arranque."
             : "Pensá qué sucede justo después de «" + correcto[puestos-1].t + "».",
-          pista));
+          'El próximo bloque es de la categoría <span class="pill-cat" style="background:' + CAT_COL[cat] + '">' + CAT_ICO[cat] + CAT_NOM[cat] + '</span>'));
       }
     }
 
     pintarSueltos();
-    vacioB();
+    listaB.appendChild(el("p","vacio","Acá se arma el programa, de arriba hacia abajo."));
   }
 
   /* ============================================================
-     ACTIVIDAD · PAREJAS
+     PAREJAS
      ============================================================ */
   function juegoParejas(host, act){
     var conceptos = mezclar(act.pares), definiciones = mezclar(act.pares);
     var elegido = null, botonElegido = null, hechas = 0;
-
-    host.appendChild(html("span","mision", ICO.union + " Uní " + act.pares.length + " pares"));
 
     var grid = el("div","parejas");
     var colA = el("div","col"), colB = el("div","col");
@@ -1677,7 +1585,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
           zonaFB.innerHTML = "";
           if(!elegido){
             zonaFB.appendChild(feedback("info","Elegí primero una palabra",
-              "Tocá una palabra de la columna amarilla y después su significado.", null));
+              "Tocá una palabra de la izquierda y después su significado.", null));
             return;
           }
           if(elegido === par){
@@ -1691,13 +1599,13 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
             b.disabled = true;
             elegido = null; botonElegido = null;
             if(hechas === act.pares.length){
-              zonaFB.appendChild(feedback("ok","¡Uniste todas!",
+              zonaFB.appendChild(feedback("ok","Uniste todas",
                 "Estas son las palabras que usamos durante todo el proyecto de Número.", null));
               var r = grid.getBoundingClientRect();
-              particulas(r.left + r.width/2, r.top + 60);
+              celebrar(r.left + r.width/2, r.top + 60);
               botonSiguiente(pie, "Terminar actividad");
             }else{
-              zonaFB.appendChild(feedback("ok","¡Par correcto!",
+              zonaFB.appendChild(feedback("ok","Par correcto",
                 "Quedan " + (act.pares.length - hechas) + " palabras por unir.", null));
             }
           }else{
@@ -1712,7 +1620,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   }
 
   /* ============================================================
-     CIERRE DE ETAPA
+     CIERRE
      ============================================================ */
   function renderCierre(hoja, e){
     var d = el("div","cierre");
@@ -1730,36 +1638,30 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     stats.appendChild(s1); stats.appendChild(s2);
     d.appendChild(stats);
 
-    var bc = el("div","bloque-concepto");
-    bc.appendChild(html("span","ic", ICO.lampara));
-    var bcTxt = el("div");
-    bcTxt.appendChild(el("div","t","Lo que aprendimos"));
-    bcTxt.appendChild(el("div","d", e.concepto));
-    bc.appendChild(bcTxt);
-    d.appendChild(bc);
+    var ap = el("div","aprendido");
+    ap.appendChild(html("span","ic", ICO.lampara));
+    var apT = el("div");
+    apT.appendChild(el("div","t","Lo que aprendimos"));
+    apT.appendChild(el("div","d", e.concepto));
+    ap.appendChild(apT);
+    d.appendChild(ap);
 
     var meta = el("div","meta-card");
     meta.appendChild(el("div","t","Para conversar entre todos"));
     var ul = document.createElement("ul");
-    for(var i=0;i<e.cierre.length;i++){
-      var li = el("li");
-      li.appendChild(el("span","q","?"));
-      li.appendChild(el("span",null,e.cierre[i]));
-      ul.appendChild(li);
-    }
+    for(var i=0;i<e.cierre.length;i++){ ul.appendChild(el("li",null,e.cierre[i])); }
     meta.appendChild(ul);
     d.appendChild(meta);
 
     var f = el("div","fila");
-    f.style.justifyContent = "center";
-    var bS = html("button","btn btn-cta", ICO.cohete + " ¡Vamos a Scratch!");
+    var bS = html("button","btn btn-cta", ICO.cohete + "Vamos a Scratch");
     bS.addEventListener("click", function(){ mostrarCartel(e); });
     f.appendChild(bS);
-    var b1 = html("button","btn btn-2", "Repetir la etapa");
+    var b1 = html("button","btn btn-2","Repetir la etapa");
     b1.addEventListener("click", function(){ progreso[etapaActiva] = 0; render(); });
     f.appendChild(b1);
     if(etapaActiva < ETAPAS.length-1){
-      var b2 = html("button","btn btn-2", "Etapa " + ETAPAS[etapaActiva+1].n + " " + ICO.flecha);
+      var b2 = html("button","btn btn-2", "Etapa " + ETAPAS[etapaActiva+1].n + ICO.flecha);
       b2.addEventListener("click", function(){ etapaActiva++; render(); });
       f.appendChild(b2);
     }
@@ -1768,7 +1670,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
   }
 
   /* ============================================================
-     MODAL · SALIDA A SCRATCH
+     MODAL
      ============================================================ */
   function mostrarCartel(e){
     var telon = el("div","telon");
@@ -1777,23 +1679,23 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     m.setAttribute("aria-modal","true");
 
     m.appendChild(html("div", null,
-      '<svg class="rana-svg" viewBox="0 0 120 92" aria-hidden="true">' +
-      '<ellipse cx="60" cy="84" rx="34" ry="6" fill="#12281F" opacity=".12"/>' +
-      '<path d="M32 30 l-7-11" stroke="#EFA820" stroke-width="3.4" stroke-linecap="round"/>' +
-      '<path d="M88 30 l7-11" stroke="#EFA820" stroke-width="3.4" stroke-linecap="round"/>' +
-      '<path d="M60 16 v-12" stroke="#EFA820" stroke-width="3.4" stroke-linecap="round"/>' +
-      '<g transform="translate(60,54)">' +
-      '<ellipse cx="-20" cy="10" rx="11" ry="6" fill="#237A4B"/><ellipse cx="20" cy="10" rx="11" ry="6" fill="#237A4B"/>' +
-      '<ellipse cx="0" cy="0" rx="27" ry="19" fill="#2E8B57"/>' +
-      '<ellipse cx="0" cy="6" rx="17" ry="10" fill="#8FCFA4" opacity=".55"/>' +
-      '<circle cx="-11" cy="-19" r="9.6" fill="#2E8B57"/><circle cx="11" cy="-19" r="9.6" fill="#2E8B57"/>' +
-      '<circle cx="-11" cy="-20" r="6" fill="#FCF8EF"/><circle cx="11" cy="-20" r="6" fill="#FCF8EF"/>' +
-      '<circle cx="-9.6" cy="-20" r="3.1" fill="#12281F"/><circle cx="12.4" cy="-20" r="3.1" fill="#12281F"/>' +
-      '<path d="M-8 3 q 8 6 16 0" stroke="#1B5C39" stroke-width="2.6" fill="none" stroke-linecap="round"/>' +
+      '<svg class="rana-svg" viewBox="0 0 116 84" aria-hidden="true">' +
+      '<ellipse cx="58" cy="77" rx="30" ry="5" fill="#13241D" opacity=".10"/>' +
+      '<path d="M32 28 l-6-9" stroke="#E5A21F" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M84 28 l6-9" stroke="#E5A21F" stroke-width="3" stroke-linecap="round"/>' +
+      '<path d="M58 15 v-10" stroke="#E5A21F" stroke-width="3" stroke-linecap="round"/>' +
+      '<g transform="translate(58,50)">' +
+      '<ellipse cx="-18" cy="9" rx="10" ry="5.4" fill="#246E48"/><ellipse cx="18" cy="9" rx="10" ry="5.4" fill="#246E48"/>' +
+      '<ellipse cx="0" cy="0" rx="25" ry="17.4" fill="#2F8A5B"/>' +
+      '<ellipse cx="0" cy="5" rx="15.6" ry="9" fill="#8FCFA4" opacity=".5"/>' +
+      '<circle cx="-10" cy="-17.4" r="8.8" fill="#2F8A5B"/><circle cx="10" cy="-17.4" r="8.8" fill="#2F8A5B"/>' +
+      '<circle cx="-10" cy="-18.4" r="5.4" fill="#FCFAF4"/><circle cx="10" cy="-18.4" r="5.4" fill="#FCFAF4"/>' +
+      '<circle cx="-8.8" cy="-18.4" r="2.8" fill="#13241D"/><circle cx="11.2" cy="-18.4" r="2.8" fill="#13241D"/>' +
+      '<path d="M-7 3 q 7 5.4 14 0" stroke="#1A5335" stroke-width="2.4" fill="none" stroke-linecap="round"/>' +
       '</g></svg>'));
 
-    m.appendChild(el("h2",null,"¡Excelente, buen trabajo!"));
-    m.appendChild(el("p",null,"Terminaron los juegos de la Etapa " + e.n + ". Ahora llevamos lo aprendido a Scratch: esta página es solo la guía, el proyecto se programa allá."));
+    m.appendChild(el("h2",null,"Excelente, buen trabajo"));
+    m.appendChild(el("p",null,"Terminaron los juegos de la Etapa " + e.n + ". Ahora llevamos lo aprendido a Scratch: esta página es la guía, el proyecto se programa allá."));
     m.appendChild(html("div","puntos-mini", ICO.estrella + " " + puntos + " puntos en la sesión"));
 
     var f = el("div","fila");
@@ -1802,7 +1704,7 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     a.href = URL_SCRATCH;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
-    a.innerHTML = ICO.cohete + " ¡Vamos a Scratch!";
+    a.innerHTML = ICO.cohete + "Vamos a Scratch";
     f.appendChild(a);
     var b = html("button","btn btn-2","Quedarme acá");
     b.addEventListener("click", cerrar);
@@ -1821,13 +1723,8 @@ h1,h2,h3,h4{font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
     telon.appendChild(m);
     document.body.appendChild(telon);
     a.focus();
-    particulas(window.innerWidth/2, window.innerHeight/2 - 90);
   }
 
-  /* ============================================================
-     ARRANQUE
-     ============================================================ */
-  elRelleno.style.width = "0%";
   render();
 })();
 </script>
