@@ -1,0 +1,4 @@
+# respaldos locales previos al rediseño (el original ya está en el historial de git)
+index.original.backup.html
+*.backup.html
+*.tmp
