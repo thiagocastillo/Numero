@@ -2492,11 +2492,8 @@ p{margin:0;}
     var ronda = 0, pos = 1, actual = null, errores = 0, bloqueado = false;
 
     function nuevaPregunta(){
-      var a, b, txt, res, t = Math.floor(Math.random()*4);
-      if(t === 0){ a = 2+Math.floor(Math.random()*8); b = 2+Math.floor(Math.random()*8); txt = a+" × "+b; res = a*b; }
-      else if(t === 1){ a = 20+Math.floor(Math.random()*60); b = 10+Math.floor(Math.random()*30); txt = a+" + "+b; res = a+b; }
-      else if(t === 2){ a = 40+Math.floor(Math.random()*60); b = 10+Math.floor(Math.random()*30); txt = a+" − "+b; res = a-b; }
-      else{ b = 2+Math.floor(Math.random()*8); res = 2+Math.floor(Math.random()*9); a = b*res; txt = a+" ÷ "+b; }
+      var a = 2+Math.floor(Math.random()*9), b = 2+Math.floor(Math.random()*9);
+      var txt = a+" × "+b, res = a*b;
       var ops = [res], guard = 0;
       while(ops.length < N && guard++ < 60){
         var d = (1+Math.floor(Math.random()*10)) * (Math.random() < 0.5 ? -1 : 1);
