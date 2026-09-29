@@ -245,7 +245,17 @@ p{margin:0;}
 /* ============================================================
    CAPA 2 · EL CAMINO DE ETAPAS
    ============================================================ */
+.pestanias{display:flex;gap:var(--s2);margin:var(--s6) 0 0;}
+.pestania{
+  font:inherit;font-weight:700;cursor:pointer;border:0;padding:var(--s3) var(--s6);
+  border-radius:var(--r2);background:rgba(255,255,255,.7);color:var(--ink-2,#3b5a4a);
+  box-shadow:var(--e1,0 1px 3px rgba(16,38,28,.15));transition:transform .18s var(--ease), background .18s var(--ease);
+}
+.pestania:hover{transform:translateY(-2px);}
+.pestania.on{background:linear-gradient(180deg,var(--leaf-b),var(--leaf));color:#fff;}
+[hidden]{display:none !important;}
 .camino{margin:var(--s6) 0 var(--s5);position:relative;}
+.hoja-juego{margin-top:var(--s5);padding:var(--s6);}
 .rail{
   display:flex;gap:var(--s3);overflow-x:auto;padding:var(--s2) 4px var(--s4);
   scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:rgba(47,160,94,.35) transparent;
@@ -1467,11 +1477,21 @@ p{margin:0;}
     </div>
   </header>
 
-  <nav class="camino" aria-label="Etapas del proyecto">
-    <div class="rail" id="rail"></div>
-  </nav>
+  <div class="pestanias" role="tablist" aria-label="Secciones">
+    <button class="pestania on" id="tab-dinamica" role="tab" aria-selected="true" type="button">Dinámica</button>
+    <button class="pestania" id="tab-juego" role="tab" aria-selected="false" type="button">Juego</button>
+  </div>
 
-  <main id="contenido"></main>
+  <div id="vista-dinamica">
+    <nav class="camino" aria-label="Etapas del proyecto">
+      <div class="rail" id="rail"></div>
+    </nav>
+    <main id="contenido"></main>
+  </div>
+
+  <div id="vista-juego" hidden>
+    <section class="hoja hoja-juego" id="juego"></section>
+  </div>
 
 </div>
 <script>
@@ -1655,9 +1675,6 @@ p{margin:0;}
           {p:"Número pregunta: ¿cuál está entre 450 y 460?", o:["449","455","461","470"], c:1,
            r:"455 queda justo entre 450 y 460 en la recta numérica."}
          ]},
-        {tipo:"salto", titulo:"La rana saltarina",
-         consigna:"Movete con las flechas <strong>←</strong> y <strong>→</strong> del teclado hasta la flor con el resultado y apretá <strong>↓</strong> para elegirla.",
-         rondas:5},
         {tipo:"quiz", render:"normal", titulo:"Interactividad",
          consigna:"Repasamos por qué el juego que están programando es interactivo.",
          preguntas:[
@@ -1838,7 +1855,6 @@ p{margin:0;}
         var a = acts[j];
         if(a.tipo === "quiz"){ t += a.preguntas.length * 10; }
         if(a.tipo === "cantero"){ t += 20; }
-        if(a.tipo === "salto"){ t += a.rondas * 10; }
         if(a.tipo === "secuencia"){ t += 30; }
         if(a.tipo === "parejas"){ t += a.pares.length * 10; }
       }
@@ -2232,7 +2248,6 @@ p{margin:0;}
 
     if(act.tipo === "quiz"){ juegoQuiz(host, act); }
     if(act.tipo === "cantero"){ juegoCantero(host); }
-    if(act.tipo === "salto"){ juegoSalto(host, act); }
     if(act.tipo === "secuencia"){ juegoSecuencia(host, act); }
     if(act.tipo === "parejas"){ juegoParejas(host, act); }
 
@@ -2472,7 +2487,7 @@ p{margin:0;}
   /* ============================================================
      SALTO: la rana pregunta y se mueve con el teclado
      ============================================================ */
-  function juegoSalto(host, act){
+  function juegoSalto(host, act, alTerminar){
     var N = 4, tonos = ["#E5A21F","#C9527A","#DD8543","#A868B8"];
     var ronda = 0, pos = 1, actual = null, errores = 0, bloqueado = false;
 
@@ -2549,7 +2564,6 @@ p{margin:0;}
       if(pos === actual.c){
         bloqueado = true;
         f.classList.add("buena");
-        sumar(errores ? 5 : 10, f);
         var r = f.getBoundingClientRect();
         celebrar(r.left + r.width/2, r.top + 20);
         ronda++;
@@ -2558,7 +2572,7 @@ p{margin:0;}
         setTimeout(function(){
           if(!host.isConnected){ return; }
           if(ronda < act.rondas){ cargar(); }
-          else{ terminarActividad(); }
+          else{ alTerminar(); }
         }, reduceMotion() ? 500 : 1300);
       }else{
         errores++;
@@ -2569,6 +2583,7 @@ p{margin:0;}
 
     function tecla(ev){
       if(!host.isConnected){ document.removeEventListener("keydown", tecla); return; }
+      if(!host.offsetParent){ return; }
       var t = ev.target && ev.target.tagName;
       if(t === "INPUT" || t === "TEXTAREA"){ return; }
       var c = ev.key || "";
@@ -2586,6 +2601,45 @@ p{margin:0;}
     });
     colocar(); cargar();
   }
+
+  /* ============================================================
+     PESTAÑAS: Dinámica / Juego
+     ============================================================ */
+  var vistaDin = document.getElementById("vista-dinamica");
+  var vistaJue = document.getElementById("vista-juego");
+  var tabDin = document.getElementById("tab-dinamica");
+  var tabJue = document.getElementById("tab-juego");
+
+  function montarJuego(){
+    var cont = document.getElementById("juego");
+    cont.innerHTML = "";
+    var enc = el("div","enc");
+    enc.appendChild(el("p","eyebrow","Juego · La rana saltarina"));
+    enc.appendChild(el("h2",null,"Saltá a la flor del resultado"));
+    cont.appendChild(enc);
+    cont.appendChild(html("p","consigna","Movete con las flechas <strong>←</strong> y <strong>→</strong> del teclado hasta la flor con el resultado y apretá <strong>↓</strong> para elegirla."));
+    var host = el("div","lienzo");
+    cont.appendChild(host);
+    juegoSalto(host, {rondas:5}, function(){
+      host.innerHTML = "";
+      host.appendChild(feedback("ok","¡Completaste el juego!","Resolviste las 5 preguntas de la rana.", null));
+      var f = el("div","fila");
+      var b = html("button","btn btn-1","Jugar de nuevo" + ICO.flecha);
+      b.addEventListener("click", montarJuego);
+      f.appendChild(b); host.appendChild(f);
+      b.focus();
+    });
+  }
+  function irA(juego){
+    vistaDin.hidden = juego; vistaJue.hidden = !juego;
+    tabDin.className = "pestania" + (juego ? "" : " on");
+    tabJue.className = "pestania" + (juego ? " on" : "");
+    tabDin.setAttribute("aria-selected", String(!juego));
+    tabJue.setAttribute("aria-selected", String(juego));
+    if(juego && !vistaJue.getAttribute("data-listo")){ vistaJue.setAttribute("data-listo","1"); montarJuego(); }
+  }
+  tabDin.addEventListener("click", function(){ irA(false); });
+  tabJue.addEventListener("click", function(){ irA(true); });
 
   /* ============================================================
      CANTERO
