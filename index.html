@@ -759,6 +759,36 @@ p{margin:0;}
 .flor.mala{opacity:.4;filter:saturate(.35);transform:translateY(3px) scale(.95);}
 .flor:disabled{cursor:default;}
 
+/* --- juego de la rana saltarina --- */
+.salto{
+  position:relative;overflow:hidden;margin-top:var(--s5);
+  padding:var(--s5) var(--s5) 96px;border-radius:var(--r2);
+  background:linear-gradient(180deg,#CFEEF9 0%,#E2F4EE 40%,#BEE4C6 62%,#A7D6B2 70%,#C09062 70%,#A97848 100%);
+  box-shadow:inset 0 0 0 2px rgba(16,38,28,.06), var(--e2);
+}
+.salto-globo{
+  position:relative;z-index:2;margin:0 auto var(--s4);max-width:420px;text-align:center;
+  background:#fff;border-radius:var(--r2);padding:var(--s3) var(--s4);
+  font-weight:700;font-size:1.25rem;box-shadow:var(--e2);
+}
+.salto-fila{position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);}
+.salto-flor{cursor:pointer;display:flex;justify-content:center;transition:transform .22s var(--bounce), filter .22s var(--ease);filter:drop-shadow(0 6px 5px rgba(16,38,28,.18));}
+.salto-flor svg{width:100%;max-width:102px;height:auto;overflow:visible;}
+.salto-flor.sel{transform:translateY(-8px) scale(1.08);filter:drop-shadow(0 0 12px rgba(255,216,115,.95)) drop-shadow(0 8px 6px rgba(16,38,28,.2));}
+.salto-flor.buena .petalos{animation:florece .6s var(--bounce) forwards;}
+.salto-flor.mala{animation:sacude .4s;}
+@keyframes sacude{0%,100%{translate:0;}25%{translate:-7px;}75%{translate:7px;}}
+.salto-rana{
+  position:absolute;z-index:2;bottom:14px;width:84px;transform:translateX(-50%);
+  transition:left .28s var(--ease);
+}
+.salto-rana svg{width:100%;height:auto;overflow:visible;display:block;}
+.salto-rana.salta{animation:salto-arco .3s var(--ease);}
+@keyframes salto-arco{50%{margin-bottom:34px;}}
+.salto-ctrl{justify-content:center;margin-top:var(--s4);}
+.salto-ayuda{text-align:center;font-size:.9rem;opacity:.75;margin:var(--s2) 0 0;}
+@media (max-width:520px){.salto{padding-left:var(--s3);padding-right:var(--s3);}.salto-rana{width:64px;}}
+
 /* ============================================================
    CANTERO NUMÉRICO
    ============================================================ */
@@ -1625,6 +1655,9 @@ p{margin:0;}
           {p:"Número pregunta: ¿cuál está entre 450 y 460?", o:["449","455","461","470"], c:1,
            r:"455 queda justo entre 450 y 460 en la recta numérica."}
          ]},
+        {tipo:"salto", titulo:"La rana saltarina",
+         consigna:"Movete con las flechas <strong>←</strong> y <strong>→</strong> del teclado hasta la flor con el resultado y apretá <strong>↓</strong> para elegirla.",
+         rondas:5},
         {tipo:"quiz", render:"normal", titulo:"Interactividad",
          consigna:"Repasamos por qué el juego que están programando es interactivo.",
          preguntas:[
@@ -1805,6 +1838,7 @@ p{margin:0;}
         var a = acts[j];
         if(a.tipo === "quiz"){ t += a.preguntas.length * 10; }
         if(a.tipo === "cantero"){ t += 20; }
+        if(a.tipo === "salto"){ t += a.rondas * 10; }
         if(a.tipo === "secuencia"){ t += 30; }
         if(a.tipo === "parejas"){ t += a.pares.length * 10; }
       }
@@ -2198,6 +2232,7 @@ p{margin:0;}
 
     if(act.tipo === "quiz"){ juegoQuiz(host, act); }
     if(act.tipo === "cantero"){ juegoCantero(host); }
+    if(act.tipo === "salto"){ juegoSalto(host, act); }
     if(act.tipo === "secuencia"){ juegoSecuencia(host, act); }
     if(act.tipo === "parejas"){ juegoParejas(host, act); }
 
@@ -2316,6 +2351,27 @@ p{margin:0;}
     inp.focus();
   }
 
+  function florSVG(num, tono){
+    var petalos = '';
+    for(var p=0;p<6;p++){
+      var a = (p/6)*Math.PI*2;
+      var cx = (Math.cos(a)*18).toFixed(1), cy = (Math.sin(a)*18).toFixed(1);
+      petalos += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="11.6" ry="10.4" fill="'+tono+'" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+cx+' '+cy+')"/>';
+      petalos += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="7" ry="6" fill="#FFFFFF" opacity=".16" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+cx+' '+cy+')"/>';
+    }
+    return '<svg viewBox="-40 -46 80 94" aria-hidden="true">' +
+      '<ellipse cx="0" cy="45" rx="13" ry="3" fill="#16532F" opacity=".18"/>' +
+      '<path d="M0 45 L0 -2" stroke="#3F8A5C" stroke-width="4.4" stroke-linecap="round"/>' +
+      '<path d="M0 25 q -17 -4 -20 -17 q 16 -3 20 17z" fill="#59A87C"/>' +
+      '<path d="M0 14 q 15 -4 18 -15 q -14 -3 -18 15z" fill="#72C393"/>' +
+      '<g class="petalos">' + petalos + '</g>' +
+      '<circle r="12.4" fill="#FFFDF5"/>' +
+      '<circle r="12.4" fill="none" stroke="'+tono+'" stroke-width="2" opacity=".5"/>' +
+      '<text y="5.4" text-anchor="middle" font-family="ui-monospace,monospace" font-weight="700" font-size="15" fill="#10261C">'+num+'</text>' +
+      '</svg>';
+  }
+
+
   /* ============================================================
      QUIZ
      ============================================================ */
@@ -2338,26 +2394,6 @@ p{margin:0;}
     var zonaFB = el("div"); host.appendChild(zonaFB);
     var zonaPasos = el("div"); host.appendChild(zonaPasos);
     var pie = el("div"); host.appendChild(pie);
-
-    function florSVG(num, tono){
-      var petalos = '';
-      for(var p=0;p<6;p++){
-        var a = (p/6)*Math.PI*2;
-        var cx = (Math.cos(a)*18).toFixed(1), cy = (Math.sin(a)*18).toFixed(1);
-        petalos += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="11.6" ry="10.4" fill="'+tono+'" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+cx+' '+cy+')"/>';
-        petalos += '<ellipse cx="'+cx+'" cy="'+cy+'" rx="7" ry="6" fill="#FFFFFF" opacity=".16" transform="rotate('+((a*180/Math.PI)+90).toFixed(1)+' '+cx+' '+cy+')"/>';
-      }
-      return '<svg viewBox="-40 -46 80 94" aria-hidden="true">' +
-        '<ellipse cx="0" cy="45" rx="13" ry="3" fill="#16532F" opacity=".18"/>' +
-        '<path d="M0 45 L0 -2" stroke="#3F8A5C" stroke-width="4.4" stroke-linecap="round"/>' +
-        '<path d="M0 25 q -17 -4 -20 -17 q 16 -3 20 17z" fill="#59A87C"/>' +
-        '<path d="M0 14 q 15 -4 18 -15 q -14 -3 -18 15z" fill="#72C393"/>' +
-        '<g class="petalos">' + petalos + '</g>' +
-        '<circle r="12.4" fill="#FFFDF5"/>' +
-        '<circle r="12.4" fill="none" stroke="'+tono+'" stroke-width="2" opacity=".5"/>' +
-        '<text y="5.4" text-anchor="middle" font-family="ui-monospace,monospace" font-weight="700" font-size="15" fill="#10261C">'+num+'</text>' +
-        '</svg>';
-    }
 
     function pintar(){
       var q = lista[i];
@@ -2431,6 +2467,124 @@ p{margin:0;}
     }
 
     pintar();
+  }
+
+  /* ============================================================
+     SALTO: la rana pregunta y se mueve con el teclado
+     ============================================================ */
+  function juegoSalto(host, act){
+    var N = 4, tonos = ["#E5A21F","#C9527A","#DD8543","#A868B8"];
+    var ronda = 0, pos = 1, actual = null, errores = 0, bloqueado = false;
+
+    function nuevaPregunta(){
+      var a, b, txt, res, t = Math.floor(Math.random()*4);
+      if(t === 0){ a = 2+Math.floor(Math.random()*8); b = 2+Math.floor(Math.random()*8); txt = a+" × "+b; res = a*b; }
+      else if(t === 1){ a = 20+Math.floor(Math.random()*60); b = 10+Math.floor(Math.random()*30); txt = a+" + "+b; res = a+b; }
+      else if(t === 2){ a = 40+Math.floor(Math.random()*60); b = 10+Math.floor(Math.random()*30); txt = a+" − "+b; res = a-b; }
+      else{ b = 2+Math.floor(Math.random()*8); res = 2+Math.floor(Math.random()*9); a = b*res; txt = a+" ÷ "+b; }
+      var ops = [res], guard = 0;
+      while(ops.length < N && guard++ < 60){
+        var d = (1+Math.floor(Math.random()*10)) * (Math.random() < 0.5 ? -1 : 1);
+        var c = res + d;
+        if(c > 0 && ops.indexOf(c) < 0){ ops.push(c); }
+      }
+      ops = mezclar(ops);
+      return {p:"¿Cuánto es " + txt + "?", o:ops, c:ops.indexOf(res)};
+    }
+
+    var escena = el("div","salto");
+    var globo = el("p","salto-globo");
+    var fila = el("div","salto-fila");
+    var slots = [];
+    for(var k=0;k<N;k++){
+      var s = html("div","salto-flor", florSVG("", tonos[k % tonos.length]));
+      s.setAttribute("data-i", k);
+      slots.push(s); fila.appendChild(s);
+    }
+    var rana = html("div","salto-rana",
+      '<svg viewBox="-34 -34 68 52" aria-hidden="true">' +
+      '<ellipse cx="-19" cy="9" rx="10.4" ry="5.6" fill="#227A48"/><ellipse cx="19" cy="9" rx="10.4" ry="5.6" fill="#227A48"/>' +
+      '<ellipse cx="0" cy="0" rx="25" ry="17.4" fill="#3AA96A"/><ellipse cx="0" cy="5.4" rx="15.6" ry="9.2" fill="#DDF4E5" opacity=".72"/>' +
+      '<circle cx="-10" cy="-17.4" r="8.8" fill="#3AA268"/><circle cx="10" cy="-17.4" r="8.8" fill="#3AA268"/>' +
+      '<circle cx="-10" cy="-18.6" r="5.6" fill="#FFFDF5"/><circle cx="10" cy="-18.6" r="5.6" fill="#FFFDF5"/>' +
+      '<circle cx="-8.6" cy="-18.6" r="2.9" fill="#10261C"/><circle cx="11.4" cy="-18.6" r="2.9" fill="#10261C"/>' +
+      '<path d="M-7.4 3 q 7.4 6 14.8 0" stroke="#16532F" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>');
+    escena.appendChild(globo); escena.appendChild(fila); escena.appendChild(rana);
+    host.appendChild(escena);
+
+    var ctrl = el("div","fila salto-ctrl");
+    var bIzq = html("button","btn btn-2","←"), bSel = html("button","btn btn-1","↓ Elegir esta flor"), bDer = html("button","btn btn-2","→");
+    bIzq.setAttribute("aria-label","Mover a la izquierda"); bDer.setAttribute("aria-label","Mover a la derecha");
+    ctrl.appendChild(bIzq); ctrl.appendChild(bSel); ctrl.appendChild(bDer);
+    host.appendChild(ctrl);
+    host.appendChild(el("p","salto-ayuda","Teclado: ← y → para moverte, ↓ para elegir la flor donde estás parada."));
+    var zonaFB = el("div"); host.appendChild(zonaFB);
+    var zonaPasos = el("div"); host.appendChild(zonaPasos);
+
+    function colocar(){
+      rana.style.left = ((pos + 0.5) / N * 100) + "%";
+      for(var k=0;k<N;k++){ slots[k].classList.toggle("sel", k === pos); }
+    }
+    function mover(d){
+      if(bloqueado){ return; }
+      var n = Math.max(0, Math.min(N-1, pos + d));
+      if(n === pos){ return; }
+      pos = n; colocar();
+      rana.classList.remove("salta"); void rana.offsetWidth; rana.classList.add("salta");
+    }
+    function cargar(){
+      actual = nuevaPregunta(); errores = 0; bloqueado = false;
+      globo.textContent = "🐸 " + actual.p;
+      for(var k=0;k<N;k++){
+        slots[k].className = "salto-flor" + (k === pos ? " sel" : "");
+        slots[k].querySelector("text").textContent = actual.o[k];
+      }
+      zonaFB.innerHTML = "";
+      zonaPasos.innerHTML = ""; zonaPasos.appendChild(pasos(act.rondas, ronda));
+    }
+    function elegir(){
+      if(bloqueado){ return; }
+      var f = slots[pos];
+      zonaFB.innerHTML = "";
+      if(pos === actual.c){
+        bloqueado = true;
+        f.classList.add("buena");
+        sumar(errores ? 5 : 10, f);
+        var r = f.getBoundingClientRect();
+        celebrar(r.left + r.width/2, r.top + 20);
+        ronda++;
+        zonaFB.appendChild(feedback("ok","¡Muy bien!", actual.p.replace("¿Cuánto es ","").replace("?","") + " = " + actual.o[actual.c], null));
+        zonaPasos.innerHTML = ""; zonaPasos.appendChild(pasos(act.rondas, ronda));
+        setTimeout(function(){
+          if(!host.isConnected){ return; }
+          if(ronda < act.rondas){ cargar(); }
+          else{ terminarActividad(); }
+        }, reduceMotion() ? 500 : 1300);
+      }else{
+        errores++;
+        f.classList.remove("mala"); void f.offsetWidth; f.classList.add("mala");
+        zonaFB.appendChild(feedback("casi","¡Inténtalo de nuevo!", "Esa flor no tiene el resultado. Movete a otra flor y volvé a elegir.", null));
+      }
+    }
+
+    function tecla(ev){
+      if(!host.isConnected){ document.removeEventListener("keydown", tecla); return; }
+      var t = ev.target && ev.target.tagName;
+      if(t === "INPUT" || t === "TEXTAREA"){ return; }
+      var c = ev.key || "";
+      if(c === "ArrowLeft"){ ev.preventDefault(); mover(-1); }
+      else if(c === "ArrowRight"){ ev.preventDefault(); mover(1); }
+      else if(c === "ArrowDown"){ ev.preventDefault(); elegir(); }
+    }
+    document.addEventListener("keydown", tecla);
+    bIzq.addEventListener("click", function(){ mover(-1); });
+    bDer.addEventListener("click", function(){ mover(1); });
+    bSel.addEventListener("click", elegir);
+    fila.addEventListener("click", function(ev){
+      var n = ev.target.closest ? ev.target.closest(".salto-flor") : null;
+      if(n){ var d = parseInt(n.getAttribute("data-i"),10) - pos; if(d){ mover(d); } }
+    });
+    colocar(); cargar();
   }
 
   /* ============================================================
