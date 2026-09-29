@@ -2617,9 +2617,9 @@ p{margin:0;}
     cont.appendChild(html("p","consigna","Movete con las flechas <strong>←</strong> y <strong>→</strong> del teclado hasta la flor con el resultado y apretá <strong>↓</strong> para elegirla."));
     var host = el("div","lienzo");
     cont.appendChild(host);
-    juegoSalto(host, {rondas:5}, function(){
+    juegoSalto(host, {rondas:30}, function(){
       host.innerHTML = "";
-      host.appendChild(feedback("ok","¡Completaste el juego!","Resolviste las 5 preguntas de la rana.", null));
+      host.appendChild(feedback("ok","¡Completaste el juego!","Resolviste las 30 preguntas de la rana.", null));
       var f = el("div","fila");
       var b = html("button","btn btn-1","Jugar de nuevo" + ICO.flecha);
       b.addEventListener("click", montarJuego);
