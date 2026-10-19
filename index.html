@@ -2534,35 +2534,104 @@ p{margin:0;}
     var pads = [];
 
     function azar(a, b){ return a + Math.floor(Math.random()*(b-a+1)); }
-    function nuevaPregunta(){
-      var txt, res, a, b, c, d, maxF, cerca = [];
-      if(nivel === "facil"){
-        a = azar(2,10); b = azar(2,10); txt = a+" × "+b; res = a*b;
-      }else{
-        var t = Math.min(ronda, 30), azarTipo = Math.random();
-        if(nivel === "medio"){
-          maxF = 10 + Math.floor(t/6);
-          a = azar(2,maxF); b = azar(2,maxF);
-          if(ronda >= 6 && azarTipo < 0.3){ c = azar(2,9); txt = a+" × "+b+" + "+c; res = a*b+c; }
-          else if(ronda >= 12 && azarTipo < 0.55){ c = azar(2,9); txt = a+" × "+b+" − "+c; res = a*b-c; }
-          else{ txt = a+" × "+b; res = a*b; }
-        }else{
-          maxF = 12 + Math.floor(t/5);
-          a = azar(4,maxF); b = azar(4,maxF);
-          if(azarTipo < 0.3){ c = azar(3,15); txt = a+" × "+b+" + "+c; res = a*b+c; }
-          else if(azarTipo < 0.55){ c = azar(3,15); txt = a+" × "+b+" − "+c; res = a*b-c; }
-          else if(azarTipo < 0.75){ c = azar(3,12); d = azar(3,12); txt = "("+a+" + "+b+") × "+c; res = (a+b)*c; cerca = [res+a, res-b, res+c, res-c]; }
-          else{ txt = a+" × "+b; res = a*b; }
-        }
-        if(!cerca.length){ cerca = [res+a, res-a, res+b, res-b, res+10, res-10]; }
-      }
-      var ops = [res], guard = 0;
-      while(ops.length < COLS && guard++ < 80){
-        var c2 = (cerca.length && Math.random() < 0.6) ? cerca[azar(0,cerca.length-1)] : res + azar(1,10) * (Math.random() < 0.5 ? -1 : 1);
-        if(c2 > 0 && ops.indexOf(c2) < 0){ ops.push(c2); }
+    function elegirUno(arr){ return arr[azar(0,arr.length-1)]; }
+    // arma la pregunta: la correcta + 2 distractores distintos (se rellenan con cercanos si faltan)
+    function armar(p, ok, dist, r){
+      var ops = [ok], i, g = 0;
+      dist = mezclar(dist.slice());
+      for(i=0;i<dist.length && ops.length<COLS;i++){ if(dist[i] > 0 && ops.indexOf(dist[i]) < 0){ ops.push(dist[i]); } }
+      while(ops.length < COLS && g++ < 80){
+        var c = ok + azar(1,10) * (Math.random() < 0.5 ? -1 : 1);
+        if(c > 0 && ops.indexOf(c) < 0){ ops.push(c); }
       }
       ops = mezclar(ops);
-      return {p:"¿Cuánto es " + txt + "?", o:ops, c:ops.indexOf(res)};
+      return {p:p, o:ops, c:ops.indexOf(ok), r:r};
+    }
+    function num3(lugar, dig){ // lugar: 0 unidades, 1 decenas, 2 centenas
+      var d = [azar(0,9), azar(0,9), azar(1,9)];
+      d[lugar] = dig;
+      return d[2]*100 + d[1]*10 + d[0];
+    }
+    var LUGARES = ["unidades","decenas","centenas"];
+    var generadores = {
+      tabla: function(){
+        var a, b, tablas;
+        if(nivel === "medio"){
+          tablas = [2,3,4,5,10];
+          if(ronda >= 4){ tablas.push(6); }
+          if(ronda >= 8){ tablas.push(9); }
+          if(ronda >= 12){ tablas.push(7); }
+          if(ronda >= 16){ tablas.push(8); }
+          a = elegirUno(tablas); b = azar(2,10);
+          if(Math.random() < 0.5){ var x = a; a = b; b = x; }
+        }else{ a = azar(2,10); b = azar(2,10); }
+        var res = a*b;
+        var cerca = nivel === "facil" ? [] : [res+a, res-a, res+b, res-b];
+        var dist = cerca.length ? cerca : [res+azar(1,10), res-azar(1,10), res+azar(1,10)];
+        return armar("¿Cuánto es " + a + " × " + b + "?", res, dist, a+" × "+b+" = "+res);
+      },
+      ext: function(){
+        var m = elegirUno([10,10,100,11,12]), a = m >= 100 ? azar(2,20) : m === 10 ? azar(11,40) : azar(2,10);
+        var res = a*m, dist = m === 10 ? [res*10, res/10, res+10] : m === 100 ? [res*10, res/10, res+100] : [res+a, res-a, res+10];
+        return armar("¿Cuánto es " + a + " × " + m + "?", res, dist, a+" × "+m+" = "+res);
+      },
+      div: function(){
+        var b = azar(2,10), q = azar(2,10), a = b*q;
+        return armar("¿Cuánto es " + a + " ÷ " + b + "?", q, [q+1, q-1, q+2, q-2, b], a+" ÷ "+b+" = "+q);
+      },
+      falta: function(){
+        var a = azar(2,10), b = azar(2,10), res = a*b;
+        return armar("¿Qué número falta? " + a + " × ▢ = " + res, b, [b+1, b-1, b+2, a], a+" × "+b+" = "+res);
+      },
+      doble: function(){
+        if(Math.random() < 0.5){
+          var n = nivel === "dificil" ? azar(25,250) : azar(12,60);
+          return armar("¿Cuál es el doble de " + n + "?", 2*n, [2*n+10, 2*n-10, 2*n+2, 2*n-2, n+2], "El doble de "+n+" es "+(2*n));
+        }
+        var m = azar(6,nivel === "dificil" ? 120 : 50);
+        return armar("¿Cuál es la mitad de " + (2*m) + "?", m, [m+10, m-10, m+1, m-1, 2*m], "La mitad de "+(2*m)+" es "+m);
+      },
+      multiplo: function(){
+        var k = elegirUno(nivel === "facil" ? [2,5,10] : [2,3,4,5,6,10]), ok = k*azar(3,12), dist = [];
+        for(var i=0;i<6;i++){ dist.push(k*azar(3,12) + azar(1,k-1)); }
+        return armar("¿Cuál de estos números es múltiplo de " + k + "?", ok, dist, ok+" = "+k+" × "+(ok/k));
+      },
+      divisor: function(){
+        var N = elegirUno([12,18,20,24,30,36,40,42,48,60]), ds = [], nds = [], d;
+        for(d=3; d<N; d++){ if(N % d === 0){ ds.push(d); } else if(d <= 14){ nds.push(d); } }
+        var ok = elegirUno(ds);
+        return armar("¿Cuál de estos números es divisor de " + N + "?", ok, nds, N+" ÷ "+ok+" = "+(N/ok)+" exacto");
+      },
+      pos: function(){
+        var lugar = azar(0,2), dig = azar(1,9), ok = num3(lugar, dig), dist = [];
+        for(var i=0;i<8;i++){
+          var otro = (lugar + azar(1,2)) % 3, n = num3(otro, dig);
+          if(Math.floor(n / Math.pow(10,lugar)) % 10 !== dig){ dist.push(n); }
+        }
+        return armar("¿Cuál tiene un " + dig + " en el lugar de las " + LUGARES[lugar] + "?", ok, dist, "En "+ok+" el "+dig+" ocupa las "+LUGARES[lugar]);
+      },
+      entre: function(){
+        var lo = 10*azar(20,95), hi = lo+10, ok = lo+azar(1,9);
+        return armar("¿Cuál número está entre " + lo + " y " + hi + "?", ok, [lo-azar(1,9), hi+azar(1,9), lo-azar(10,20), hi+azar(10,20)], ok+" está entre "+lo+" y "+hi);
+      }
+    };
+    function nuevaPregunta(){
+      var pool;
+      if(nivel === "facil"){
+        pool = ["tabla","tabla","tabla","tabla","tabla","ext","doble","multiplo","div"];
+      }else if(nivel === "medio"){
+        pool = ["tabla","tabla","tabla"];
+        if(ronda >= 3){ pool.push("div"); }
+        if(ronda >= 5){ pool.push("multiplo","doble"); }
+        if(ronda >= 7){ pool.push("ext"); }
+        if(ronda >= 9){ pool.push("pos"); }
+        if(ronda >= 11){ pool.push("falta"); }
+        if(ronda >= 13){ pool.push("entre"); }
+        if(ronda >= 15){ pool.push("divisor"); }
+      }else{
+        pool = ["tabla","tabla","ext","div","falta","doble","multiplo","divisor","pos","entre"];
+      }
+      return generadores[elegirUno(pool)]();
     }
     function hojaSVG(){
       return '<svg viewBox="-42 -30 84 60" aria-hidden="true">' +
@@ -2723,7 +2792,7 @@ p{margin:0;}
         var rec = mejor();
         if(ronda > rec){ try{ localStorage.setItem(claveRec, String(ronda)); }catch(e){} }
         host.innerHTML = "";
-        var cuenta = actual.p.replace("¿Cuánto es ","").replace("?","") + " = " + actual.o[actual.c];
+        var cuenta = actual.r;
         host.appendChild(feedback("casi", tiempo ? "¡Se acabó el tiempo! ⏱️" : "¡Game over! 💦",
           (tiempo ? "La hoja se hundió. " : "La hoja se hundió: ") + cuenta + ". Respondiste " + ronda + " seguidas bien" + (ronda > rec ? " ¡y es un nuevo récord! 🏆" : ". Tu récord es " + rec + "."), null));
         var f = el("div","fila");
@@ -2780,9 +2849,9 @@ p{margin:0;}
     if(typeof nivel !== "string"){
       cont.appendChild(html("p","consigna","Elegí un nivel. Cada hoja de nenúfar tiene un número: llevá a la rana a la hoja con el resultado correcto. Si te equivocás, ¡la hoja se hunde y se acaba el juego!"));
       var g = el("div","niveles");
-      [["facil","🌱","Fácil","Tablas del 2 al 10. Sin apuro.","rana-record"],
-       ["medio","🌿","Medio","Las cuentas se van poniendo más difíciles a medida que acertás.","rana-record-medio"],
-       ["dificil","🔥","Difícil","Cuentas difíciles y solo 10 segundos por pregunta: si se acaba el tiempo, la hoja se hunde.","rana-record-dificil"]
+      [["facil","🌱","Fácil","Sobre todo tablas del 2 al 10, con algunas preguntas fáciles de variedad. Sin apuro.","rana-record"],
+       ["medio","🌿","Medio","Empezás con tablas fáciles y, a medida que acertás, se suman más tablas y preguntas nuevas: divisiones, múltiplos, dobles, 12 × 10…","rana-record-medio"],
+       ["dificil","🔥","Difícil","Tablas y todo tipo de desafíos mezclados desde el inicio, con solo 10 segundos por pregunta: si se acaba el tiempo, la hoja se hunde.","rana-record-dificil"]
       ].forEach(function(n){
         var rec = 0; try{ rec = parseInt(localStorage.getItem(n[4]),10) || 0; }catch(e){}
         var b = html("button","nivel","<span class=\"em\">"+n[1]+"</span><strong>"+n[2]+"</strong><span class=\"d\">"+n[3]+"</span><span class=\"r\">🏆 Récord: "+rec+"</span>");
