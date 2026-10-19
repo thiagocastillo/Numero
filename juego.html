@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Número, la rana — Juego</title>
+<link rel="stylesheet" href="estilos.css">
+<link rel="stylesheet" href="juego.css">
+</head>
+<body>
+<div class="mundo" aria-hidden="true">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" focusable="false">
+    <defs>
+      <radialGradient id="mSol">
+        <stop offset="0" stop-color="#FFE9A8" stop-opacity=".95"/>
+        <stop offset="55%" stop-color="#FFD873" stop-opacity=".38"/>
+        <stop offset="100%" stop-color="#FFD873" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="mPasto" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#A7DCAF"/>
+        <stop offset="60%" stop-color="#84C892"/>
+        <stop offset="100%" stop-color="#6BB77C"/>
+      </linearGradient>
+      <linearGradient id="mCamino" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#E8D6B0"/>
+        <stop offset="100%" stop-color="#D6BE93"/>
+      </linearGradient>
+    </defs>
+
+    <!-- sol -->
+    <circle cx="1216" cy="132" r="150" fill="url(#mSol)"/>
+    <g transform="translate(1216,132)">
+      <g class="sol-hero">
+        <g opacity=".35" fill="none" stroke="#F5C13C" stroke-width="5" stroke-linecap="round">
+          <path d="M0 -74 V-98"/><path d="M0 74 V98"/><path d="M-74 0 H-98"/><path d="M74 0 H98"/>
+          <path d="M-52 -52 L-70 -70"/><path d="M52 52 L70 70"/>
+          <path d="M52 -52 L70 -70"/><path d="M-52 52 L-70 70"/>
+        </g>
+      </g>
+      <circle r="52" fill="#FFD873" opacity=".55"/>
+    </g>
+
+    <!-- nubes -->
+    <g transform="translate(230,140)" opacity=".85">
+      <g class="nube-fondo">
+        <ellipse cx="0" cy="0" rx="58" ry="30" fill="#fff"/>
+        <ellipse cx="-46" cy="12" rx="38" ry="22" fill="#fff"/>
+        <ellipse cx="44" cy="13" rx="42" ry="24" fill="#fff"/>
+      </g>
+    </g>
+    <g transform="translate(760,84)" opacity=".7">
+      <g class="nube-fondo n2">
+        <ellipse cx="0" cy="0" rx="44" ry="23" fill="#fff"/>
+        <ellipse cx="-36" cy="10" rx="28" ry="17" fill="#fff"/>
+        <ellipse cx="34" cy="10" rx="31" ry="18" fill="#fff"/>
+      </g>
+    </g>
+    <g transform="translate(1060,250)" opacity=".6">
+      <g class="nube-fondo n3">
+        <ellipse cx="0" cy="0" rx="36" ry="19" fill="#fff"/>
+        <ellipse cx="-28" cy="8" rx="24" ry="14" fill="#fff"/>
+        <ellipse cx="28" cy="8" rx="26" ry="15" fill="#fff"/>
+      </g>
+    </g>
+
+    <!-- colinas lejanas -->
+    <path d="M-40 500 q 180 -96 360 -40 q 190 60 380 -26 q 200 -92 420 -6 q 200 80 400 10 L1480 900 L-40 900 Z"
+          fill="#C6E6CC" opacity=".85"/>
+    <!-- colinas medias -->
+    <path d="M-40 596 q 220 -80 430 -18 q 210 62 400 -18 q 210 -88 410 4 q 160 66 340 12 L1480 900 L-40 900 Z"
+          fill="#AEDDB8" opacity=".9"/>
+
+    <!-- arbustos -->
+    <g fill="#8FCC9C" opacity=".85">
+      <circle cx="120" cy="606" r="42"/><circle cx="168" cy="618" r="32"/><circle cx="76" cy="620" r="30"/>
+      <circle cx="1320" cy="590" r="48"/><circle cx="1376" cy="606" r="34"/><circle cx="1268" cy="608" r="32"/>
+      <circle cx="700" cy="576" r="34"/><circle cx="742" cy="588" r="26"/><circle cx="662" cy="588" r="24"/>
+    </g>
+
+    <!-- pasto -->
+    <path d="M-40 660 q 240 -46 470 -8 q 250 42 500 -12 q 250 -52 550 6 L1480 900 L-40 900 Z" fill="url(#mPasto)"/>
+
+    <!-- camino de tierra -->
+    <path d="M-40 900 q 300 -140 470 -160 q 190 -22 300 -60 q 120 -42 320 -46 q 220 -4 390 34
+             l0 74 q -180 -40 -390 -34 q -190 6 -300 46 q -120 44 -300 66 q -220 26 -450 168 Z"
+          fill="url(#mCamino)" opacity=".7"/>
+
+    <!-- flores del jardín -->
+    <g class="jardin-fondo">
+      <g transform="translate(300,742)"><g class="tallo-fondo">
+        <path d="M0 0 V-40" stroke="#4E9E6B" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M0 -18 q -16 -4 -19 -16 q 15 -3 19 16z" fill="#63B884"/>
+        <g transform="translate(0,-48)" opacity=".92">
+          <circle cx="0" cy="-9" r="8" fill="#EC5F92"/><circle cx="9" cy="0" r="8" fill="#EC5F92"/>
+          <circle cx="0" cy="9" r="8" fill="#EC5F92"/><circle cx="-9" cy="0" r="8" fill="#EC5F92"/>
+          <circle r="6" fill="#FFE9A8"/>
+        </g></g></g>
+
+      <g transform="translate(1160,780)"><g class="tallo-fondo" style="animation-delay:-1.4s">
+        <path d="M0 0 V-46" stroke="#4E9E6B" stroke-width="4.4" stroke-linecap="round" fill="none"/>
+        <path d="M0 -20 q 18 -4 21 -18 q -17 -3 -21 18z" fill="#63B884"/>
+        <g transform="translate(0,-56)" opacity=".92">
+          <circle cx="0" cy="-10" r="9" fill="#F2B02A"/><circle cx="10" cy="0" r="9" fill="#F2B02A"/>
+          <circle cx="0" cy="10" r="9" fill="#F2B02A"/><circle cx="-10" cy="0" r="9" fill="#F2B02A"/>
+          <circle r="6.5" fill="#FFF8E2"/>
+        </g></g></g>
+
+      <g transform="translate(560,840)"><g class="tallo-fondo" style="animation-delay:-2.6s">
+        <path d="M0 0 V-38" stroke="#4E9E6B" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M0 -16 q -15 -4 -18 -15 q 14 -3 18 15z" fill="#63B884"/>
+        <g transform="translate(0,-46)" opacity=".9">
+          <circle cx="0" cy="-8" r="7.5" fill="#9268D6"/><circle cx="8" cy="0" r="7.5" fill="#9268D6"/>
+          <circle cx="0" cy="8" r="7.5" fill="#9268D6"/><circle cx="-8" cy="0" r="7.5" fill="#9268D6"/>
+          <circle r="5.5" fill="#FFF8E2"/>
+        </g></g></g>
+
+      <g transform="translate(880,806)"><g class="tallo-fondo" style="animation-delay:-3.8s">
+        <path d="M0 0 V-42" stroke="#4E9E6B" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M0 -18 q 16 -4 19 -16 q -15 -3 -19 16z" fill="#63B884"/>
+        <g transform="translate(0,-50)" opacity=".9">
+          <circle cx="0" cy="-8.5" r="8" fill="#F0813C"/><circle cx="8.5" cy="0" r="8" fill="#F0813C"/>
+          <circle cx="0" cy="8.5" r="8" fill="#F0813C"/><circle cx="-8.5" cy="0" r="8" fill="#F0813C"/>
+          <circle r="6" fill="#FFF8E2"/>
+        </g></g></g>
+
+      <g transform="translate(90,864)"><g class="tallo-fondo" style="animation-delay:-5s">
+        <path d="M0 0 V-44" stroke="#4E9E6B" stroke-width="4.4" stroke-linecap="round" fill="none"/>
+        <g transform="translate(0,-54)" opacity=".9">
+          <circle cx="0" cy="-9" r="8.5" fill="#EC5F92"/><circle cx="9" cy="0" r="8.5" fill="#EC5F92"/>
+          <circle cx="0" cy="9" r="8.5" fill="#EC5F92"/><circle cx="-9" cy="0" r="8.5" fill="#EC5F92"/>
+          <circle r="6" fill="#FFF8E2"/>
+        </g></g></g>
+    </g>
+
+    <!-- pasto en primer plano -->
+    <g stroke="#5AA86D" stroke-width="5" stroke-linecap="round" fill="none" opacity=".55">
+      <path d="M40 900 q 6 -34 -6 -56"/><path d="M78 900 q -4 -30 8 -50"/>
+      <path d="M420 900 q 8 -36 -4 -58"/><path d="M462 900 q -6 -28 6 -46"/>
+      <path d="M980 900 q 6 -32 -6 -54"/><path d="M1022 900 q -5 -30 7 -48"/>
+      <path d="M1360 900 q 7 -34 -5 -56"/><path d="M1400 900 q -6 -28 6 -46"/>
+    </g>
+  </svg>
+
+  <span class="chispa" style="left:14%;bottom:26%;animation-delay:0s"></span>
+  <span class="chispa" style="left:33%;bottom:14%;animation-delay:-2.6s"></span>
+  <span class="chispa" style="left:58%;bottom:32%;animation-delay:-5.1s"></span>
+  <span class="chispa" style="left:77%;bottom:18%;animation-delay:-7.3s"></span>
+  <span class="chispa" style="left:90%;bottom:38%;animation-delay:-3.9s"></span>
+</div>
+
+<div class="app">
+  <header class="hero">
+    <div class="hero-bar">
+      <div class="hero-txt">
+        <p class="eyebrow">Pensamiento Computacional · Ceibal</p>
+        <h1>Número, la rana</h1>
+        <p class="lema">Practicá las tablas saltando de hoja en hoja.</p>
+      </div>
+    </div>
+  </header>
+  <div class="pestanias">
+    <a class="pestania" href="index.html">Dinámica</a>
+    <a class="pestania on" href="juego.html" aria-current="page">Juego</a>
+  </div>
+  <section class="hoja hoja-juego" id="juego"></section>
+</div>
+<script src="juego.js"></script>
+</body>
+</html>
