@@ -1,16 +1,30 @@
 /* Juego de la rana: estilos propios (usa las variables de estilos.css) */
-.hoja-juego{margin-top:var(--s5);padding:var(--s6);text-align:center;}
-/* sin renglones ni línea de margen: el juego queda centrado en la hoja */
-.hoja-juego::before,.hoja-juego::after{display:none;}
-.hoja-juego .consigna{margin-left:auto;margin-right:auto;max-width:560px;}
-.hoja-juego .lienzo{max-width:680px;margin-left:auto;margin-right:auto;}
-.hoja-juego .niveles{max-width:900px;margin-left:auto;margin-right:auto;}
+/* ===== Página del juego: diseño propio (estanque de noche), sin hoja de cuaderno ===== */
+body.pagina-juego{
+  min-height:100vh;color:#EAF7F1;
+  background:
+    radial-gradient(60% 40% at 80% 8%, rgba(255,241,176,.35) 0%, rgba(255,241,176,0) 70%),
+    radial-gradient(circle at 12% 88%, rgba(120,230,200,.18) 0 90px, transparent 91px),
+    radial-gradient(circle at 88% 78%, rgba(120,230,200,.14) 0 60px, transparent 61px),
+    linear-gradient(180deg,#0B2E3F 0%,#115668 48%,#17806F 100%);
+  background-attachment:fixed;
+}
+.zona-juego{text-align:center;}
+.zona-juego .enc{margin-top:var(--s5);}
+.zona-juego .eyebrow{background:rgba(255,255,255,.14);color:#BFF1DD;border-color:rgba(255,255,255,.25);}
+.zona-juego h2{color:#fff;}
+.zona-juego .consigna{margin:var(--s3) auto 0;max-width:560px;color:#D6EFE6;}
+.zona-juego .consigna strong{color:#fff;}
+.zona-juego .lienzo{max-width:760px;margin:0 auto;}
+.zona-juego .niveles{max-width:900px;margin-left:auto;margin-right:auto;}
+.zona-juego .fb{text-align:left;margin-left:auto;margin-right:auto;max-width:560px;}
+.zona-juego .fila{justify-content:center;}
 /* --- juego de la rana: cruzar el estanque --- */
 .rio{
-  --H:clamp(250px, calc(100vh - 330px), 470px); /* el estanque se achica si la pantalla es baja */
+  --H:clamp(250px, calc(100vh - 330px), 540px); /* el estanque se achica si la pantalla es baja */
   position:relative;overflow:hidden;margin-top:var(--s3);height:var(--H);border-radius:var(--r2);
   background:linear-gradient(180deg,#8FD3E8 0%,#6FBFD9 50%,#58AECB 100%);
-  box-shadow:inset 0 0 0 2px rgba(16,38,28,.06), var(--e2);
+  box-shadow:0 0 0 4px rgba(255,255,255,.18), 0 18px 40px rgba(0,0,0,.35);
 }
 .rio::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
   background:repeating-linear-gradient(0deg,transparent 0 30px,rgba(255,255,255,.35) 30px 32px);}
@@ -79,15 +93,15 @@
 
 
 
-/* partida en curso: hoja compacta para que todo entre en pantalla */
-.hoja-juego.jugando{padding:var(--s4);}
-.hoja-juego.jugando .enc,.hoja-juego.jugando .consigna{display:none;}
-.hoja-juego.jugando .lienzo{margin-top:0;}
-.hoja-juego.jugando .salto-ctrl{margin-top:var(--s3);}
-.hoja-juego.jugando .salto-ayuda{margin-top:var(--s2);}
-/* encabezado compacto de la página del juego */
+/* partida en curso: todo entra en pantalla */
+.zona-juego.jugando .enc,.zona-juego.jugando .consigna{display:none;}
+.zona-juego.jugando .salto-ctrl{margin-top:var(--s3);}
+.zona-juego.jugando .salto-ayuda{margin-top:var(--s2);color:#CFE9E0;opacity:1;}
 .barra-juego{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);flex-wrap:wrap;margin-bottom:var(--s3);}
-.barra-juego h1{font-size:1.5rem;color:var(--leaf-dd);}
+.barra-juego h1{font-size:1.5rem;color:#fff;}
 .barra-juego .pestanias{margin:0;}
+.pagina-juego .pestania{background:rgba(255,255,255,.14);color:#fff;box-shadow:none;}
+.pagina-juego .pestania.on{background:linear-gradient(180deg,var(--leaf-b),var(--leaf));}
 .app.app-juego{padding-top:var(--s4);padding-bottom:var(--s5);}
-.app-juego .hoja-juego{margin-top:0;}
+.rio-globo{color:var(--ink);}
+.zona-juego h2{text-shadow:none;}
