@@ -11,14 +11,14 @@
   function base(nivel, U){
     var n, d, g = 0;
     while(g++ < 200){
-      if(nivel === "facil"){ d = U.elegir([2,3,4,5]); n = U.azar(1, d-1); }
-      else if(nivel === "medio"){ d = U.azar(2,8); n = U.azar(1, d-1); }
-      else{ d = U.azar(3,12); n = U.azar(1, d-1); }
+      if(nivel === "facil"){ d = U.elegir([2,3,4]); n = U.azar(1, d-1); }
+      else if(nivel === "medio"){ d = U.azar(2,6); n = U.azar(1, d-1); }
+      else{ d = U.azar(3,8); n = U.azar(1, d-1); }
       if(mcd(n, d) === 1){ return [n, d]; }
     }
     return [1,2];
   }
-  function factor(nivel, U){ return nivel === "facil" ? U.azar(2,4) : nivel === "medio" ? U.azar(2,5) : U.azar(2,6); }
+  function factor(nivel, U){ return nivel === "facil" ? U.azar(2,3) : nivel === "medio" ? U.azar(2,4) : U.azar(2,5); }
 
   // 3 opciones de texto: la correcta + 2 distractores distintos (se completan si faltan)
   function armar(p, ok, dist, r, U){
@@ -59,7 +59,7 @@
       return armar("¿Qué número falta? " + f(n,d) + " = " + (n*k) + "/▢", ok, [String(d+k), String(d*k+1), String(d*k-1), String(d+1)], f(n,d)+" = "+f(n*k,d*k)+": "+n+" × "+k+" = "+(n*k)+", así que "+d+" × "+k+" = "+(d*k), U);
     },
     simplificar: function(nivel, U){
-      var b = base(nivel === "facil" ? "medio" : nivel, U), n = b[0], d = b[1], k = U.elegir([2,3,4,6]);
+      var b = base(nivel === "facil" ? "medio" : nivel, U), n = b[0], d = b[1], k = U.elegir([2,2,3,4]);
       var ok = f(n,d), dist = [];
       [2,3].forEach(function(j){ if(k % j === 0 && k / j > 1){ dist.push(f(n*(k/j), d*(k/j))); } });
       [f(n+1,d), f(n,d+1), f(n+1,d+1)].forEach(function(s){ var p = s.split("/"); if(!equiv(+p[0], +p[1], n, d)){ dist.push(s); } });
@@ -83,8 +83,8 @@
     consigna: "Elegí un nivel. En cada hoja hay una respuesta: llevá a la rana a la hoja correcta. Si te equivocás, ¡la hoja se hunde y se acaba el juego!",
     niveles: [
       ["facil","🌱","Fácil","Encontrá la fracción equivalente y completá fracciones sencillas. Sin apuro."],
-      ["medio","🌿","Medio","Empezás con equivalentes y, a medida que acertás, aparecen más fracciones, denominadores que faltan, la que NO es equivalente y simplificar."],
-      ["dificil","🔥","Difícil","Fracciones más grandes y todos los desafíos mezclados, con solo 10 segundos por pregunta."]
+      ["medio","🌿","Medio","Empezás con equivalentes y, a medida que acertás, se suman denominadores que faltan, la que NO es equivalente y simplificar."],
+      ["dificil","🔥","Difícil","Todos los desafíos mezclados con fracciones un poco más grandes, con solo 10 segundos por pregunta."]
     ],
     generar: function(nivel, ronda, U){
       var pool;
@@ -92,9 +92,9 @@
       else if(nivel === "medio"){
         pool = ["equivalente","equivalente","faltaNum"];
         if(ronda >= 4){ pool.push("faltaDen"); }
-        if(ronda >= 7){ pool.push("noEquiv"); }
-        if(ronda >= 10){ pool.push("simplificar"); }
-      }else{ pool = ["equivalente","faltaNum","faltaDen","noEquiv","simplificar","simplificar"]; }
+        if(ronda >= 8){ pool.push("noEquiv"); }
+        if(ronda >= 12){ pool.push("simplificar"); }
+      }else{ pool = ["equivalente","equivalente","faltaNum","faltaDen","noEquiv","simplificar"]; }
       return gen[U.elegir(pool)](nivel, U);
     }
   };
