@@ -2512,7 +2512,7 @@ p{margin:0;}
      SALTO: cruzar el estanque saltando de hoja en hoja
      ============================================================ */
   function juegoSalto(host, act, alTerminar){
-    var COLS = 3, FILAS = 5, BASE = 80, STEP = 66, total = act.rondas;
+    var COLS = 3, FILAS = 5, BASE = 80, STEP = 66;
     var ronda = 0, cruce = 0, fila = -1, selc = 1, actual = null, bloqueado = false;
     var pads = [];
 
@@ -2582,7 +2582,12 @@ p{margin:0;}
       if(sig >= FILAS){ return; }
       for(var c=0;c<COLS;c++){ pads[sig][c].classList.toggle("sel", c === selc); }
     }
-    function pintarPasos(){ zonaPasos.innerHTML = ""; zonaPasos.appendChild(pasos(total, ronda)); }
+    function mejor(){ try{ return parseInt(localStorage.getItem("rana-record"),10) || 0; }catch(e){ return 0; } }
+    function pintarPasos(){
+      zonaPasos.innerHTML = "";
+      var m = Math.max(mejor(), ronda);
+      zonaPasos.appendChild(html("p","salto-ayuda","🪷 Aciertos seguidos: <strong>" + ronda + "</strong> · 🏆 Récord: <strong>" + m + "</strong>"));
+    }
 
     function prepararFila(){
       var sig = fila + 1;
@@ -2628,7 +2633,6 @@ p{margin:0;}
           var rc = h.getBoundingClientRect();
           celebrar(rc.left + rc.width/2, rc.top + 10);
           ronda++; fila = sig; pintarPasos();
-          if(ronda >= total){ setTimeout(function(){ if(host.isConnected){ alTerminar(); } }, 900); return; }
           if(fila >= FILAS-1){
             globo.textContent = "🪷 ¡Cruzaste el estanque!";
             setTimeout(function(){
@@ -2648,8 +2652,10 @@ p{margin:0;}
           setTimeout(function(){
             if(!host.isConnected){ return; }
             document.removeEventListener("keydown", tecla);
+            var rec = mejor();
+            if(ronda > rec){ try{ localStorage.setItem("rana-record", String(ronda)); }catch(e){} }
             host.innerHTML = "";
-            host.appendChild(feedback("casi","¡Game over! 💦", "La hoja se hundió: " + actual.p.replace("¿Cuánto es ","").replace("?","") + " = " + actual.o[actual.c] + ". Llegaste a " + ronda + " de " + total + " preguntas.", null));
+            host.appendChild(feedback("casi","¡Game over! 💦", "La hoja se hundió: " + actual.p.replace("¿Cuánto es ","").replace("?","") + " = " + actual.o[actual.c] + ". Respondiste " + ronda + " seguidas bien" + (ronda > rec ? " ¡y es un nuevo récord! 🏆" : ". Tu récord es " + rec + "."), null));
             var f = el("div","fila");
             var b = html("button","btn btn-1","Reintentar" + ICO.flecha);
             b.addEventListener("click", act.alReintentar);
@@ -2704,7 +2710,7 @@ p{margin:0;}
     cont.appendChild(html("p","consigna","Cada hoja de nenúfar tiene un número. Elegí con <strong>←</strong> y <strong>→</strong> la hoja con el resultado correcto y apretá <strong>↑</strong> para saltar. Si acertás, la hoja te aguanta; si te equivocás, ¡se hunde y se acaba el juego!"));
     var host = el("div","lienzo");
     cont.appendChild(host);
-    juegoSalto(host, {rondas:30, alReintentar:montarJuego}, function(){
+    juegoSalto(host, {alReintentar:montarJuego}, function(){
       host.innerHTML = "";
       host.appendChild(feedback("ok","¡Completaste el juego!","Resolviste las 30 preguntas de la rana.", null));
       var f = el("div","fila");
