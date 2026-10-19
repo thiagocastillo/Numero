@@ -1,0 +1,19 @@
+/* Juego 021: tema propio (atardecer violeta) y pantalla de contraseña */
+body.tema-021{
+  background:
+    radial-gradient(60% 40% at 20% 8%, rgba(255,196,140,.38) 0%, rgba(255,196,140,0) 70%),
+    radial-gradient(circle at 85% 85%, rgba(255,160,200,.18) 0 90px, transparent 91px),
+    linear-gradient(180deg,#2B1B4F 0%,#5B2F7A 50%,#A04A7F 100%);
+  background-attachment:fixed;
+}
+.tema-021 .zona-juego .eyebrow{color:#FFD9EC;}
+.tema-021 .zona-juego .consigna{color:#F1E3F7;}
+.tema-021 .hud-chip b{color:#5B2F7A;}
+.clave-caja{max-width:380px;margin:var(--s8) auto 0;padding:var(--s7) var(--s6);background:#fff;color:var(--ink);border-radius:var(--r3);box-shadow:0 18px 40px rgba(0,0,0,.35);}
+.clave-caja h2{color:#5B2F7A;margin:var(--s2) 0;}
+.clave-caja p{color:var(--ink-3);}
+.clave-ico{font-size:2.6rem;}
+.clave-caja input{width:100%;box-sizing:border-box;margin-top:var(--s4);padding:var(--s3) var(--s4);font:inherit;font-size:1.1rem;text-align:center;border:2px solid var(--line);border-radius:var(--r2);}
+.clave-caja input:focus{outline:none;border-color:#A04A7F;}
+.clave-caja .fila{justify-content:center;margin-top:var(--s4);}
+.clave-error{min-height:1.4em;margin-top:var(--s3);color:var(--petal-d) !important;font-weight:700;}

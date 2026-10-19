@@ -1,5 +1,7 @@
 (function(){
   "use strict";
+  // Configuración opcional (la usa el juego 021 de fracciones): prefijo del récord, textos, niveles y generador de preguntas
+  var CFG = window.JUEGO_CFG || {};
   var ICO = {
     tilde: svg('<path d="M4.8 12.4l4.8 4.8L19.2 7"/>'),
     circulo: svg('<circle cx="12" cy="12" r="7"/>'),
@@ -75,7 +77,7 @@
      SALTO: cruzar el estanque saltando de hoja en hoja
      ============================================================ */
   function juegoSalto(host, act, alTerminar){
-    var nivel = act.nivel || "facil", LIMITE = 10000, claveRec = nivel === "facil" ? "rana-record" : "rana-record-" + nivel;
+    var nivel = act.nivel || "facil", LIMITE = 10000, claveRec = nivel === "facil" ? (CFG.prefijo || "rana-record") : (CFG.prefijo || "rana-record") + "-" + nivel;
     var COLS = 3, FILAS = 5, BASE = 80, STEP = 66, ALTO = 470;
     function pct(px){ return (px / ALTO * 100) + "%"; } // el estanque se escala según el alto de la pantalla
     var ronda = 0, cruce = 0, fila = -1, selc = 1, actual = null, bloqueado = false;
@@ -164,6 +166,7 @@
       }
     };
     function nuevaPregunta(){
+      if(CFG.generar){ return CFG.generar(nivel, ronda, {azar:azar, elegir:elegirUno, mezclar:mezclar}); }
       var pool;
       if(nivel === "facil"){
         pool = ["tabla","tabla","tabla","tabla","tabla","ext","doble","multiplo","div"];
@@ -275,7 +278,10 @@
       for(var c=0;c<COLS;c++){
         var h = pads[sig][c];
         h.className = "hoja-n" + (c === selc ? " sel" : "");
-        h.querySelector(".t").textContent = actual.o[c];
+        var tx = String(actual.o[c]), larga = tx.length > 3;
+        h.querySelector(".t").textContent = tx;
+        h.querySelector(".t").setAttribute("font-size", tx.length <= 3 ? 15 : tx.length <= 5 ? 11.5 : 9.5);
+        var cs = h.querySelectorAll(".num circle"); for(var q=0;q<cs.length;q++){ cs[q].setAttribute("r", larga ? 16 : 13); }
       }
     }
     function nuevoCruce(){
@@ -379,21 +385,24 @@
     nuevoCruce();
   }
 
+  var NIVELES = CFG.niveles || [
+    ["facil","🌱","Fácil","Sobre todo tablas del 2 al 10, con algunas preguntas fáciles de variedad. Sin apuro."],
+    ["medio","🌿","Medio","Empezás con tablas fáciles y, a medida que acertás, se suman más tablas y preguntas nuevas: divisiones, múltiplos, dobles, 12 × 10…"],
+    ["dificil","🔥","Difícil","Tablas y todo tipo de desafíos mezclados desde el inicio, con solo 10 segundos por pregunta: si se acaba el tiempo, la hoja se hunde."]
+  ];
   function montarJuego(nivel){
     var cont = document.getElementById("juego");
     cont.innerHTML = ""; cont.classList.remove("jugando");
     var enc = el("div","enc");
-    enc.appendChild(el("p","eyebrow","Juego · Cruzar el estanque"));
-    enc.appendChild(el("h2",null,"Ayudá a la rana a cruzar el estanque"));
+    enc.appendChild(el("p","eyebrow", CFG.eyebrow || "Juego · Cruzar el estanque"));
+    enc.appendChild(el("h2",null, CFG.titulo || "Ayudá a la rana a cruzar el estanque"));
     cont.appendChild(enc);
     if(typeof nivel !== "string"){
-      cont.appendChild(html("p","consigna","Elegí un nivel. Cada hoja de nenúfar tiene un número: llevá a la rana a la hoja con el resultado correcto. Si te equivocás, ¡la hoja se hunde y se acaba el juego!"));
+      cont.appendChild(html("p","consigna", CFG.consigna || "Elegí un nivel. Cada hoja de nenúfar tiene un número: llevá a la rana a la hoja con el resultado correcto. Si te equivocás, ¡la hoja se hunde y se acaba el juego!"));
       var g = el("div","niveles");
-      [["facil","🌱","Fácil","Sobre todo tablas del 2 al 10, con algunas preguntas fáciles de variedad. Sin apuro.","rana-record"],
-       ["medio","🌿","Medio","Empezás con tablas fáciles y, a medida que acertás, se suman más tablas y preguntas nuevas: divisiones, múltiplos, dobles, 12 × 10…","rana-record-medio"],
-       ["dificil","🔥","Difícil","Tablas y todo tipo de desafíos mezclados desde el inicio, con solo 10 segundos por pregunta: si se acaba el tiempo, la hoja se hunde.","rana-record-dificil"]
-      ].forEach(function(n){
-        var rec = 0; try{ rec = parseInt(localStorage.getItem(n[4]),10) || 0; }catch(e){}
+      NIVELES.forEach(function(n){
+        var pre = CFG.prefijo || "rana-record";
+        var rec = 0; try{ rec = parseInt(localStorage.getItem(n[0] === "facil" ? pre : pre + "-" + n[0]),10) || 0; }catch(e){}
         var b = html("button","nivel","<span class=\"em\">"+n[1]+"</span><strong>"+n[2]+"</strong><span class=\"d\">"+n[3]+"</span><span class=\"r\">🏆 Récord: "+rec+"</span>");
         b.addEventListener("click", function(){ montarJuego(n[0]); });
         g.appendChild(b);
@@ -401,11 +410,12 @@
       cont.appendChild(g);
       return;
     }
-    cont.appendChild(html("p","consigna","Elegí con <strong>←</strong> y <strong>→</strong> la hoja con el resultado correcto y apretá <strong>↑</strong> para saltar." + (nivel === "dificil" ? " ¡Tenés 10 segundos por pregunta!" : "")));
+    cont.appendChild(html("p","consigna","Elegí con <strong>←</strong> y <strong>→</strong> la hoja con la respuesta correcta y apretá <strong>↑</strong> para saltar." + (nivel === "dificil" ? " ¡Tenés 10 segundos por pregunta!" : "")));
     cont.classList.add("jugando");
     var host = el("div","lienzo");
     cont.appendChild(host);
     juegoSalto(host, {nivel:nivel, alReintentar:montarJuego}, function(){});
   }
-  montarJuego();
+  window.iniciarJuego = montarJuego;
+  if(!window.JUEGO_MANUAL){ montarJuego(); }
 })();
