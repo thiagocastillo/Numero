@@ -819,6 +819,23 @@ p{margin:0;}
 }
 .chapoteo{position:absolute;z-index:3;font-size:1.6rem;transform:translateX(-50%);pointer-events:none;animation:chap .9s ease-out forwards;}
 @keyframes chap{0%{opacity:0;transform:translateX(-50%) scale(.4);}30%{opacity:1;}100%{opacity:0;transform:translateX(-50%) translateY(-18px) scale(1.4);}}
+.hud{display:flex;gap:var(--s3);justify-content:center;flex-wrap:wrap;margin:0 auto var(--s3);}
+.hud-chip{background:#fff;border-radius:var(--r2);padding:var(--s2) var(--s4);box-shadow:var(--e2);text-align:center;min-width:120px;}
+.hud-chip small{display:block;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);}
+.hud-chip b{font-size:2rem;line-height:1.1;font-family:ui-monospace,monospace;color:var(--leaf-dd);display:inline-block;}
+.hud-chip.rec b{color:var(--sun-d);}
+.hud-chip b.sube{animation:sube .45s var(--bounce);}
+@keyframes sube{50%{transform:scale(1.5);}}
+.tiempo{height:14px;max-width:420px;margin:0 auto var(--s3);background:rgba(255,255,255,.7);border-radius:99px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(16,38,28,.08);}
+.tiempo i{display:block;height:100%;width:100%;background:var(--leaf-b);border-radius:99px;transition:background .3s;}
+.tiempo.poco i{background:var(--petal);}
+.niveles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--s4);margin-top:var(--s5);}
+.nivel{cursor:pointer;text-align:center;padding:var(--s5) var(--s4);border:0;border-radius:var(--r2);background:#fff;box-shadow:var(--e2);font:inherit;color:var(--ink);transition:transform .2s var(--bounce);}
+.nivel:hover,.nivel:focus-visible{transform:translateY(-4px) scale(1.03);}
+.nivel .em{font-size:2.4rem;display:block;}
+.nivel strong{display:block;font-size:1.3rem;margin:var(--s2) 0;}
+.nivel span.d{display:block;font-size:.95rem;color:var(--ink-3);}
+.nivel span.r{display:block;margin-top:var(--s3);font-weight:700;color:var(--sun-d);}
 .salto-ctrl{justify-content:center;margin-top:var(--s4);}
 .salto-ayuda{text-align:center;font-size:.9rem;opacity:.75;margin:var(--s2) 0 0;}
 @media (max-width:520px){.hoja-n{width:68px;}.rana-r{width:54px;}.rio{height:440px;}}
@@ -2431,7 +2448,6 @@ p{margin:0;}
     host.appendChild(cont);
 
     var zonaFB = el("div"); host.appendChild(zonaFB);
-    var zonaPasos = el("div"); host.appendChild(zonaPasos);
     var pie = el("div"); host.appendChild(pie);
 
     function pintar(){
@@ -2512,20 +2528,41 @@ p{margin:0;}
      SALTO: cruzar el estanque saltando de hoja en hoja
      ============================================================ */
   function juegoSalto(host, act, alTerminar){
+    var nivel = act.nivel || "facil", LIMITE = 10000, claveRec = nivel === "facil" ? "rana-record" : "rana-record-" + nivel;
     var COLS = 3, FILAS = 5, BASE = 80, STEP = 66;
     var ronda = 0, cruce = 0, fila = -1, selc = 1, actual = null, bloqueado = false;
     var pads = [];
 
+    function azar(a, b){ return a + Math.floor(Math.random()*(b-a+1)); }
     function nuevaPregunta(){
-      var a = 2+Math.floor(Math.random()*9), b = 2+Math.floor(Math.random()*9);
-      var res = a*b, ops = [res], guard = 0;
-      while(ops.length < COLS && guard++ < 60){
-        var d = (1+Math.floor(Math.random()*10)) * (Math.random() < 0.5 ? -1 : 1);
-        var c = res + d;
-        if(c > 0 && ops.indexOf(c) < 0){ ops.push(c); }
+      var txt, res, a, b, c, d, maxF, cerca = [];
+      if(nivel === "facil"){
+        a = azar(2,10); b = azar(2,10); txt = a+" × "+b; res = a*b;
+      }else{
+        var t = Math.min(ronda, 30), azarTipo = Math.random();
+        if(nivel === "medio"){
+          maxF = 10 + Math.floor(t/6);
+          a = azar(2,maxF); b = azar(2,maxF);
+          if(ronda >= 6 && azarTipo < 0.3){ c = azar(2,9); txt = a+" × "+b+" + "+c; res = a*b+c; }
+          else if(ronda >= 12 && azarTipo < 0.55){ c = azar(2,9); txt = a+" × "+b+" − "+c; res = a*b-c; }
+          else{ txt = a+" × "+b; res = a*b; }
+        }else{
+          maxF = 12 + Math.floor(t/5);
+          a = azar(4,maxF); b = azar(4,maxF);
+          if(azarTipo < 0.3){ c = azar(3,15); txt = a+" × "+b+" + "+c; res = a*b+c; }
+          else if(azarTipo < 0.55){ c = azar(3,15); txt = a+" × "+b+" − "+c; res = a*b-c; }
+          else if(azarTipo < 0.75){ c = azar(3,12); d = azar(3,12); txt = "("+a+" + "+b+") × "+c; res = (a+b)*c; cerca = [res+a, res-b, res+c, res-c]; }
+          else{ txt = a+" × "+b; res = a*b; }
+        }
+        if(!cerca.length){ cerca = [res+a, res-a, res+b, res-b, res+10, res-10]; }
+      }
+      var ops = [res], guard = 0;
+      while(ops.length < COLS && guard++ < 80){
+        var c2 = (cerca.length && Math.random() < 0.6) ? cerca[azar(0,cerca.length-1)] : res + azar(1,10) * (Math.random() < 0.5 ? -1 : 1);
+        if(c2 > 0 && ops.indexOf(c2) < 0){ ops.push(c2); }
       }
       ops = mezclar(ops);
-      return {p:"¿Cuánto es " + a + " × " + b + "?", o:ops, c:ops.indexOf(res)};
+      return {p:"¿Cuánto es " + txt + "?", o:ops, c:ops.indexOf(res)};
     }
     function hojaSVG(){
       return '<svg viewBox="-42 -30 84 60" aria-hidden="true">' +
@@ -2561,7 +2598,18 @@ p{margin:0;}
       '<circle cx="-8.6" cy="-18.6" r="2.9" fill="#10261C"/><circle cx="11.4" cy="-18.6" r="2.9" fill="#10261C"/>' +
       '<path d="M-7.4 3 q 7.4 6 14.8 0" stroke="#16532F" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>');
     rio.appendChild(rana);
-    host.appendChild(globo); host.appendChild(rio);
+    var hud = el("div","hud");
+    var chipA = html("div","hud-chip","<small>🪷 Aciertos</small><b>0</b>");
+    var chipR = html("div","hud-chip rec","<small>🏆 Récord</small><b>0</b>");
+    hud.appendChild(chipA); hud.appendChild(chipR);
+    var barra = null, barraI = null, timer = null;
+    if(nivel === "dificil"){
+      barra = el("div","tiempo"); barraI = el("i"); barra.appendChild(barraI);
+      barra.setAttribute("role","timer"); barra.setAttribute("aria-label","Tiempo para responder: 10 segundos");
+    }
+    host.appendChild(globo); host.appendChild(hud);
+    if(barra){ host.appendChild(barra); }
+    host.appendChild(rio);
 
     var ctrl = el("div","fila salto-ctrl");
     var bIzq = html("button","btn btn-2","←"), bSel = html("button","btn btn-1","↑ Saltar a esta hoja"), bDer = html("button","btn btn-2","→");
@@ -2582,17 +2630,31 @@ p{margin:0;}
       if(sig >= FILAS){ return; }
       for(var c=0;c<COLS;c++){ pads[sig][c].classList.toggle("sel", c === selc); }
     }
-    function mejor(){ try{ return parseInt(localStorage.getItem("rana-record"),10) || 0; }catch(e){ return 0; } }
-    function pintarPasos(){
-      zonaPasos.innerHTML = "";
-      var m = Math.max(mejor(), ronda);
-      zonaPasos.appendChild(html("p","salto-ayuda","🪷 Aciertos seguidos: <strong>" + ronda + "</strong> · 🏆 Récord: <strong>" + m + "</strong>"));
+    function mejor(){ try{ return parseInt(localStorage.getItem(claveRec),10) || 0; }catch(e){ return 0; } }
+    function pintarPasos(sube){
+      var bA = chipA.querySelector("b"), bR = chipR.querySelector("b");
+      bA.textContent = ronda; bR.textContent = Math.max(mejor(), ronda);
+      if(sube){ bA.classList.remove("sube"); void bA.offsetWidth; bA.classList.add("sube"); }
     }
-
+    function pararTimer(){ if(timer){ clearInterval(timer); timer = null; } }
+    function arrancarTimer(){
+      pararTimer();
+      if(!barra){ return; }
+      var ini = Date.now();
+      barraI.style.width = "100%"; barra.classList.remove("poco");
+      timer = setInterval(function(){
+        if(!host.isConnected){ pararTimer(); return; }
+        var resto = LIMITE - (Date.now() - ini);
+        barraI.style.width = Math.max(0, resto/LIMITE*100) + "%";
+        barra.classList.toggle("poco", resto < 3500);
+        if(resto <= 0){ pararTimer(); if(!bloqueado){ perder(true); } }
+      }, 80);
+    }
     function prepararFila(){
       var sig = fila + 1;
       actual = nuevaPregunta(); bloqueado = false;
       globo.textContent = "🐸 " + actual.p;
+      arrancarTimer();
       for(var c=0;c<COLS;c++){
         var h = pads[sig][c];
         h.className = "hoja-n" + (c === selc ? " sel" : "");
@@ -2621,7 +2683,7 @@ p{margin:0;}
     }
     function saltar(c){
       if(bloqueado){ return; }
-      bloqueado = true; selc = c; marcarSel();
+      bloqueado = true; pararTimer(); selc = c; marcarSel();
       var sig = fila + 1, h = pads[sig][c];
       zonaFB.innerHTML = "";
       var lento = reduceMotion() ? 200 : 1;
@@ -2632,9 +2694,9 @@ p{margin:0;}
           for(var k=0;k<COLS;k++){ pads[sig][k].classList.remove("sel"); pads[sig][k].classList.add(k === c ? "pasada" : "otra"); }
           var rc = h.getBoundingClientRect();
           celebrar(rc.left + rc.width/2, rc.top + 10);
-          ronda++; fila = sig; pintarPasos();
+          ronda++; fila = sig; pintarPasos(true);
           if(fila >= FILAS-1){
-            globo.textContent = "🪷 ¡Cruzaste el estanque!";
+            globo.textContent = "🪷 ¡Cruzaste el estanque!"; pararTimer();
             setTimeout(function(){
               if(!host.isConnected){ return; }
               posRana(FILAS, c); saltito();
@@ -2645,25 +2707,33 @@ p{margin:0;}
           }
         }, 380);
       }else{
-        setTimeout(function(){
-          if(!host.isConnected){ return; }
-          h.classList.remove("sel"); h.classList.add("hunde");
-          rana.classList.add("cae"); chapoteo(c, sig);
-          setTimeout(function(){
-            if(!host.isConnected){ return; }
-            document.removeEventListener("keydown", tecla);
-            var rec = mejor();
-            if(ronda > rec){ try{ localStorage.setItem("rana-record", String(ronda)); }catch(e){} }
-            host.innerHTML = "";
-            host.appendChild(feedback("casi","¡Game over! 💦", "La hoja se hundió: " + actual.p.replace("¿Cuánto es ","").replace("?","") + " = " + actual.o[actual.c] + ". Respondiste " + ronda + " seguidas bien" + (ronda > rec ? " ¡y es un nuevo récord! 🏆" : ". Tu récord es " + rec + "."), null));
-            var f = el("div","fila");
-            var b = html("button","btn btn-1","Reintentar" + ICO.flecha);
-            b.addEventListener("click", act.alReintentar);
-            f.appendChild(b); host.appendChild(f);
-            b.focus();
-          }, 1000);
-        }, 380);
+        setTimeout(function(){ perder(false, h, c, sig); }, 380);
       }
+    }
+    function perder(tiempo, hoja, c, sig){
+      bloqueado = true; pararTimer();
+      if(!hoja && fila >= 0){ c = pasadaCol(); hoja = pads[fila][c]; sig = fila; }
+      if(!host.isConnected){ return; }
+      if(hoja){ hoja.classList.remove("sel"); hoja.classList.add("hunde"); chapoteo(c, sig); }
+      else{ chapoteo(selc, -0.6); }
+      rana.classList.add("cae");
+      setTimeout(function(){
+        if(!host.isConnected){ return; }
+        document.removeEventListener("keydown", tecla);
+        var rec = mejor();
+        if(ronda > rec){ try{ localStorage.setItem(claveRec, String(ronda)); }catch(e){} }
+        host.innerHTML = "";
+        var cuenta = actual.p.replace("¿Cuánto es ","").replace("?","") + " = " + actual.o[actual.c];
+        host.appendChild(feedback("casi", tiempo ? "¡Se acabó el tiempo! ⏱️" : "¡Game over! 💦",
+          (tiempo ? "La hoja se hundió. " : "La hoja se hundió: ") + cuenta + ". Respondiste " + ronda + " seguidas bien" + (ronda > rec ? " ¡y es un nuevo récord! 🏆" : ". Tu récord es " + rec + "."), null));
+        var f = el("div","fila");
+        var b = html("button","btn btn-1","Reintentar" + ICO.flecha);
+        b.addEventListener("click", function(){ act.alReintentar(nivel); });
+        var b2 = html("button","btn btn-2","Cambiar de nivel");
+        b2.addEventListener("click", function(){ act.alReintentar(); });
+        f.appendChild(b); f.appendChild(b2); host.appendChild(f);
+        b.focus();
+      }, 1000);
     }
     function pasadaCol(){
       for(var c=0;c<COLS;c++){ if(pads[fila][c].classList.contains("pasada")){ return c; } }
@@ -2700,25 +2770,32 @@ p{margin:0;}
   var tabDin = document.getElementById("tab-dinamica");
   var tabJue = document.getElementById("tab-juego");
 
-  function montarJuego(){
+  function montarJuego(nivel){
     var cont = document.getElementById("juego");
     cont.innerHTML = "";
     var enc = el("div","enc");
     enc.appendChild(el("p","eyebrow","Juego · Cruzar el estanque"));
     enc.appendChild(el("h2",null,"Ayudá a la rana a cruzar el estanque"));
     cont.appendChild(enc);
-    cont.appendChild(html("p","consigna","Cada hoja de nenúfar tiene un número. Elegí con <strong>←</strong> y <strong>→</strong> la hoja con el resultado correcto y apretá <strong>↑</strong> para saltar. Si acertás, la hoja te aguanta; si te equivocás, ¡se hunde y se acaba el juego!"));
+    if(typeof nivel !== "string"){
+      cont.appendChild(html("p","consigna","Elegí un nivel. Cada hoja de nenúfar tiene un número: llevá a la rana a la hoja con el resultado correcto. Si te equivocás, ¡la hoja se hunde y se acaba el juego!"));
+      var g = el("div","niveles");
+      [["facil","🌱","Fácil","Tablas del 2 al 10. Sin apuro.","rana-record"],
+       ["medio","🌿","Medio","Las cuentas se van poniendo más difíciles a medida que acertás.","rana-record-medio"],
+       ["dificil","🔥","Difícil","Cuentas difíciles y solo 10 segundos por pregunta: si se acaba el tiempo, la hoja se hunde.","rana-record-dificil"]
+      ].forEach(function(n){
+        var rec = 0; try{ rec = parseInt(localStorage.getItem(n[4]),10) || 0; }catch(e){}
+        var b = html("button","nivel","<span class=\"em\">"+n[1]+"</span><strong>"+n[2]+"</strong><span class=\"d\">"+n[3]+"</span><span class=\"r\">🏆 Récord: "+rec+"</span>");
+        b.addEventListener("click", function(){ montarJuego(n[0]); });
+        g.appendChild(b);
+      });
+      cont.appendChild(g);
+      return;
+    }
+    cont.appendChild(html("p","consigna","Elegí con <strong>←</strong> y <strong>→</strong> la hoja con el resultado correcto y apretá <strong>↑</strong> para saltar." + (nivel === "dificil" ? " ¡Tenés 10 segundos por pregunta!" : "")));
     var host = el("div","lienzo");
     cont.appendChild(host);
-    juegoSalto(host, {alReintentar:montarJuego}, function(){
-      host.innerHTML = "";
-      host.appendChild(feedback("ok","¡Completaste el juego!","Resolviste las 30 preguntas de la rana.", null));
-      var f = el("div","fila");
-      var b = html("button","btn btn-1","Jugar de nuevo" + ICO.flecha);
-      b.addEventListener("click", montarJuego);
-      f.appendChild(b); host.appendChild(f);
-      b.focus();
-    });
+    juegoSalto(host, {nivel:nivel, alReintentar:montarJuego}, function(){});
   }
   function irA(juego){
     vistaDin.hidden = juego; vistaJue.hidden = !juego;
