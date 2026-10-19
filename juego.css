@@ -1,5 +1,10 @@
 /* Juego de la rana: estilos propios (usa las variables de estilos.css) */
-.hoja-juego{margin-top:var(--s5);padding:var(--s6);}
+.hoja-juego{margin-top:var(--s5);padding:var(--s6);text-align:center;}
+/* sin renglones ni línea de margen: el juego queda centrado en la hoja */
+.hoja-juego::before,.hoja-juego::after{display:none;}
+.hoja-juego .consigna{margin-left:auto;margin-right:auto;max-width:560px;}
+.hoja-juego .lienzo{max-width:680px;margin-left:auto;margin-right:auto;}
+.hoja-juego .niveles{max-width:900px;margin-left:auto;margin-right:auto;}
 /* --- juego de la rana: cruzar el estanque --- */
 .rio{
   position:relative;overflow:hidden;margin-top:var(--s4);height:470px;border-radius:var(--r2);
