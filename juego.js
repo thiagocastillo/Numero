@@ -76,7 +76,8 @@
      ============================================================ */
   function juegoSalto(host, act, alTerminar){
     var nivel = act.nivel || "facil", LIMITE = 10000, claveRec = nivel === "facil" ? "rana-record" : "rana-record-" + nivel;
-    var COLS = 3, FILAS = 5, BASE = 80, STEP = 66;
+    var COLS = 3, FILAS = 5, BASE = 80, STEP = 66, ALTO = 470;
+    function pct(px){ return (px / ALTO * 100) + "%"; } // el estanque se escala según el alto de la pantalla
     var ronda = 0, cruce = 0, fila = -1, selc = 1, actual = null, bloqueado = false;
     var pads = [];
 
@@ -200,7 +201,7 @@
       for(var c=0;c<COLS;c++){
         var h = html("div","hoja-n futura", hojaSVG());
         h.style.left = ((c+0.5)/COLS*100) + "%";
-        h.style.bottom = (BASE + r*STEP) + "px";
+        h.style.bottom = pct(BASE + r*STEP);
         h.setAttribute("data-r", r); h.setAttribute("data-c", c);
         pads[r].push(h); rio.appendChild(h);
       }
@@ -223,7 +224,8 @@
       barra = el("div","tiempo"); barraI = el("i"); barra.appendChild(barraI);
       barra.setAttribute("role","timer"); barra.setAttribute("aria-label","Tiempo para responder: 10 segundos");
     }
-    host.appendChild(globo); host.appendChild(hud);
+    var cab = el("div","rio-cab"); cab.appendChild(globo); cab.appendChild(hud);
+    host.appendChild(cab);
     if(barra){ host.appendChild(barra); }
     host.appendChild(rio);
 
@@ -232,12 +234,12 @@
     bIzq.setAttribute("aria-label","Mover a la izquierda"); bDer.setAttribute("aria-label","Mover a la derecha");
     ctrl.appendChild(bIzq); ctrl.appendChild(bSel); ctrl.appendChild(bDer);
     host.appendChild(ctrl);
-    host.appendChild(el("p","salto-ayuda","Teclado: ← y → para elegir la hoja, ↑ para saltar. Si el resultado es correcto, la hoja te aguanta; si no, ¡se hunde y es game over!"));
+    host.appendChild(el("p","salto-ayuda","Teclado: ← y → para elegir la hoja, ↑ para saltar."));
     var zonaFB = el("div"); host.appendChild(zonaFB);
 
     function posRana(r, c){
       rana.style.left = ((c+0.5)/COLS*100) + "%";
-      rana.style.bottom = (r < 0 ? 14 : r >= FILAS ? BASE + FILAS*STEP - 8 : BASE + r*STEP + 8) + "px";
+      rana.style.bottom = pct(r < 0 ? 14 : r >= FILAS ? BASE + FILAS*STEP - 8 : BASE + r*STEP + 8);
     }
     function saltito(){ rana.classList.remove("salta"); void rana.offsetWidth; rana.classList.add("salta"); }
     function marcarSel(){
@@ -292,7 +294,7 @@
     }
     function chapoteo(c, r){
       var ch = el("div","chapoteo","💦");
-      ch.style.left = ((c+0.5)/COLS*100) + "%"; ch.style.bottom = (BASE + r*STEP + 6) + "px";
+      ch.style.left = ((c+0.5)/COLS*100) + "%"; ch.style.bottom = pct(BASE + r*STEP + 6);
       rio.appendChild(ch);
       setTimeout(function(){ if(ch.parentNode){ ch.parentNode.removeChild(ch); } }, 1000);
     }
@@ -379,7 +381,7 @@
 
   function montarJuego(nivel){
     var cont = document.getElementById("juego");
-    cont.innerHTML = "";
+    cont.innerHTML = ""; cont.classList.remove("jugando");
     var enc = el("div","enc");
     enc.appendChild(el("p","eyebrow","Juego · Cruzar el estanque"));
     enc.appendChild(el("h2",null,"Ayudá a la rana a cruzar el estanque"));
@@ -400,6 +402,7 @@
       return;
     }
     cont.appendChild(html("p","consigna","Elegí con <strong>←</strong> y <strong>→</strong> la hoja con el resultado correcto y apretá <strong>↑</strong> para saltar." + (nivel === "dificil" ? " ¡Tenés 10 segundos por pregunta!" : "")));
+    cont.classList.add("jugando");
     var host = el("div","lienzo");
     cont.appendChild(host);
     juegoSalto(host, {nivel:nivel, alReintentar:montarJuego}, function(){});
