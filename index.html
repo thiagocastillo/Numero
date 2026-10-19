@@ -2449,6 +2449,7 @@ p{margin:0;}
 
     var zonaFB = el("div"); host.appendChild(zonaFB);
     var pie = el("div"); host.appendChild(pie);
+    var zonaPasos = el("div"); host.appendChild(zonaPasos);
 
     function pintar(){
       var q = lista[i];
@@ -2687,7 +2688,6 @@ p{margin:0;}
     host.appendChild(ctrl);
     host.appendChild(el("p","salto-ayuda","Teclado: ← y → para elegir la hoja, ↑ para saltar. Si el resultado es correcto, la hoja te aguanta; si no, ¡se hunde y es game over!"));
     var zonaFB = el("div"); host.appendChild(zonaFB);
-    var zonaPasos = el("div"); host.appendChild(zonaPasos);
 
     function posRana(r, c){
       rana.style.left = ((c+0.5)/COLS*100) + "%";
