@@ -105,3 +105,12 @@ body.pagina-juego{
 .app.app-juego{padding-top:var(--s4);padding-bottom:var(--s5);}
 .rio-globo{color:var(--ink);}
 .zona-juego h2{text-shadow:none;}
+
+/* aviso al llegar a 10 aciertos: subir de nivel / medalla de campeón/a */
+.hito{position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:var(--s3);background:rgba(11,46,63,.62);}
+.hito-caja{background:#fff;color:var(--ink);border-radius:var(--r2);padding:var(--s4);max-width:360px;box-shadow:var(--e2);animation:hito-entra .45s var(--bounce);}
+.hito-caja h3{margin:var(--s2) 0;font-size:1.3rem;}
+.hito-caja p{margin:0 0 var(--s3);}
+.hito-caja .fila{flex-wrap:wrap;}
+.medalla{font-size:3.6rem;line-height:1;}
+@keyframes hito-entra{0%{transform:scale(.6);opacity:0;}100%{transform:scale(1);opacity:1;}}

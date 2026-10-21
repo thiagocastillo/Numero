@@ -77,7 +77,7 @@
      SALTO: cruzar el estanque saltando de hoja en hoja
      ============================================================ */
   function juegoSalto(host, act, alTerminar){
-    var nivel = act.nivel || "facil", LIMITE = 10000, claveRec = nivel === "facil" ? (CFG.prefijo || "rana-record") : (CFG.prefijo || "rana-record") + "-" + nivel;
+    var nivel = act.nivel || "facil", LIMITE = 10000, META = 10, ORDEN = ["facil","medio","dificil"], claveRec = nivel === "facil" ? (CFG.prefijo || "rana-record") : (CFG.prefijo || "rana-record") + "-" + nivel;
     var COLS = 3, FILAS = 5, BASE = 80, STEP = 66, ALTO = 470;
     function pct(px){ return (px / ALTO * 100) + "%"; } // el estanque se escala según el alto de la pantalla
     var ronda = 0, cruce = 0, fila = -1, selc = 1, actual = null, bloqueado = false;
@@ -318,6 +318,16 @@
           var rc = h.getBoundingClientRect();
           celebrar(rc.left + rc.width/2, rc.top + 10);
           ronda++; fila = sig; pintarPasos(true);
+          if(ronda === META){ hito(function(){ continuar(c); }); }
+          else{ continuar(c); }
+        }, 380);
+      }else{
+        setTimeout(function(){ perder(false, h, c, sig); }, 380);
+      }
+    }
+    function continuar(c){
+      bloqueado = true;
+      {
           if(fila >= FILAS-1){
             globo.textContent = "🪷 ¡Cruzaste el estanque!"; pararTimer();
             setTimeout(function(){
@@ -328,10 +338,37 @@
           }else{
             prepararFila();
           }
-        }, 380);
-      }else{
-        setTimeout(function(){ perder(false, h, c, sig); }, 380);
       }
+    }
+    // al llegar a META aciertos: guarda el récord y ofrece subir de nivel (o la medalla en el último)
+    function hito(seguir){
+      bloqueado = true; pararTimer();
+      var rec = mejor();
+      if(ronda > rec){ try{ localStorage.setItem(claveRec, String(ronda)); }catch(e){} }
+      var sigNivel = ORDEN[ORDEN.indexOf(nivel) + 1], final = !sigNivel;
+      if(final){ try{ localStorage.setItem(claveRec + "-medalla", "1"); }catch(e){} }
+      var p = el("div","hito"), caja = el("div","hito-caja");
+      if(final){
+        caja.appendChild(el("div","medalla","🏅"));
+        caja.appendChild(el("h3",null,"¡Campeón/a del estanque!"));
+        caja.appendChild(el("p",null,"Llegaste a " + META + " aciertos seguidos en el último nivel. ¡Ganaste la medalla de campeón/a!"));
+      }else{
+        caja.appendChild(el("div","medalla","🏆"));
+        caja.appendChild(el("h3",null,"¡" + META + " aciertos seguidos!"));
+        caja.appendChild(el("p",null,"¿Querés subir la dificultad y pasar al nivel siguiente?"));
+      }
+      var f = el("div","fila");
+      var bSub = sigNivel ? html("button","btn btn-1","Subir de nivel" + ICO.flecha) : null;
+      var bSeg = html("button", sigNivel ? "btn btn-2" : "btn btn-1", "Seguir jugando");
+      var bMenu = html("button","btn btn-2","Elegir nivel");
+      if(bSub){ bSub.addEventListener("click", function(){ cerrar(); act.alReintentar(sigNivel); }); f.appendChild(bSub); }
+      bSeg.addEventListener("click", function(){ if(p.parentNode){ p.parentNode.removeChild(p); } seguir(); });
+      bMenu.addEventListener("click", function(){ cerrar(); act.alReintentar(); });
+      f.appendChild(bSeg); f.appendChild(bMenu);
+      caja.appendChild(f); p.appendChild(caja); rio.appendChild(p);
+      (bSub || bSeg).focus();
+      if(!reduceMotion()){ var rc = caja.getBoundingClientRect(); celebrar(rc.left + rc.width/2, rc.top + 30); }
+      function cerrar(){ document.removeEventListener("keydown", tecla); }
     }
     function perder(tiempo, hoja, c, sig){
       bloqueado = true; pararTimer();
@@ -403,7 +440,8 @@
       NIVELES.forEach(function(n){
         var pre = CFG.prefijo || "rana-record";
         var rec = 0; try{ rec = parseInt(localStorage.getItem(n[0] === "facil" ? pre : pre + "-" + n[0]),10) || 0; }catch(e){}
-        var b = html("button","nivel","<span class=\"em\">"+n[1]+"</span><strong>"+n[2]+"</strong><span class=\"d\">"+n[3]+"</span><span class=\"r\">🏆 Récord: "+rec+"</span>");
+        var medalla = ""; try{ if(localStorage.getItem((n[0] === "facil" ? pre : pre + "-" + n[0]) + "-medalla")){ medalla = " 🏅"; } }catch(e){}
+        var b = html("button","nivel","<span class=\"em\">"+n[1]+"</span><strong>"+n[2]+"</strong><span class=\"d\">"+n[3]+"</span><span class=\"r\">🏆 Récord: "+rec+medalla+"</span>");
         b.addEventListener("click", function(){ montarJuego(n[0]); });
         g.appendChild(b);
       });
