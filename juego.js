@@ -77,7 +77,7 @@
      SALTO: cruzar el estanque saltando de hoja en hoja
      ============================================================ */
   function juegoSalto(host, act, alTerminar){
-    var nivel = act.nivel || "facil", LIMITE = 10000, META = 10, ORDEN = ["facil","medio","dificil"], claveRec = nivel === "facil" ? (CFG.prefijo || "rana-record") : (CFG.prefijo || "rana-record") + "-" + nivel;
+    var nivel = act.nivel || "facil", LIMITE = 10000, META = 15, ORDEN = ["facil","medio","dificil"], claveRec = nivel === "facil" ? (CFG.prefijo || "rana-record") : (CFG.prefijo || "rana-record") + "-" + nivel;
     var COLS = 3, FILAS = 5, BASE = 80, STEP = 66, ALTO = 470;
     function pct(px){ return (px / ALTO * 100) + "%"; } // el estanque se escala según el alto de la pantalla
     var ronda = 0, cruce = 0, fila = -1, selc = 1, actual = null, bloqueado = false;
